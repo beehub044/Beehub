@@ -1,0 +1,619 @@
+local Players = game:GetService("Players")
+local Lighting = game:GetService("Lighting")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local SoundService = game:GetService("SoundService")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Sound Settings (Bee Buzzing Sound)
+local SOUND_ID = "rbxassetid://9125612340" 
+local SOUND_VOLUME = 2.0
+
+-- Helper Function to Play Sound
+local function playExecutionSound()
+	local sound = Instance.new("Sound")
+	sound.SoundId = SOUND_ID
+	sound.Volume = SOUND_VOLUME
+	sound.Parent = SoundService
+	sound:Play()
+	
+	sound.Ended:Connect(function()
+		sound:Destroy()
+	end)
+end
+
+-- Cleanup duplicate UI
+if playerGui:FindFirstChild("BeeHubShaderUI") then
+	playerGui.BeeHubShaderUI:Destroy()
+end
+
+----------------------------------------------------
+-- OVERHEAD NAME TAG SYSTEM WITH WORKING FPS
+----------------------------------------------------
+local fpsLabel = nil
+
+local function applyNameTag(character)
+	if not character then return end
+	local head = character:WaitForChild("Head", 5)
+	if not head then return end
+
+	if head:FindFirstChild("BeeHubNameTag") then
+		head.BeeHubNameTag:Destroy()
+	end
+
+	local billboard = Instance.new("BillboardGui")
+	billboard.Name = "BeeHubNameTag"
+	billboard.Size = UDim2.new(0, 220, 0, 60)
+	billboard.StudsOffset = Vector3.new(0, 2.8, 0)
+	billboard.AlwaysOnTop = true
+	billboard.Parent = head
+
+	local frame = Instance.new("Frame")
+	frame.Size = UDim2.new(1, 0, 1, 0)
+	frame.BackgroundTransparency = 1
+	frame.Parent = billboard
+
+	local tagLabel = Instance.new("TextLabel")
+	tagLabel.Size = UDim2.new(1, 0, 0, 30)
+	tagLabel.Position = UDim2.new(0, 0, 0, 0)
+	tagLabel.BackgroundTransparency = 1
+	tagLabel.Text = "BEE HUB 🐝🍯"
+	tagLabel.TextColor3 = Color3.fromRGB(255, 220, 30)
+	tagLabel.TextSize = 20
+	tagLabel.Font = Enum.Font.FredokaOne
+	tagLabel.Parent = frame
+
+	local stroke = Instance.new("UIStroke")
+	stroke.Thickness = 3
+	stroke.Color = Color3.fromRGB(255, 120, 0)
+	stroke.Parent = tagLabel
+
+	fpsLabel = Instance.new("TextLabel")
+	fpsLabel.Size = UDim2.new(1, 0, 0, 25)
+	fpsLabel.Position = UDim2.new(0, 0, 0, 28)
+	fpsLabel.BackgroundTransparency = 1
+	fpsLabel.Text = "FPS: Calculating..."
+	fpsLabel.TextColor3 = Color3.fromRGB(255, 220, 30)
+	fpsLabel.TextSize = 16
+	fpsLabel.Font = Enum.Font.FredokaOne
+	fpsLabel.Parent = frame
+
+	local fpsStroke = Instance.new("UIStroke")
+	fpsStroke.Thickness = 2.5
+	fpsStroke.Color = Color3.fromRGB(255, 120, 0)
+	fpsStroke.Parent = fpsLabel
+end
+
+-- REAL-TIME FPS CALCULATOR
+local frameCount = 0
+local lastUpdate = tick()
+
+RunService.RenderStepped:Connect(function()
+	frameCount = frameCount + 1
+	local now = tick()
+	if now - lastUpdate >= 1 then
+		local fps = math.floor(frameCount / (now - lastUpdate))
+		if fpsLabel and fpsLabel.Parent then
+			fpsLabel.Text = "FPS: " .. tostring(fps)
+		end
+		frameCount = 0
+		lastUpdate = now
+	end
+end)
+
+if player.Character then
+	applyNameTag(player.Character)
+end
+player.CharacterAdded:Connect(applyNameTag)
+
+----------------------------------------------------
+-- MAIN GUI CREATION
+----------------------------------------------------
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "BeeHubShaderUI"
+screenGui.ResetOnSpawn = false
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Parent = playerGui
+
+local FULL_SIZE = UDim2.new(0, 340, 0, 390)
+local CENTER_POS = UDim2.new(0.5, -170, 0.35, -195)
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 0, 0, 0)
+mainFrame.Position = UDim2.new(0.5, 0, 0.35, 0)
+mainFrame.BackgroundColor3 = Color3.fromRGB(245, 205, 35)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.ClipsDescendants = true
+mainFrame.Parent = screenGui
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 18)
+corner.Parent = mainFrame
+
+local stroke = Instance.new("UIStroke")
+stroke.Thickness = 4
+stroke.Color = Color3.fromRGB(20, 20, 20)
+stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+stroke.Parent = mainFrame
+
+-- Title Header ("BeeHub 🐝")
+local headerLabel = Instance.new("TextLabel")
+headerLabel.Size = UDim2.new(1, -50, 0, 48)
+headerLabel.Position = UDim2.new(0, 10, 0, 0)
+headerLabel.BackgroundTransparency = 1
+headerLabel.Text = "BeeHub 🐝"
+headerLabel.TextColor3 = Color3.fromRGB(20, 20, 20)
+headerLabel.TextSize = 24
+headerLabel.Font = Enum.Font.FredokaOne
+headerLabel.TextXAlignment = Enum.TextXAlignment.Left
+headerLabel.Parent = mainFrame
+
+-- Minimize Button ( - )
+local minimizeBtn = Instance.new("TextButton")
+minimizeBtn.Name = "MinimizeBtn"
+minimizeBtn.Size = UDim2.new(0, 32, 0, 32)
+minimizeBtn.Position = UDim2.new(1, -40, 0, 8)
+minimizeBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+minimizeBtn.Text = "-"
+minimizeBtn.TextColor3 = Color3.fromRGB(245, 205, 35)
+minimizeBtn.TextSize = 24
+minimizeBtn.Font = Enum.Font.FredokaOne
+minimizeBtn.Parent = mainFrame
+
+local minCorner = Instance.new("UICorner")
+minCorner.CornerRadius = UDim.new(0, 8)
+minCorner.Parent = minimizeBtn
+
+local divider = Instance.new("Frame")
+divider.Size = UDim2.new(0.9, 0, 0, 3)
+divider.Position = UDim2.new(0.05, 0, 0, 48)
+divider.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+divider.BorderSizePixel = 0
+divider.Parent = mainFrame
+
+-- Content Container
+local contentFrame = Instance.new("Frame")
+contentFrame.Name = "ContentFrame"
+contentFrame.Size = UDim2.new(1, 0, 1, -50)
+contentFrame.Position = UDim2.new(0, 0, 0, 50)
+contentFrame.BackgroundTransparency = 1
+contentFrame.Parent = mainFrame
+
+----------------------------------------------------
+-- HELPER: TOGGLE CREATOR FUNCTION
+----------------------------------------------------
+local function createToggle(name, yPos)
+	local label = Instance.new("TextLabel")
+	label.Size = UDim2.new(0, 180, 0, 35)
+	label.Position = UDim2.new(0.08, 0, 0, yPos)
+	label.BackgroundTransparency = 1
+	label.Text = name
+	label.TextColor3 = Color3.fromRGB(20, 20, 20)
+	label.TextSize = 22
+	label.Font = Enum.Font.FredokaOne
+	label.TextXAlignment = Enum.TextXAlignment.Left
+	label.Parent = contentFrame
+
+	local track = Instance.new("Frame")
+	track.Size = UDim2.new(0, 65, 0, 30)
+	track.Position = UDim2.new(0.72, 0, 0, yPos + 2)
+	track.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+	track.Parent = contentFrame
+
+	local trackCorner = Instance.new("UICorner")
+	trackCorner.CornerRadius = UDim.new(1, 0)
+	trackCorner.Parent = track
+
+	local knob = Instance.new("TextButton")
+	knob.Size = UDim2.new(0, 24, 0, 24)
+	knob.Position = UDim2.new(0, 3, 0.5, -12)
+	knob.BackgroundColor3 = Color3.fromRGB(245, 245, 245)
+	knob.Text = ""
+	knob.AutoButtonColor = false
+	knob.Parent = track
+
+	local knobCorner = Instance.new("UICorner")
+	knobCorner.CornerRadius = UDim.new(1, 0)
+	knobCorner.Parent = knob
+
+	return knob, track
+end
+
+local shaderKnob, shaderTrack = createToggle("Shader", 10)
+local fastKnob, fastTrack = createToggle("Fast Mode", 50)
+local avatarKnob, avatarTrack = createToggle("Bee Aura Effect", 90)
+
+----------------------------------------------------
+-- SKY & TIME PRESET BUTTONS
+----------------------------------------------------
+local skyContainer = Instance.new("Frame")
+skyContainer.Size = UDim2.new(0.9, 0, 0, 150)
+skyContainer.Position = UDim2.new(0.05, 0, 0, 145)
+skyContainer.BackgroundTransparency = 1
+skyContainer.Parent = contentFrame
+
+local gridLayout = Instance.new("UIGridLayout")
+gridLayout.CellSize = UDim2.new(0.31, 0, 0, 42)
+gridLayout.CellPadding = UDim2.new(0.035, 0, 0, 8)
+gridLayout.Parent = skyContainer
+
+local function createPresetButton(name, color)
+	local btn = Instance.new("TextButton")
+	btn.Name = name .. "Btn"
+	btn.BackgroundColor3 = color
+	btn.Text = name
+	btn.Font = Enum.Font.FredokaOne
+	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+	btn.TextSize = 15
+	btn.Parent = skyContainer
+
+	local btnCorner = Instance.new("UICorner")
+	btnCorner.CornerRadius = UDim.new(0, 10)
+	btnCorner.Parent = btn
+
+	local btnStroke = Instance.new("UIStroke")
+	btnStroke.Thickness = 2
+	btnStroke.Color = Color3.fromRGB(20, 20, 20)
+	btnStroke.Parent = btn
+
+	btn.MouseEnter:Connect(function()
+		TweenService:Create(btn, TweenInfo.new(0.15), {Size = UDim2.new(0.32, 0, 0, 44)}):Play()
+	end)
+	btn.MouseLeave:Connect(function()
+		TweenService:Create(btn, TweenInfo.new(0.15), {Size = UDim2.new(0.31, 0, 0, 42)}):Play()
+	end)
+
+	return btn
+end
+
+local sunnyBtn = createPresetButton("Sunny ☀️", Color3.fromRGB(240, 140, 30))
+local sunsetBtn = createPresetButton("Sunset 🌅", Color3.fromRGB(210, 70, 70))
+local nightBtn = createPresetButton("Night 🌙", Color3.fromRGB(40, 40, 80))
+
+----------------------------------------------------
+-- EXECUTION INTRO ANIMATION & SOUND
+----------------------------------------------------
+local function playIntroAnimation()
+	mainFrame.Size = UDim2.new(0, 0, 0, 0)
+	mainFrame.Position = UDim2.new(0.5, 0, 0.35, 0)
+	
+	playExecutionSound()
+	
+	TweenService:Create(mainFrame, TweenInfo.new(0.6, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+		Size = FULL_SIZE,
+		Position = CENTER_POS
+	}):Play()
+end
+
+playIntroAnimation()
+
+----------------------------------------------------
+-- MINIMIZE SYSTEM
+----------------------------------------------------
+local isMinimized = false
+
+minimizeBtn.MouseButton1Click:Connect(function()
+	isMinimized = not isMinimized
+	
+	if isMinimized then
+		contentFrame.Visible = false
+		minimizeBtn.Text = "+"
+		TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+			Size = UDim2.new(0, 340, 0, 48)
+		}):Play()
+	else
+		minimizeBtn.Text = "-"
+		local tween = TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+			Size = FULL_SIZE
+		})
+		tween:Play()
+		tween.Completed:Connect(function()
+			if not isMinimized then
+				contentFrame.Visible = true
+			end
+		end)
+	end
+end)
+
+----------------------------------------------------
+-- SHADER & LIGHTING LOGIC
+----------------------------------------------------
+local shaderFolder = Lighting:FindFirstChild("BeeHubShaders") or Instance.new("Folder")
+shaderFolder.Name = "BeeHubShaders"
+shaderFolder.Parent = Lighting
+
+local colorCorrection = shaderFolder:FindFirstChildOfClass("ColorCorrectionEffect") or Instance.new("ColorCorrectionEffect")
+colorCorrection.Brightness = 0.05
+colorCorrection.Contrast = 0.3
+colorCorrection.Saturation = 0.45
+colorCorrection.TintColor = Color3.fromRGB(255, 245, 230)
+colorCorrection.Enabled = false
+colorCorrection.Parent = shaderFolder
+
+local bloom = shaderFolder:FindFirstChildOfClass("BloomEffect") or Instance.new("BloomEffect")
+bloom.Intensity = 1.1
+bloom.Size = 36
+bloom.Threshold = 0.8
+bloom.Enabled = false
+bloom.Parent = shaderFolder
+
+local sunRays = shaderFolder:FindFirstChildOfClass("SunRaysEffect") or Instance.new("SunRaysEffect")
+sunRays.Intensity = 0.4
+sunRays.Spread = 1
+sunRays.Enabled = false
+sunRays.Parent = shaderFolder
+
+local shaderActive = false
+local fastModeActive = false
+local avatarEffectActive = false
+
+local function updateToggleUI(knob, track, state)
+	local targetPos = state and UDim2.new(1, -27, 0.5, -12) or UDim2.new(0, 3, 0.5, -12)
+	local targetColor = state and Color3.fromRGB(46, 204, 113) or Color3.fromRGB(45, 45, 45)
+	TweenService:Create(knob, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Position = targetPos}):Play()
+	TweenService:Create(track, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {BackgroundColor3 = targetColor}):Play()
+end
+
+shaderKnob.MouseButton1Click:Connect(function()
+	shaderActive = not shaderActive
+	updateToggleUI(shaderKnob, shaderTrack, shaderActive)
+
+	colorCorrection.Enabled = shaderActive
+	bloom.Enabled = shaderActive and not fastModeActive
+	sunRays.Enabled = shaderActive and not fastModeActive
+
+	if shaderActive then
+		pcall(function() Lighting.Technology = Enum.Technology.Future end)
+	end
+end)
+
+----------------------------------------------------
+-- ADVANCED FULL-BODY BEE ULTRA AURA EFFECT
+----------------------------------------------------
+local renderConnection = nil
+
+local function removeFullBodyAura(character)
+	if not character then return end
+	if character:FindFirstChild("BeeAuraHighlight") then character.BeeAuraHighlight:Destroy() end
+	if character:FindFirstChild("BeeHaloOuter") then character.BeeHaloOuter:Destroy() end
+	if character:FindFirstChild("BeeHaloInner") then character.BeeHaloInner:Destroy() end
+	if character:FindFirstChild("BeeOrbitFolder") then character.BeeOrbitFolder:Destroy() end
+
+	local root = character:FindFirstChild("HumanoidRootPart") or character:FindFirstChild("Torso")
+	if root then
+		if root:FindFirstChild("BeeBodyParticles") then root.BeeBodyParticles:Destroy() end
+		if root:FindFirstChild("BeeSelectionBox") then root.BeeSelectionBox:Destroy() end
+		if root:FindFirstChild("BeeFloorLight") then root.BeeFloorLight:Destroy() end
+	end
+
+	if renderConnection then
+		renderConnection:Disconnect()
+		renderConnection = nil
+	end
+end
+
+local function applyFullBodyAura(character)
+	if not character then return end
+	removeFullBodyAura(character)
+
+	if avatarEffectActive then
+		-- 1. FULL BODY GOLDEN HIGHLIGHT
+		local highlight = Instance.new("Highlight")
+		highlight.Name = "BeeAuraHighlight"
+		highlight.FillColor = Color3.fromRGB(255, 200, 20)
+		highlight.OutlineColor = Color3.fromRGB(255, 120, 0)
+		highlight.FillTransparency = 0.5
+		highlight.OutlineTransparency = 0
+		highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+		highlight.Parent = character
+
+		local root = character:WaitForChild("HumanoidRootPart", 5) or character:FindFirstChild("Torso")
+		if root then
+			-- 2. INNER NEON CORE SELECTION BOX
+			local selBox = Instance.new("SelectionBox")
+			selBox.Name = "BeeSelectionBox"
+			selBox.Adornee = character
+			selBox.Color3 = Color3.fromRGB(255, 235, 50)
+			selBox.LineThickness = 0.05
+			selBox.SurfaceTransparency = 0.8
+			selBox.SurfaceColor3 = Color3.fromRGB(255, 180, 0)
+			selBox.Parent = root
+
+			-- 3. ASCENDING HONEY SPARKLE PARTICLES
+			local particles = Instance.new("ParticleEmitter")
+			particles.Name = "BeeBodyParticles"
+			particles.Color = ColorSequence.new({
+				ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 240, 80)),
+				ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 180, 0)),
+				ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 100, 0))
+			})
+			particles.Size = NumberSequence.new({
+				NumberSequenceKeypoint.new(0, 0.5),
+				NumberSequenceKeypoint.new(0.5, 0.8),
+				NumberSequenceKeypoint.new(1, 0)
+			})
+			particles.Lifetime = NumberRange.new(1, 2.2)
+			particles.Rate = 35
+			particles.Speed = NumberRange.new(2, 4.5)
+			particles.VelocitySpread = 180
+			particles.LightEmission = 0.9
+			particles.Transparency = NumberSequence.new(0.05, 1)
+			particles.Parent = root
+
+			-- 4. GROUND LIGHTING GLOW
+			local floorLight = Instance.new("SurfaceLight")
+			floorLight.Name = "BeeFloorLight"
+			floorLight.Color = Color3.fromRGB(255, 200, 30)
+			floorLight.Brightness = 3
+			floorLight.Range = 12
+			floorLight.Face = Enum.NormalId.Bottom
+			floorLight.Parent = root
+		end
+
+		-- 5. ROTATING DUAL HALO RINGS
+		local head = character:WaitForChild("Head", 5)
+		if head then
+			local createHalo = Instance.new("Part")
+			createHalo.Name = "BeeHaloOuter"
+			createHalo.Size = Vector3.new(2.8, 0.1, 2.8)
+			createHalo.Material = Enum.Material.Neon
+			createHalo.Color = Color3.fromRGB(255, 220, 0)
+			createHalo.CanCollide = false
+			createHalo.Massless = true
+
+			local mesh = Instance.new("SpecialMesh")
+			mesh.MeshType = Enum.MeshType.FileMesh
+			mesh.MeshId = "rbxassetid://3270017"
+			mesh.Scale = Vector3.new(2.6, 2.6, 0.8)
+			mesh.Parent = createHalo
+
+			local weld1 = Instance.new("Weld")
+			weld1.Part0 = head
+			weld1.Part1 = createHalo
+			weld1.C0 = CFrame.new(0, 1.8, 0) * CFrame.Angles(math.rad(90), 0, 0)
+			weld1.Parent = createHalo
+			createHalo.Parent = character
+
+			local createHaloInner = createHalo:Clone()
+			createHaloInner.Name = "BeeHaloInner"
+			createHaloInner.Color = Color3.fromRGB(255, 140, 0)
+			createHaloInner.SpecialMesh.Scale = Vector3.new(1.8, 1.8, 0.8)
+			local weld2 = Instance.new("Weld")
+			weld2.Part0 = head
+			weld2.Part1 = createHaloInner
+			weld2.C0 = CFrame.new(0, 2.1, 0) * CFrame.Angles(math.rad(90), 0, 0)
+			weld2.Parent = createHaloInner
+			createHaloInner.Parent = character
+
+			-- 6. ORBITING BEE ENERGY ORBS
+			local orbitFolder = Instance.new("Folder")
+			orbitFolder.Name = "BeeOrbitFolder"
+			orbitFolder.Parent = character
+
+			local centerAtt = Instance.new("Attachment")
+			centerAtt.Position = Vector3.new(0, -0.5, 0)
+			centerAtt.Parent = root
+
+			local orbAtts = {}
+			local ORB_COUNT = 3
+			for i = 1, ORB_COUNT do
+				local att = Instance.new("Attachment")
+				att.Parent = root
+
+				local pEmitter = Instance.new("ParticleEmitter")
+				pEmitter.Color = ColorSequence.new(Color3.fromRGB(255, 230, 40))
+				pEmitter.Size = NumberSequence.new(0.3, 0)
+				pEmitter.Lifetime = NumberRange.new(0.3, 0.6)
+				pEmitter.Rate = 30
+				pEmitter.Speed = NumberRange.new(0.5, 1)
+				pEmitter.LightEmission = 1
+				pEmitter.Parent = att
+
+				table.insert(orbAtts, att)
+			end
+
+			-- ANIMATION LOOP FOR HALOS & ORBITING ORBS
+			local angle = 0
+			renderConnection = RunService.RenderStepped:Connect(function(dt)
+				if head and head.Parent and root and root.Parent then
+					angle = (angle + dt * 160) % 360
+					
+					-- Rotate Halos in opposite directions
+					weld1.C0 = CFrame.new(0, 1.8, 0) * CFrame.Angles(math.rad(90 + math.sin(math.rad(angle)) * 10), math.rad(angle), 0)
+					weld2.C0 = CFrame.new(0, 2.2, 0) * CFrame.Angles(math.rad(90 - math.sin(math.rad(angle)) * 10), math.rad(-angle * 1.5), 0)
+
+					-- Orbiting Bee Orbs around Torso
+					local radius = 3.2
+					for i, att in ipairs(orbAtts) do
+						local offsetAngle = math.rad(angle + (i * (360 / ORB_COUNT)))
+						local x = math.cos(offsetAngle) * radius
+						local z = math.sin(offsetAngle) * radius
+						local y = math.sin(offsetAngle * 2) * 0.6
+						att.Position = Vector3.new(x, y - 0.5, z)
+					end
+				else
+					if renderConnection then renderConnection:Disconnect() end
+				end
+			end)
+		end
+	end
+end
+
+avatarKnob.MouseButton1Click:Connect(function()
+	avatarEffectActive = not avatarEffectActive
+	updateToggleUI(avatarKnob, avatarTrack, avatarEffectActive)
+
+	if player.Character then
+		applyFullBodyAura(player.Character)
+	end
+end)
+
+player.CharacterAdded:Connect(function(char)
+	task.wait(0.5)
+	if avatarEffectActive then
+		applyFullBodyAura(char)
+	end
+end)
+
+----------------------------------------------------
+-- FAST MODE LOGIC
+----------------------------------------------------
+fastKnob.MouseButton1Click:Connect(function()
+	fastModeActive = not fastModeActive
+	updateToggleUI(fastKnob, fastTrack, fastModeActive)
+
+	if fastModeActive then
+		bloom.Enabled = false
+		sunRays.Enabled = false
+		Lighting.GlobalShadows = false
+		settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+	else
+		bloom.Enabled = shaderActive
+		sunRays.Enabled = shaderActive
+		Lighting.GlobalShadows = true
+		settings().Rendering.QualityLevel = Enum.QualityLevel.Automatic
+	end
+end)
+
+-- Sky Presets
+local function applyPreset(timeOfDay, ambientColor, brightness, outdoorAmbient)
+	TweenService:Create(Lighting, TweenInfo.new(1), {
+		ClockTime = timeOfDay,
+		Brightness = brightness,
+		Ambient = ambientColor,
+		OutdoorAmbient = outdoorAmbient
+	}):Play()
+end
+
+sunnyBtn.MouseButton1Click:Connect(function()
+	applyPreset(14, Color3.fromRGB(150, 150, 150), 2.5, Color3.fromRGB(120, 120, 120))
+	colorCorrection.TintColor = Color3.fromRGB(255, 250, 235)
+end)
+
+sunsetBtn.MouseButton1Click:Connect(function()
+	applyPreset(17.2, Color3.fromRGB(210, 160, 130), 2.3, Color3.fromRGB(190, 140, 110))
+	colorCorrection.TintColor = Color3.fromRGB(255, 225, 205)
+end)
+
+nightBtn.MouseButton1Click:Connect(function()
+	applyPreset(0, Color3.fromRGB(30, 30, 50), 0.5, Color3.fromRGB(20, 20, 40))
+	colorCorrection.TintColor = Color3.fromRGB(180, 200, 255)
+end)
+
+-- Keybind (Right Control)
+UserInputService.InputBegan:Connect(function(input, processed)
+	if not processed and input.KeyCode == Enum.KeyCode.RightControl then
+		if mainFrame.Visible then
+			mainFrame.Visible = false
+		else
+			mainFrame.Visible = true
+			playIntroAnimation()
+		end
+	end
+end)
