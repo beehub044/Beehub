@@ -635,6 +635,24 @@ scriptsTab:CreateButton("Shader", function()
   end)
 end)
 
+scriptsTab:CreateButton("Source Hub", function()
+  pcall(function()
+     loadstring(game:HttpGet("https://pastebin.com/raw/d0zBUM6r"))()
+  end)
+end)
+
+scriptsTab:CreateButton("OUROBOROS", function()
+  pcall(function()
+     loadstring(game:HttpGet("https://raw.githubusercontent.com/joustingmatch/Ouroboros/main/loader.lua"))()
+  end)
+end)
+
+scriptsTab:CreateButton("TSUO", function()
+  pcall(function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/Tsuo7/TsuoHub/main/stealanegg"))()
+  end)
+end)
+
 scriptsTab:CreateLabel("🔑 KEY REQUIRED")
 
 scriptsTab:CreateButton("Bf", function()
