@@ -670,20 +670,20 @@ local function helper3(val25, label2, text3)
   label2.Text = text3
 end
 
-ownerTab:CreateButton("Tiktok - renehubs.rblx", function(p28)
-  helper3("renehubs.rblx", p28, "Tiktok - renehubs.rblx")
+ownerTab:CreateButton("Tiktok - Its Bee", function(p28)
+  helper3("Its Bee", p28, "Tiktok - Its Bee")
 end)
 
 ownerTab:CreateButton("Discord", function(p29)
-  helper3("https://discord.gg/cDB53Zm6g", p29, "Discord")
+  helper3("https://discord.gg/M9ZnxTafE", p29, "Discord")
 end)
 
-ownerTab:CreateButton("Promoter: Kierb_08", function(p30)
-  helper3("Kierb_08", p30, "Promoter: Kierb_08")
+ownerTab:CreateButton("Promoter: None", function(p30)
+  helper3("None", p30, "Promoter: None")
 end)
 
-ownerTab:CreateButton("Promoter - syuta0666", function(p31)
-  helper3("syuta0666", p31, "Promoter - syuta0666")
+ownerTab:CreateButton("Promoter - None", function(p31)
+  helper3("None", p31, "Promoter - None")
 end)
 
 local configTab = reneBaterboniaWindow:CreateTab("Config")
