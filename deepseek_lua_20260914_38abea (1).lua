@@ -1,6 +1,3 @@
--- ============================================================
--- 🐝 BEE HUB - YELLOW NEON EDITION
--- ============================================================
 local teleportService = game:GetService("TeleportService")
 local httpService = game:GetService("HttpService")
 local players = game:GetService("Players")
@@ -70,7 +67,6 @@ end
 
 local val5 = safeCall2()
 
--- 🐝 CHANGED: YELLOW NEON BEE THEME
 local val6 = {
   Default = {
     Background = Color3.fromRGB(20, 18, 5),
@@ -188,7 +184,6 @@ function object:MakeDraggable(p10, p11, p12)
   end)
 end
 
--- 🐝 NEW: Bee swarm animation around the main container
 local function createBeeSwarm(parentFrame, theme)
   local beeFolder = Instance.new("Folder")
   beeFolder.Name = "BeeSwarm"
@@ -233,7 +228,6 @@ local function createBeeSwarm(parentFrame, theme)
   return beeFolder
 end
 
--- 🐝 NEW: Honeycomb pattern overlay
 local function createHoneycombOverlay(parentFrame, theme)
   local honeycomb = Instance.new("Frame")
   honeycomb.Name = "HoneycombOverlay"
@@ -262,7 +256,6 @@ local function createHoneycombOverlay(parentFrame, theme)
   return honeycomb
 end
 
--- 🐝 CHANGED: Name Tag now shows "BEE HUB 🐝🍯 | PREMIUM👑"
 local function createNameTag(parentGui, theme)
   local tag = Instance.new("Frame")
   tag.Name = "PlayerNameTag"
@@ -298,7 +291,6 @@ local function createNameTag(parentGui, theme)
   gradient.Rotation = 135
   gradient.Parent = tag
 
-  -- 👑 MAIN TEXT: BEE HUB 🐝🍯 | PREMIUM👑
   local mainLabel = Instance.new("TextLabel")
   mainLabel.Name = "MainLabel"
   mainLabel.BackgroundTransparency = 1
@@ -312,13 +304,11 @@ local function createNameTag(parentGui, theme)
   mainLabel.TextScaled = false
   mainLabel.Parent = tag
 
-  -- Neon glow pulse on the main text
   tweenService:Create(mainLabel, TweenInfo.new(1.0, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true), {
     TextColor3 = theme.AccentGlow,
     TextTransparency = 0.15,
   }):Play()
 
-  -- Subtitle: player info below
   local subLabel = Instance.new("TextLabel")
   subLabel.Name = "SubLabel"
   subLabel.BackgroundTransparency = 1
@@ -331,7 +321,6 @@ local function createNameTag(parentGui, theme)
   subLabel.TextXAlignment = Enum.TextXAlignment.Center
   subLabel.Parent = tag
 
-  -- Glow orb behind the tag
   local glow = Instance.new("ImageLabel")
   glow.Name = "Glow"
   glow.BackgroundTransparency = 1
@@ -604,7 +593,6 @@ function val3:CreateWindow(p13)
   return val10
 end
 
--- 🐝 BEE HUB 🐝🍯 | PREMIUM 👑
 local reneBaterboniaWindow = val3:CreateWindow({
   Name = "BEE HUB 🐝🍯 | PREMIUM 👑", Subtitle = "By Beehubs", Version = "v5 PREMIUM", })
 
