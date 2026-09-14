@@ -564,7 +564,7 @@ scriptsTab:CreateButton("Horizon", function()
   end)
 end)
 
-scriptsTab:CreateButton("Nasi hub", function()
+scriptsTab:CreateButton("Nasi hub PREMIUM version", function()
   pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/JualNasiRendang/loader/refs/heads/main/main.lua"))()
   end)
