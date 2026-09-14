@@ -1,0 +1,5159 @@
+local players = game:GetService("Players")
+local tweenService = game:GetService("TweenService")
+local userInputService = game:GetService("UserInputService")
+local httpService = game:GetService("HttpService")
+local runService = game:GetService("RunService")
+local marketplaceService = game:GetService("MarketplaceService")
+local teleportService = game:GetService("TeleportService")
+local starterGui = game:GetService("StarterGui")
+local virtualUser = game:GetService("VirtualUser")
+
+if not game:IsLoaded() then
+  game.Loaded:Wait()
+end
+
+local element = getgenv and getgenv() or _G
+
+if element.__NAE5__ then
+  pcall(function() element.__NAE5__.kill() end)
+  task.wait(0.3)
+end
+
+local localPlayer = players.LocalPlayer
+local playerGui = localPlayer:WaitForChild("PlayerGui")
+local touchEnabled = userInputService.TouchEnabled and not userInputService.MouseEnabled
+local val = {}
+local val2 = {}
+
+local function helper(val3)
+  table.insert(val, val3)
+  return val3
+end
+
+local function waitLoop(val5, val4, fn)
+  if val2[val5] then
+    val2[val5] = false
+    task.wait(val4 + 0.1)
+  end
+
+  val2[val5] = true
+
+  task.spawn(function()
+    while val2[val5] do
+      fn()
+      task.wait(val4)
+    end
+  end)
+end
+
+local function helper2(val6)
+  val2[val6] = false
+end
+
+local val7 = localPlayer.Name == "Theerakarn_TH"
+
+local val8 = {
+  small = {
+    w = 280, h = 370, txt = 10, txt_sm = 9, txt_lg = 12, btn_h = 30, pad = 6, tab_h = 24, hdr_h = 36, }, medium = {
+    w = 350, h = 450, txt = 12, txt_sm = 10, txt_lg = 14, btn_h = 36, pad = 8, tab_h = 28, hdr_h = 42, }, large = {
+    w = 440, h = 540, txt = 13, txt_sm = 11, txt_lg = 16, btn_h = 42, pad = 12, tab_h = 34, hdr_h = 48, }, }
+
+local val9 = {
+  busy = false, orig_desc = nil, cur_id = nil, cache = {}, name_cache = {}, favs = {}, fav_idx = {}, hist = {}, hist_pos = 0, max_hist = 30, tab = "home", minimized = false, hidden = false, theme_idx = 1, ui_size = touchEnabled and "small" or "medium", auto_apply = false, sfx = true, notif_on = true, keybind = Enum.KeyCode.RightControl, qa_keybind = Enum.KeyCode.E, scale_w = 1, scale_h = 1, scale_head = 1, scale_w_on = false, scale_h_on = false, scale_head_on = false, speed_on = false, speed_val = 16, jump_on = false, jump_val = 50, fly_on = false, noclip_on = false, inf_jump_on = false, tap_copy_on = false, player_orig_descs = {}, preset_page = 1, random_pool = {}, music_playing = false, music_idx = 1, music_vol = 0.5, music_loop = true, music_obj = nil, quick_apply_on = false, swap_mode_on = false, swap_source = nil, friends_list = {}, friends_loaded = false, friends_page = 1, qa_selected_player = nil, qa_last_tap_time = 0, qa_last_tap_player = nil, outfit_items = {}, outfit_removed = {}, outfit_total_robux = 0, outfit_emotes = {}, online_visible = true, online_users = {}, online_page = 1, chat_messages = {}, chat_page = 1, online_heartbeat_active = false, gui_transparency = 0, anti_afk = true, esp_on = false, esp_highlights = {}, mirror_mode = false, bodyguard_on = false, bodyguard_npc = nil, tp_waypoints = {}, waypoint_page = 1, morph_anim = true, search_preset = "", dark_mode = true, last_applied_time = 0, total_morphs = 0, uptime = os.time(), }
+
+local val10 = {
+  { name = "Twilight", pri = Color3.fromRGB(108, 92, 231), lit = Color3.fromRGB(142, 128, 255) }, { name = "Ocean", pri = Color3.fromRGB(9, 132, 227), lit = Color3.fromRGB(116, 185, 255) }, { name = "Sunset", pri = Color3.fromRGB(214, 48, 49), lit = Color3.fromRGB(255, 118, 117) }, { name = "Forest", pri = Color3.fromRGB(0, 148, 50), lit = Color3.fromRGB(85, 239, 196) }, { name = "Sakura", pri = Color3.fromRGB(232, 67, 147), lit = Color3.fromRGB(253, 121, 168) }, { name = "Gold", pri = Color3.fromRGB(225, 177, 44), lit = Color3.fromRGB(254, 211, 48) }, { name = "Mint", pri = Color3.fromRGB(0, 206, 201), lit = Color3.fromRGB(129, 236, 236) }, { name = "Neon", pri = Color3.fromRGB(162, 155, 254), lit = Color3.fromRGB(200, 194, 255) }, { name = "Blood", pri = Color3.fromRGB(180, 20, 20), lit = Color3.fromRGB(255, 60, 60) }, { name = "Ice", pri = Color3.fromRGB(70, 160, 220), lit = Color3.fromRGB(180, 230, 255) }, { name = "Void", pri = Color3.fromRGB(40, 0, 80), lit = Color3.fromRGB(120, 60, 200) }, { name = "Lime", pri = Color3.fromRGB(80, 200, 0), lit = Color3.fromRGB(160, 255, 80) }, }
+
+local val11 = {
+  bg = Color3.fromRGB(17, 17, 23), surface = Color3.fromRGB(24, 24, 33), card = Color3.fromRGB(32, 31, 42), raised = Color3.fromRGB(42, 41, 55), input_bg = Color3.fromRGB(28, 27, 38), outline = Color3.fromRGB(52, 51, 68), txt = Color3.fromRGB(232, 230, 245), txt2 = Color3.fromRGB(155, 152, 178), txt3 = Color3.fromRGB(95, 93, 118), }
+
+local val12 = {
+  bg = Color3.fromRGB(240, 240, 248), surface = Color3.fromRGB(250, 250, 255), card = Color3.fromRGB(230, 228, 240), raised = Color3.fromRGB(210, 208, 225), input_bg = Color3.fromRGB(245, 244, 252), outline = Color3.fromRGB(190, 188, 210), txt = Color3.fromRGB(30, 28, 50), txt2 = Color3.fromRGB(90, 88, 115), txt3 = Color3.fromRGB(140, 138, 165), }
+
+local element2 = {}
+
+local function iterate()
+  for key, value in pairs(val9.dark_mode and val11 or val12) do
+    element2[key] = value
+  end
+end
+
+local function helper3()
+  local element3 = val10[val9.theme_idx]
+
+  element2.pri = element3.pri
+  element2.pri_lit = element3.lit
+  element2.green = Color3.fromRGB(85, 239, 196)
+  element2.red = Color3.fromRGB(255, 107, 107)
+  element2.orange = Color3.fromRGB(255, 177, 66)
+  element2.ghost = Color3.fromRGB(45, 44, 60)
+  element2.cyan = Color3.fromRGB(0, 206, 201)
+  element2.yellow = Color3.fromRGB(254, 211, 48)
+  element2.purple = Color3.fromRGB(162, 155, 254)
+  element2.blue = Color3.fromRGB(116, 185, 255)
+  element2.owner = Color3.fromRGB(255, 215, 0)
+
+  iterate()
+end
+
+local val13 = {
+  { id = 1, n = "ROBLOX" }, { id = 156, n = "builderman" }, { id = 289438135, n = "Bacon" }, { id = 1707711223, n = "Guest" }, { id = 188732, n = "Shedletsky" }, { id = 2298753899, n = "Cool" }, { id = 5254879171, n = "Noob" }, { id = 6007609888, n = "Pro" }, { id = 124751865, n = "Aesthetic" }, { id = 5019714978, n = "DarkKnight" }, { id = 5007631110, n = "Robot" }, { id = 9088628683, n = "Ninja" }, { id = 7223875998, n = "Pirate" }, { id = 2474943274, n = "Zombie" }, { id = 3104949425, n = "Alien" }, { id = 3335871296, n = "Angel" }, { id = 203030608, n = "Demon" }, { id = 2596305840, n = "Samurai" }, { id = 201124389, n = "Viking" }, { id = 1981724228, n = "Wizard" }, { id = 3731169417, n = "Astro" }, { id = 205419201, n = "Cowboy" }, { id = 7422492329, n = "Cyborg" }, { id = 406436524, n = "Elf" }, { id = 1803380, n = "Ghost" }, { id = 3012958642, n = "Skeleton" }, { id = 2260118449, n = "Pumpkin" }, { id = 188829949, n = "Santa" }, { id = 660132420, n = "Snowman" }, { id = 1125262365, n = "Dragon" }, { id = 144018186, n = "Phoenix" }, { id = 2017401176, n = "Mummy" }, { id = 283156132, n = "Clown" }, { id = 1630540916, n = "Chef" }, { id = 344091683, n = "Doctor" }, { id = 6538096, n = "Classic" }, { id = 261, n = "Sorcus" }, { id = 13656, n = "ROBLOX Admin" }, { id = 4719353, n = "Merely" }, { id = 79838, n = "Telamon" }, { id = 16150, n = "Coeptus" }, { id = 7210880, n = "KreekCraft" }, { id = 175429722, n = "Flamingo" }, { id = 18442032, n = "Tofuu" }, { id = 38184639, n = "Hyper" }, { id = 48103520, n = "Bloxburg NPC" }, { id = 1234567890, n = "TestDummy" }, }
+
+local val14 = {
+  { n = "Chill Vibes", id = "rbxassetid://9125603749" }, { n = "Montagem", id = "rbxassetid://122203857226173" }, { n = "PHONK", id = "rbxassetid://117759015860393" }, { n = "Anime OP", id = "rbxassetid://124853612881772" }, { n = "Lo-Fi", id = "rbxassetid://1838457617" }, { n = "Raining Tacos", id = "rbxassetid://142376088" }, { n = "Classical", id = "rbxassetid://1836283178" }, { n = "Happy Song", id = "rbxassetid://1843404009" }, { n = "Megalovania", id = "rbxassetid://2458488617" }, { n = "Trap Nation", id = "rbxassetid://1839245717" }, { n = "Chill Hop", id = "rbxassetid://6151241060" }, }
+
+local function helper4()
+  return val8[val9.ui_size] or val8.medium
+end
+
+local function createElement(val15, val16)
+  local instance = Instance.new(val15)
+
+  for key2, value2 in pairs(val16) do
+    if key2 ~= "Parent" then
+      pcall(function() instance[key2] = value2 end)
+    end
+  end
+
+  if val16.Parent then
+    instance.Parent = val16.Parent
+  end
+
+  return instance
+end
+
+local function helper5(parent, val17)
+  createElement("UICorner", { CornerRadius = UDim.new(0, val17 or 8), Parent = parent })
+end
+
+local function helper6(parent2, val18, val19)
+  return createElement("UIStroke", {
+    Color = val18 or element2.outline, Thickness = val19 or 1, Transparency = 0.6, Parent = parent2, })
+end
+
+local function helper7(val23, val20, val21, val22, val24)
+  if not val23 or not val23.Parent then
+    return
+  end
+
+  local create = tweenService:Create(val23, TweenInfo.new(
+    val21 or 0.18, val22 or Enum.EasingStyle.Quart, val24 or Enum.EasingDirection.Out
+  ), val20)
+
+  create:Play()
+
+  return create
+end
+
+local function helper8(val26, val25, val27)
+  return helper7(val26, val25, val27 or 0.22, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
+end
+
+local function helper9(val28)
+  return val28.UserInputType == Enum.UserInputType.MouseButton1
+    or val28.UserInputType == Enum.UserInputType.Touch
+end
+
+local function helper10(sS)
+  if not sS or sS == "" then
+    return nil
+  end
+
+  sS = sS:match("^%s*(.-)%s*$")
+
+  if tonumber(sS) then
+    return tonumber(sS)
+  end
+
+  for index, value3 in ipairs(players:GetPlayers()) do
+    if value3.Name:lower() == sS:lower() or value3.DisplayName:lower() == sS:lower() then
+      return value3.UserId
+    end
+  end
+
+  local val29, success = pcall(players.GetUserIdFromNameAsync, players, sS)
+  return val29 and success or nil
+end
+
+local function helper11(val30)
+  if val9.name_cache[val30] then
+    return val9.name_cache[val30]
+  end
+
+  local val31, success2 = pcall(players.GetNameFromUserIdAsync, players, val30)
+
+  if val31 then
+    val9.name_cache[val30] = success2
+    return success2
+  end
+
+  return tostring(val30)
+end
+
+local function helper12(val32, fn2)
+  local position
+
+  val32.InputBegan:Connect(function(input)
+    if helper9(input) then
+      position = input.Position
+    end
+  end)
+
+  val32.InputEnded:Connect(function(input2)
+    if helper9(input2) and position then
+      local magnitude = (input2.Position - position).Magnitude
+      position = nil
+
+      if magnitude < 12 then
+        fn2()
+      end
+    end
+  end)
+end
+
+local function helper13(val33, val34)
+  return "rbxthumb://type=Asset&id=" .. tostring(val33) .. "&w=" .. (val34 or 150) .. "&h="
+    .. (val34 or 150)
+end
+
+local function helper14()
+  return os.date("!%Y-%m-%d")
+end
+
+local function helper15(val35)
+  local val36 = os.time() - val35
+
+  if val36 < 60 then
+    return "now"
+  elseif val36 < 3600 then
+    return math.floor(val36 / 60) .. "m"
+  elseif val36 < 86400 then
+    return math.floor(val36 / 3600) .. "h"
+  else
+    return math.floor(val36 / 86400) .. "d"
+  end
+end
+
+local function helper16(val37)
+  local strVal = tostring(val37)
+  local val38 = #strVal % 3
+
+  if val38 == 0 then
+    val38 = 3
+  end
+
+  local sub = strVal:sub(1, val38)
+
+  for i = val38 + 1, #strVal, 3 do
+    sub = sub .. "," .. strVal:sub(i, i + 2)
+  end
+
+  return sub
+end
+
+local function helper17()
+  local val39 = os.time() - val9.uptime
+
+  if val39 < 60 then
+    return val39 .. "s"
+  elseif val39 < 3600 then
+    return math.floor(val39 / 60) .. "m " .. val39 % 60 .. "s"
+  else
+    return math.floor(val39 / 3600) .. "h " .. math.floor(val39 % 3600 / 60) .. "m"
+  end
+end
+
+local val40 = {
+  apply = { id = "rbxassetid://12948391899", vol = 0.35, pitch = { 0.95, 1.05 } }, random = { id = "rbxassetid://500839268", vol = 0.3, pitch = { 0.9, 1.15 } }, reset = { id = "rbxassetid://9114395636", vol = 0.3, pitch = { 0.85, 0.95 } }, undo = { id = "rbxassetid://9113869788", vol = 0.25, pitch = { 0.9, 1 } }, redo = { id = "rbxassetid://9113869788", vol = 0.25, pitch = { 1.05, 1.15 } }, tab = { id = "rbxassetid://9065073444", vol = 0.2, pitch = { 1, 1.1 } }, toggle_on = { id = "rbxassetid://9113652972", vol = 0.28, pitch = { 1, 1.08 } }, toggle_off = { id = "rbxassetid://9113652972", vol = 0.22, pitch = { 0.75, 0.85 } }, slider = { id = "rbxassetid://9113869788", vol = 0.12, pitch = { 1.2, 1.5 } }, click = { id = "rbxassetid://12948391899", vol = 0.2, pitch = { 1.1, 1.25 } }, hover = { id = "rbxassetid://9113869788", vol = 0.06, pitch = { 1.4, 1.6 } }, fav_add = { id = "rbxassetid://9114244791", vol = 0.3, pitch = { 1, 1.1 } }, fav_rem = { id = "rbxassetid://9114395636", vol = 0.2, pitch = { 0.8, 0.9 } }, msg_send = { id = "rbxassetid://6042053626", vol = 0.25, pitch = { 1, 1.1 } }, msg_recv = { id = "rbxassetid://6042053626", vol = 0.2, pitch = { 1.15, 1.25 } }, copy = { id = "rbxassetid://9114244791", vol = 0.25, pitch = { 1.1, 1.2 } }, teleport = { id = "rbxassetid://9114244791", vol = 0.35, pitch = { 0.7, 0.8 } }, morph = { id = "rbxassetid://12948391899", vol = 0.4, pitch = { 0.8, 0.9 } }, export = { id = "rbxassetid://9114244791", vol = 0.25, pitch = { 1, 1.05 } }, error = { id = "rbxassetid://9114395636", vol = 0.3, pitch = { 0.6, 0.7 } }, success = { id = "rbxassetid://9114244791", vol = 0.3, pitch = { 1.15, 1.3 } }, music_play = { id = "rbxassetid://9113652972", vol = 0.2, pitch = { 1, 1.05 } }, music_stop = { id = "rbxassetid://9114395636", vol = 0.2, pitch = { 0.9, 1 } }, music_next = { id = "rbxassetid://9065073444", vol = 0.2, pitch = { 1.15, 1.25 } }, music_prev = { id = "rbxassetid://9065073444", vol = 0.2, pitch = { 0.85, 0.95 } }, qa_lock = { id = "rbxassetid://9114244791", vol = 0.3, pitch = { 1.2, 1.3 } }, qa_apply = { id = "rbxassetid://12948391899", vol = 0.45, pitch = { 0.85, 0.95 } }, qa_switch = { id = "rbxassetid://9113869788", vol = 0.15, pitch = { 1.3, 1.5 } }, preview = { id = "rbxassetid://9065073444", vol = 0.2, pitch = { 1.05, 1.15 } }, close = { id = "rbxassetid://9113869788", vol = 0.18, pitch = { 0.7, 0.8 } }, minimize = { id = "rbxassetid://9113869788", vol = 0.2, pitch = { 0.8, 0.9 } }, maximize = { id = "rbxassetid://9113869788", vol = 0.2, pitch = { 1.1, 1.2 } }, hide_ui = { id = "rbxassetid://9113652972", vol = 0.15, pitch = { 0.7, 0.8 } }, }
+
+local function helper18(val41, val42)
+  if not val9.sfx then
+    return
+  end
+
+  local element4 = val40[val41]
+  local id, vol, pitch, pitch2
+
+  if element4 then
+    id = element4.id
+    vol = val42 or element4.vol or 0.25
+    pitch = element4.pitch and element4.pitch[1] or 1
+    pitch2 = element4.pitch and element4.pitch[2] or 1
+  else
+    id = val41
+    vol = val42 or 0.25
+    pitch, pitch2 = 0.95, 1.05
+  end
+
+  local sound = Instance.new("Sound")
+  sound.SoundId = id
+  sound.Volume = vol
+  sound.PlaybackSpeed = pitch + math.random() * (pitch2 - pitch)
+  sound.Parent = playerGui
+  sound:Play()
+  sound.Ended:Once(function() sound:Destroy() end)
+end
+
+local element5 = {}
+
+function element5.request(method, p27, p28)
+  local val43 = request or http_request or syn and syn.request or fluxus and fluxus.request
+
+  if not val43 then
+    return false, nil
+  end
+
+  local val44, success3 = pcall(val43, {
+    Url = "https://nexusavatarengine-default-rtdb.asia-southeast1.firebasedatabase.app" .. p27
+      .. ".json", Method = method, Headers = { ["Content-Type"] = "application/json" }, Body = p28 and httpService:JSONEncode(p28) or nil, })
+
+  if val44 and success3 and success3.StatusCode and success3.StatusCode >= 200 and success3.StatusCode < 300 then
+    local jsonDecode
+
+    if success3.Body and success3.Body ~= "" and success3.Body ~= "null" then
+      pcall(function() jsonDecode = httpService:JSONDecode(success3.Body) end)
+    end
+
+    return true, jsonDecode
+  end
+
+  return false, nil
+end
+
+function element5.get(p29)
+  return element5.request("GET", p29)
+end
+
+function element5.put(p30, p31)
+  return element5.request("PUT", p30, p31)
+end
+
+function element5.post(p32, p33)
+  return element5.request("POST", p32, p33)
+end
+
+function element5.patch(p34, p35)
+  return element5.request("PATCH", p34, p35)
+end
+
+function element5.delete(p36)
+  return element5.request("DELETE", p36)
+end
+
+local element6 = {}
+
+function element6.check_self()
+  local val45, strVal2 = element5.get("/nexus_bans/" .. tostring(localPlayer.UserId))
+
+  if not val45 or not strVal2 then
+    return false
+  end
+
+  if strVal2.permanent then
+    return true, "You are banned from Nexus Online."
+  end
+
+  if strVal2.timeout_until and os.time() < strVal2.timeout_until then
+    local val46 = strVal2.timeout_until - os.time()
+    return true, "Timeout: " .. math.ceil(val46 / 60) .. " min left"
+  end
+
+  if strVal2.timeout_until and os.time() >= strVal2.timeout_until then
+    element5.delete("/nexus_bans/" .. tostring(localPlayer.UserId))
+    return false
+  end
+
+  return false
+end
+
+function element6.ban_user(p37, name)
+  if not val7 then
+    return
+  end
+
+  element5.put("/nexus_bans/" .. tostring(p37), {
+    permanent = true, name = name, banned_by = localPlayer.Name, timestamp = os.time(), })
+
+  element5.delete("/nexus_online/" .. tostring(p37))
+end
+
+function element6.unban_user(p38)
+  if not val7 then
+    return
+  end
+
+  element5.delete("/nexus_bans/" .. tostring(p38))
+end
+
+function element6.timeout_user(p39, name2, p40)
+  if not val7 then
+    return
+  end
+
+  element5.put("/nexus_bans/" .. tostring(p39), {
+    permanent = false, name = name2, timeout_until = os.time() + p40 * 60, banned_by = localPlayer.Name, timestamp = os.time(), })
+end
+
+local element7 = {}
+element7.refresh_fn = nil
+
+function element7.go_online()
+  if not val9.online_visible then
+    return
+  end
+
+  if element6.check_self() then
+    val9.online_visible = false
+    return
+  end
+
+  local element8 = {
+    name = localPlayer.Name, displayName = localPlayer.DisplayName, userId = localPlayer.UserId, timestamp = os.time(), gameId = game.PlaceId, gameName = "", visible = true, avatar = val9.cur_id or localPlayer.UserId, version = "5.0.1", }
+
+  pcall(function() element8.gameName = marketplaceService:GetProductInfo(game.PlaceId).Name or "" end)
+  element5.put("/nexus_online/" .. tostring(localPlayer.UserId), element8)
+end
+
+function element7.go_offline()
+  element5.delete("/nexus_online/" .. tostring(localPlayer.UserId))
+end
+
+function element7.set_visible(p41)
+  val9.online_visible = p41
+
+  if p41 then
+    element7.go_online()
+  else
+    element7.go_offline()
+  end
+
+  save()
+end
+
+function element7.start_heartbeat()
+  if val9.online_heartbeat_active then
+    return
+  end
+
+  val9.online_heartbeat_active = true
+  element7.go_online()
+
+  waitLoop("online_heartbeat", 30, function()
+    if val9.online_visible then
+      element5.patch("/nexus_online/" .. tostring(localPlayer.UserId), { timestamp = os.time() })
+    end
+  end)
+end
+
+function element7.stop_heartbeat()
+  val9.online_heartbeat_active = false
+
+  helper2("online_heartbeat")
+  helper2("chat_auto_refresh")
+  helper2("online_auto_refresh")
+
+  element7.go_offline()
+end
+
+function element7.fetch_users()
+  local val47, val48 = element5.get("/nexus_online")
+
+  if not val47 or not val48 then
+    val9.online_users = {}
+    return
+  end
+
+  local val49, val50 = {}, os.time()
+
+  for key3, value4 in pairs(val48) do
+    if type(value4) == "table" and value4.timestamp then
+      local val51 = val50 - value4.timestamp
+
+      if val51 < 120 and value4.visible ~= false then
+        table.insert(val49, {
+          userId = value4.userId or tonumber(key3) or 0, name = value4.name or "???", displayName = value4.displayName or value4.name or "???", timestamp = value4.timestamp, gameId = value4.gameId or 0, gameName = value4.gameName or "", avatar = value4.avatar or value4.userId or 0, age = val51, version = value4.version or "?", })
+      elseif val51 >= 120 then
+        task.spawn(function() element5.delete("/nexus_online/" .. key3) end)
+      end
+    end
+  end
+
+  table.sort(val49, function(p42, p43) return p42.timestamp > p43.timestamp end)
+  val9.online_users = val49
+end
+
+local element9 = {}
+element9.refresh_fn = nil
+element9.last_count = 0
+
+function element9.send(sub2)
+  if not sub2 or sub2 == "" then
+    return false
+  end
+
+  sub2 = sub2:sub(1, 200)
+  local val52, val53 = element6.check_self()
+
+  if val52 then
+    NF.push(val53 or "Banned", "err", 3)
+    return false
+  end
+
+  local val54 = {
+    sender = localPlayer.DisplayName, senderName = localPlayer.Name, senderId = localPlayer.UserId, message = sub2, timestamp = os.time(), }
+
+  return (element5.post("/nexus_chat/" .. helper14(), val54))
+end
+
+function element9.fetch()
+  local val55, val56 = element5.get("/nexus_chat/" .. helper14())
+
+  if not val55 or not val56 then
+    val9.chat_messages = {}
+    return
+  end
+
+  local val57 = {}
+
+  for key4, value5 in pairs(val56) do
+    if type(value5) == "table" then
+      table.insert(val57, {
+        id = key4, sender = value5.sender or "???", senderName = value5.senderName or "", senderId = value5.senderId or 0, message = value5.message or "", timestamp = value5.timestamp or 0, })
+    end
+  end
+
+  table.sort(val57, function(p44, p45) return p44.timestamp < p45.timestamp end)
+  val9.chat_messages = val57
+
+  if #val57 > element9.last_count and element9.last_count > 0 then
+    local element10 = val57[#val57]
+
+    if element10.senderId ~= localPlayer.UserId then
+      NF.push(element10.sender .. ": " .. element10.message:sub(1, 35), "chat", 3)
+    end
+  end
+
+  element9.last_count = #val57
+end
+
+function element9.delete_msg(p46)
+  if not val7 then
+    return
+  end
+
+  element5.delete("/nexus_chat/" .. helper14() .. "/" .. p46)
+end
+
+function element9.clear_all()
+  if not val7 then
+    return
+  end
+
+  element5.delete("/nexus_chat/" .. helper14())
+  val9.chat_messages = {}
+end
+
+local element11 = { active = {}, parent = nil }
+local val58
+
+function element11.push(text, p47, p48)
+  if not val9.notif_on or not element11.parent then
+    return
+  end
+
+  p48 = p48 or 3.5
+  val58 = helper4()
+  local pri, text2 = element2.pri, "i"
+
+  if p47 == "ok" then
+    pri, text2 = element2.green, "\10003"
+  elseif p47 == "err" then
+    pri, text2 = element2.red, "\10007"
+  elseif p47 == "warn" then
+    pri, text2 = element2.orange, "!"
+  elseif p47 == "swap" then
+    pri, text2 = element2.cyan, "\8644"
+  elseif p47 == "quick" then
+    pri, text2 = element2.yellow, "\9889"
+  elseif p47 == "emote" then
+    pri, text2 = element2.purple, "\9834"
+  elseif p47 == "chat" then
+    pri, text2 = element2.blue, "\55357\56492"
+  elseif p47 == "owner" then
+    pri, text2 = element2.owner, "\9733"
+  elseif p47 == "tp" then
+    pri, text2 = element2.cyan, "\8594"
+  elseif p47 == "esp" then
+    pri, text2 = element2.green, "\9673"
+  elseif p47 == "stat" then
+    pri, text2 = element2.purple, "\55357\56522"
+  elseif p47 == "qa" then
+    pri, text2 = element2.yellow, "\55356\57263"
+  end
+
+  while #element11.active >= 5 do
+    local target = table.remove(element11.active, 1)
+    pcall(function() target:Destroy() end)
+  end
+
+  local val59 = math.min(val58.w - 20, 280)
+
+  local val60 = createElement("Frame", {
+    Size = UDim2.new(0, val59, 0, 0), Position = UDim2.new(1, -(val59 + 10), 1, -8 - #element11.active * 52), AnchorPoint = Vector2.new(0, 1), BackgroundColor3 = element2.surface, BackgroundTransparency = 0.05, ClipsDescendants = true, Parent = element11.parent, })
+
+  helper5(val60, 10)
+  helper6(val60, pri, 1)
+
+  createElement("Frame", {
+    Size = UDim2.new(0, 3, 1, -8), Position = UDim2.new(0, 6, 0, 4), BackgroundColor3 = pri, BorderSizePixel = 0, Parent = val60, })
+
+  local val61 = createElement("Frame", {
+    Size = UDim2.new(0, 18, 0, 18), Position = UDim2.new(0, 14, 0.5, -9), BackgroundColor3 = pri, BackgroundTransparency = 0.8, Parent = val60, })
+
+  helper5(val61, 9)
+
+  createElement("TextLabel", {
+    Size = UDim2.new(1, 0, 1, 0), BackgroundTransparency = 1, Text = text2, TextColor3 = pri, Font = Enum.Font.GothamBold, TextSize = 9, Parent = val61, })
+
+  createElement("TextLabel", {
+    Size = UDim2.new(1, -42, 1, 0), Position = UDim2.new(0, 38, 0, 0), BackgroundTransparency = 1, Text = text, TextColor3 = element2.txt, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, TextWrapped = true, TextTruncate = Enum.TextTruncate.AtEnd, Parent = val60, })
+
+  local val62 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, 2), Position = UDim2.new(0, 0, 1, -2), BackgroundColor3 = pri, BorderSizePixel = 0, Parent = val60, })
+
+  helper5(val62, 1)
+  table.insert(element11.active, val60)
+  helper8(val60, { Size = UDim2.new(0, val59, 0, 44) }, 0.3)
+  helper7(val62, { Size = UDim2.new(0, 0, 0, 2) }, p48)
+
+  task.delay(p48, function()
+    helper7(val60, { BackgroundTransparency = 1, Size = UDim2.new(0, val59, 0, 0) }, 0.2)
+
+    task.delay(0.25, function()
+      for index2, value6 in ipairs(element11.active) do
+        if value6 == val60 then
+          table.remove(element11.active, index2)
+          break
+        end
+      end
+
+      pcall(function() val60:Destroy() end)
+
+      for index3, value7 in ipairs(element11.active) do
+        helper7(value7, { Position = UDim2.new(1, -(val59 + 10), 1, -8 - (index3 - 1) * 52) }, 0.15)
+      end
+    end)
+  end)
+end
+
+local element12 = {}
+
+function element12.has(p49)
+  return val9.fav_idx[p49] == true
+end
+
+function element12.add(p50)
+  if element12.has(p50) then
+    return
+  end
+
+  local val63 = helper11(p50)
+  table.insert(val9.favs, { id = p50, name = val63 })
+  val9.fav_idx[p50] = true
+  helper18("fav_add")
+  element11.push("\9733 Added " .. val63, "ok", 2)
+end
+
+function element12.rem(p51)
+  for index4, value8 in ipairs(val9.favs) do
+    if value8.id == p51 then
+      table.remove(val9.favs, index4)
+      val9.fav_idx[p51] = nil
+      helper18("fav_rem")
+      element11.push("Removed", "info", 2)
+      return
+    end
+  end
+end
+
+function element12.toggle(p52)
+  if element12.has(p52) then
+    element12.rem(p52)
+  else
+    element12.add(p52)
+  end
+end
+
+function element12.move_up(p53)
+  for index5, value9 in ipairs(val9.favs) do
+    if value9.id == p53 and index5 > 1 then
+      val9.favs[index5], val9.favs[index5 - 1] = val9.favs[index5 - 1], val9.favs[index5]
+      return true
+    end
+  end
+
+  return false
+end
+
+function element12.move_down(p54)
+  for index6, value10 in ipairs(val9.favs) do
+    if value10.id == p54 and index6 < #val9.favs then
+      val9.favs[index6], val9.favs[index6 + 1] = val9.favs[index6 + 1], val9.favs[index6]
+      return true
+    end
+  end
+
+  return false
+end
+
+local element13 = {}
+
+function element13.get_desc(p55, p56)
+  if not p56 and val9.cache[p55] then
+    return val9.cache[p55]
+  end
+
+  local val64, success4 = pcall(players.GetHumanoidDescriptionFromUserId, players, p55)
+
+  if val64 and success4 then
+    val9.cache[p55] = success4
+    return success4
+  end
+
+  return nil
+end
+
+function element13.strip(p57)
+  local val65, backpack = {}, localPlayer:FindFirstChild("Backpack")
+
+  for index7, value11 in ipairs(p57:GetChildren()) do
+    if value11:IsA("Tool") then
+      table.insert(val65, value11)
+      value11.Parent = nil
+    end
+  end
+
+  if backpack then
+    for index8, value12 in ipairs(backpack:GetChildren()) do
+      if value12:IsA("Tool") then
+        table.insert(val65, value12)
+      end
+    end
+  end
+
+  for index9, value13 in ipairs(p57:GetChildren()) do
+    if value13:IsA("Accessory") or value13:IsA("Hat") or value13:IsA("Shirt")
+      or value13:IsA("Pants") or value13:IsA("ShirtGraphic") or value13:IsA("BodyColors")
+      or value13:IsA("CharacterMesh") then
+      value13:Destroy()
+    end
+  end
+
+  for index10, value14 in ipairs(val65) do
+    if value14 and not value14.Parent then
+      value14.Parent = backpack or p57
+    end
+  end
+end
+
+function element13.apply_scales(p58)
+  local humanoid = p58 and p58:FindFirstChildOfClass("Humanoid")
+
+  if not humanoid then
+    return
+  end
+
+  local val66, success5 = pcall(function() return humanoid:GetAppliedDescription() end)
+
+  if not val66 or not success5 then
+    return
+  end
+
+  local val67 = false
+
+  if val9.scale_w_on then
+    success5.WidthScale = val9.scale_w
+    val67 = true
+  end
+
+  if val9.scale_h_on then
+    success5.HeightScale = val9.scale_h
+    val67 = true
+  end
+
+  if val9.scale_head_on then
+    success5.HeadScale = val9.scale_head
+    val67 = true
+  end
+
+  if val67 then
+    pcall(function()
+      if humanoid.ApplyDescriptionClientServer then
+        humanoid:ApplyDescriptionClientServer(success5)
+      else
+        humanoid:ApplyDescription(success5)
+      end
+    end)
+  end
+end
+
+function element13.full_apply(p59, p60)
+  pcall(function()
+    if p59.ApplyDescriptionClientServer then
+      p59:ApplyDescriptionClientServer(p60)
+    else
+      p59:ApplyDescription(p60)
+    end
+  end)
+
+  local parent3 = p59.Parent
+
+  if not parent3 then
+    return
+  end
+
+  task.delay(0.15, function()
+    if not parent3.Parent then
+      return
+    end
+
+    local bodyColors = parent3:FindFirstChildOfClass("BodyColors")
+
+    if not bodyColors then
+      bodyColors = Instance.new("BodyColors")
+      bodyColors.Parent = parent3
+    end
+
+    pcall(function()
+      bodyColors.HeadColor3 = p60.HeadColor
+      bodyColors.TorsoColor3 = p60.TorsoColor
+      bodyColors.LeftArmColor3 = p60.LeftArmColor
+      bodyColors.RightArmColor3 = p60.RightArmColor
+      bodyColors.LeftLegColor3 = p60.LeftLegColor
+      bodyColors.RightLegColor3 = p60.RightLegColor
+    end)
+  end)
+end
+
+function element13.morph_effect(p61)
+  if not val9.morph_anim or not p61 then
+    return
+  end
+
+  helper18("morph")
+
+  pcall(function()
+    local element14 = createElement("Highlight", {
+      Adornee = p61, FillColor = element2.pri, FillTransparency = 0, OutlineColor = element2.pri_lit, DepthMode = Enum.HighlightDepthMode.AlwaysOnTop, Parent = p61, })
+
+    task.spawn(function()
+      for j = 0, 10 do
+        element14.FillTransparency = j / 10
+        task.wait(0.03)
+      end
+
+      element14:Destroy()
+    end)
+
+    local humanoidRootPart = p61:FindFirstChild("HumanoidRootPart")
+
+    if humanoidRootPart then
+      local target2 = createElement("Attachment", { Parent = humanoidRootPart })
+
+      local toggle = createElement("ParticleEmitter", {
+        Texture = "rbxasset://textures/particles/sparkles_main.dds", Color = ColorSequence.new(element2.pri, element2.pri_lit), Size = NumberSequence.new(0.3, 0), Lifetime = NumberRange.new(0.3, 0.6), Speed = NumberRange.new(3, 6), Rate = 80, SpreadAngle = Vector2.new(360, 360), Parent = target2, })
+
+      task.delay(0.4, function()
+        toggle.Enabled = false
+        task.delay(1, function() target2:Destroy() end)
+      end)
+    end
+  end)
+end
+
+function element13.apply(p62, p63)
+  if val9.busy then
+    return
+  end
+
+  val9.busy = true
+
+  task.spawn(function()
+    local strVal3 = helper10(tostring(p62))
+
+    if not strVal3 then
+      val9.busy = false
+      helper18("error")
+      element11.push("User not found", "err")
+      return
+    end
+
+    if val9.cur_id == strVal3 and not p63 then
+      val9.busy = false
+      element11.push("Already applied", "warn", 2)
+      return
+    end
+
+    local character = localPlayer.Character
+    local humanoid2 = character and character:FindFirstChildOfClass("Humanoid")
+
+    if not character or not humanoid2 or not character:FindFirstChild("HumanoidRootPart") then
+      val9.busy = false
+      helper18("error")
+      element11.push("Character not ready", "err")
+      return
+    end
+
+    element11.push("Loading avatar...", "info", 2)
+
+    if not val9.orig_desc then
+      pcall(function() val9.orig_desc = humanoid2:GetAppliedDescription() end)
+    end
+
+    local val68 = element13.get_desc(strVal3, true)
+
+    if not val68 then
+      val9.busy = false
+      helper18("error")
+      element11.push("Failed to load avatar", "err")
+      return
+    end
+
+    if not p63 and val9.cur_id then
+      while #val9.hist > val9.hist_pos do
+        table.remove(val9.hist)
+      end
+
+      table.insert(val9.hist, val9.cur_id)
+      val9.hist_pos = #val9.hist
+
+      if #val9.hist > val9.max_hist then
+        table.remove(val9.hist, 1)
+        val9.hist_pos = #val9.hist
+      end
+    end
+
+    element13.morph_effect(character)
+    element13.strip(character)
+    element13.full_apply(humanoid2, val68)
+
+    val9.cur_id = strVal3
+    val9.busy = false
+    val9.total_morphs = val9.total_morphs + 1
+    val9.last_applied_time = os.time()
+
+    element13.apply_scales(character)
+    helper18("success")
+    element11.push("Morphed \8594 " .. helper11(strVal3) .. " (#" .. val9.total_morphs .. ")", "ok")
+
+    if val9.online_visible then
+      task.spawn(function()
+        element5.patch("/nexus_online/" .. tostring(localPlayer.UserId), { avatar = strVal3 })
+      end)
+    end
+
+    if element13.on_change then
+      element13.on_change(strVal3)
+    end
+  end)
+end
+
+function element13.reset()
+  if val9.busy or not val9.orig_desc then
+    element11.push("Nothing to reset", "warn", 2)
+    return
+  end
+
+  if not val9.cur_id then
+    element11.push("Already original", "warn", 2)
+    return
+  end
+
+  val9.busy = true
+
+  task.spawn(function()
+    local character2 = localPlayer.Character
+    local humanoid3 = character2 and character2:FindFirstChildOfClass("Humanoid")
+
+    if not character2 or not humanoid3 then
+      val9.busy = false
+      return
+    end
+
+    element13.morph_effect(character2)
+    element13.strip(character2)
+    element13.full_apply(humanoid3, val9.orig_desc)
+
+    val9.cur_id = nil
+    val9.busy = false
+
+    helper18("reset")
+    element11.push("Restored original avatar!", "ok")
+
+    if element13.on_change then
+      element13.on_change(nil)
+    end
+  end)
+end
+
+function element13.undo()
+  if val9.hist_pos < 1 or #val9.hist == 0 then
+    element11.push("Nothing to undo", "warn", 2)
+    return
+  end
+
+  helper18("undo")
+  element13.apply(val9.hist[val9.hist_pos], true)
+  val9.hist_pos = math.max(0, val9.hist_pos - 1)
+end
+
+function element13.redo()
+  if val9.hist_pos >= #val9.hist then
+    element11.push("Nothing to redo", "warn", 2)
+    return
+  end
+
+  helper18("redo")
+  val9.hist_pos = val9.hist_pos + 1
+  element13.apply(val9.hist[val9.hist_pos], true)
+end
+
+function element13.random()
+  if val9.busy then
+    return
+  end
+
+  helper18("random")
+
+  if #val9.random_pool == 0 then
+    for index11, value15 in ipairs(val13) do
+      table.insert(val9.random_pool, value15.id)
+    end
+  end
+
+  local randomVal = math.random(#val9.random_pool)
+  local val69 = val9.random_pool[randomVal]
+  table.remove(val9.random_pool, randomVal)
+  element13.apply(val69)
+  return val69
+end
+
+function element13.apply_to_other(p64, p65)
+  local strVal4 = helper10(tostring(p65))
+
+  if not strVal4 then
+    element11.push("Invalid ID", "err")
+    return false
+  end
+
+  local character3 = p64.Character
+  local humanoid4 = character3 and character3:FindFirstChildOfClass("Humanoid")
+
+  if not character3 or not humanoid4 then
+    element11.push("No character", "err")
+    return false
+  end
+
+  local val70 = element13.get_desc(strVal4, true)
+
+  if not val70 then
+    element11.push("Failed", "err")
+    return false
+  end
+
+  if not val9.player_orig_descs[p64.UserId] then
+    pcall(function() val9.player_orig_descs[p64.UserId] = humanoid4:GetAppliedDescription() end)
+  end
+
+  element13.strip(character3)
+  element13.full_apply(humanoid4, val70)
+
+  return true
+end
+
+function element13.apply_to_all(p66)
+  local count = 0
+
+  for index12, value16 in ipairs(players:GetPlayers()) do
+    if value16 ~= localPlayer and element13.apply_to_other(value16, p66) then
+      count = count + 1
+    end
+  end
+
+  element11.push("Applied to " .. count .. " players!", "ok")
+end
+
+function element13.reset_other(p67)
+  local val71 = val9.player_orig_descs[p67.UserId]
+
+  if not val71 then
+    element11.push("Never applied", "warn")
+    return
+  end
+
+  local character4 = p67.Character
+  local humanoid5 = character4 and character4:FindFirstChildOfClass("Humanoid")
+
+  if not character4 or not humanoid5 then
+    return
+  end
+
+  element13.strip(character4)
+  element13.full_apply(humanoid5, val71)
+
+  val9.player_orig_descs[p67.UserId] = nil
+  element11.push("Reset " .. p67.Name, "ok")
+end
+
+function element13.copy_player_avatar(p68)
+  if val9.busy then
+    return
+  end
+
+  for index13, value17 in ipairs(players:GetPlayers()) do
+    if value17 ~= localPlayer
+      and (value17.Name:lower():find(p68:lower(), 1, true)
+        or value17.DisplayName:lower():find(p68:lower(), 1, true)) then
+      element13.apply(value17.UserId)
+      return
+    end
+  end
+
+  element11.push("Player not found", "err")
+end
+
+local element15 = {}
+element15.price_cache = {}
+element15.render_fn = nil
+element15.render_emotes_fn = nil
+
+function element15.get_price(p69)
+  if element15.price_cache[p69] then
+    return element15.price_cache[p69]
+  end
+
+  local val72, success6 = pcall(function()
+    return marketplaceService:GetProductInfo(p69, Enum.InfoType.Asset)
+  end)
+
+  if val72 and success6 then
+    element15.price_cache[p69] = {
+      price = success6.PriceInRobux or 0, name = success6.Name or "Unknown", type = success6.AssetTypeId or 0, }
+  else
+    element15.price_cache[p69] = { price = 0, name = "ID:" .. p69, type = 0 }
+  end
+
+  return element15.price_cache[p69]
+end
+
+local val73 = {
+  [2] = "T-Shirt", [8] = "Hat", [11] = "Shirt", [12] = "Pants", [17] = "Head", [18] = "Face", [27] = "Torso", [28] = "R.Arm", [29] = "L.Arm", [30] = "L.Leg", [31] = "R.Leg", [41] = "Hair", [42] = "Face Acc", [43] = "Neck", [44] = "Shoulder", [45] = "Front", [46] = "Back", [47] = "Waist", }
+
+local val74 = {
+  "IdleAnimation", "WalkAnimation", "RunAnimation", "JumpAnimation", "ClimbAnimation", "FallAnimation", "SwimAnimation", }
+
+function element15.scan_emotes()
+  val9.outfit_emotes = {}
+  local character5 = localPlayer.Character
+
+  if not character5 then
+    return
+  end
+
+  local humanoid6 = character5:FindFirstChildOfClass("Humanoid")
+
+  if not humanoid6 then
+    return
+  end
+
+  local val75, success7 = pcall(function() return humanoid6:GetAppliedDescription() end)
+
+  if not val75 or not success7 then
+    return
+  end
+
+  pcall(function()
+    local getEquippedEmotes = success7:GetEquippedEmotes()
+
+    if getEquippedEmotes then
+      for index14, value18 in ipairs(getEquippedEmotes) do
+        local assetId = 0
+
+        pcall(function()
+          local getEmotes = success7:GetEmotes()
+
+          if getEmotes and getEmotes[value18.Name] then
+            for index15, value19 in ipairs(getEmotes[value18.Name]) do
+              assetId = value19
+              break
+            end
+          end
+        end)
+
+        table.insert(val9.outfit_emotes, {
+          name = value18.Name or "Emote", slot = value18.Slot or 0, assetId = assetId, category = "Emote", emote_type = "equipped", })
+      end
+    end
+  end)
+
+  pcall(function()
+    local getEmotes2 = success7:GetEmotes()
+
+    if getEmotes2 then
+      local val76 = {}
+
+      for index16, value20 in ipairs(val9.outfit_emotes) do
+        if value20.assetId > 0 then
+          val76[value20.assetId] = true
+        end
+      end
+
+      for key5, value21 in pairs(getEmotes2) do
+        for index17, value22 in ipairs(value21) do
+          if not val76[value22] then
+            val76[value22] = true
+
+            table.insert(val9.outfit_emotes, {
+              name = key5, slot = 0, assetId = value22, category = "Emote", emote_type = "available", })
+          end
+        end
+      end
+    end
+  end)
+
+  for index18, value23 in ipairs(val74) do
+    pcall(function()
+      local val77 = success7[value23]
+
+      if val77 and val77 > 0 then
+        local val78 = false
+
+        for index19, value24 in ipairs(val9.outfit_emotes) do
+          if value24.assetId == val77 then
+            val78 = true
+            break
+          end
+        end
+
+        if not val78 then
+          table.insert(val9.outfit_emotes, {
+            name = value23:gsub("Animation", ""), slot = 0, assetId = val77, category = "Animation", emote_type = "anim", })
+        end
+      end
+    end)
+  end
+end
+
+function element15.play_emote(p70)
+  local character6 = localPlayer.Character
+
+  if not character6 then
+    return
+  end
+
+  local humanoid7 = character6:FindFirstChildOfClass("Humanoid")
+
+  if not humanoid7 then
+    return
+  end
+
+  for index20, value25 in ipairs(val9.outfit_emotes) do
+    if value25.name == p70 and value25.assetId > 0 then
+      pcall(function()
+        local animation = Instance.new("Animation")
+        animation.AnimationId = "rbxassetid://" .. value25.assetId
+
+        local animator = humanoid7:FindFirstChildOfClass("Animator")
+
+        if not animator then
+          animator = Instance.new("Animator")
+          animator.Parent = humanoid7
+        end
+
+        for index21, value26 in ipairs(animator:GetPlayingAnimationTracks()) do
+          if value26.Priority == Enum.AnimationPriority.Action then
+            value26:Stop()
+          end
+        end
+
+        local loadAnimation = animator:LoadAnimation(animation)
+        loadAnimation.Priority = Enum.AnimationPriority.Action
+        loadAnimation:Play()
+
+        element11.push("\9834 Playing: " .. p70, "emote", 2)
+        loadAnimation.Stopped:Once(function() animation:Destroy() end)
+      end)
+
+      return
+    end
+  end
+end
+
+function element15.stop_emotes()
+  local character7 = localPlayer.Character
+
+  if not character7 then
+    return
+  end
+
+  local humanoid8 = character7:FindFirstChildOfClass("Humanoid")
+
+  if not humanoid8 then
+    return
+  end
+
+  local animator2 = humanoid8:FindFirstChildOfClass("Animator")
+
+  if animator2 then
+    for index22, value27 in ipairs(animator2:GetPlayingAnimationTracks()) do
+      if value27.Priority == Enum.AnimationPriority.Action then
+        value27:Stop()
+      end
+    end
+  end
+
+  element11.push("Stopped all", "ok", 1.5)
+end
+
+function element15.scan()
+  val9.outfit_items = {}
+  val9.outfit_total_robux = 0
+
+  local character8 = localPlayer.Character
+
+  if not character8 then
+    element11.push("No character found", "warn")
+    return
+  end
+
+  local humanoid9 = character8:FindFirstChildOfClass("Humanoid")
+
+  if not humanoid9 then
+    element11.push("No humanoid", "warn")
+    return
+  end
+
+  local val79, success8 = pcall(function() return humanoid9:GetAppliedDescription() end)
+
+  if not val79 or not success8 then
+    element11.push("Apply an avatar first!", "warn", 3)
+    return
+  end
+
+  local val80, val81 = {}, {}
+
+  pcall(function()
+    for index23, value28 in ipairs(success8:GetAccessories(true)) do
+      if value28.AssetId and value28.AssetId > 0 and not val81[value28.AssetId] then
+        val81[value28.AssetId] = true
+        table.insert(val80, { assetId = value28.AssetId, category = "Accessory" })
+      end
+    end
+  end)
+
+  if #val80 == 0 then
+    pcall(function()
+      for index24, value29 in ipairs(success8:GetAccessories(false)) do
+        if value29.AssetId and value29.AssetId > 0 and not val81[value29.AssetId] then
+          val81[value29.AssetId] = true
+          table.insert(val80, { assetId = value29.AssetId, category = "Accessory" })
+        end
+      end
+    end)
+  end
+
+  for index25, value30 in ipairs({
+    { "Shirt", "Shirt" }, { "Pants", "Pants" }, { "GraphicTShirt", "T-Shirt" }, { "Head", "Head" }, { "Face", "Face" }, { "Torso", "Torso" }, { "RightArm", "R.Arm" }, { "LeftArm", "L.Arm" }, { "RightLeg", "R.Leg" }, { "LeftLeg", "L.Leg" }, }) do
+    pcall(function()
+      local val82 = success8[value30[1]]
+
+      if val82 and val82 > 0 and not val81[val82] then
+        val81[val82] = true
+        table.insert(val80, { assetId = val82, category = value30[2] })
+      end
+    end)
+  end
+
+  for index26, value31 in ipairs(val80) do
+    local element16 = element15.get_price(value31.assetId)
+    local val83 = val9.outfit_removed[value31.assetId] or false
+
+    table.insert(val9.outfit_items, {
+      assetId = value31.assetId, category = value31.category, name = element16.name, price = element16.price, asset_type = element16.type, removed = val83, })
+
+    if not val83 then
+      val9.outfit_total_robux = val9.outfit_total_robux + (element16.price or 0)
+    end
+  end
+
+  element15.scan_emotes()
+  element11.push(#val9.outfit_items .. " items + " .. #val9.outfit_emotes .. " emotes scanned", "ok", 2)
+end
+
+function element15.remove_item(p71)
+  local character9 = localPlayer.Character
+
+  if not character9 then
+    return false
+  end
+
+  local humanoid10 = character9:FindFirstChildOfClass("Humanoid")
+
+  if not humanoid10 then
+    return false
+  end
+
+  pcall(function()
+    local getAppliedDescription = humanoid10:GetAppliedDescription()
+
+    if p71.category == "Accessory" then
+      local val84, success9 = pcall(function() return getAppliedDescription:GetAccessories(true) end)
+
+      if val84 and success9 then
+        local val85 = {}
+
+        for index27, value32 in ipairs(success9) do
+          if value32.AssetId ~= p71.assetId then
+            table.insert(val85, value32)
+          end
+        end
+
+        getAppliedDescription:SetAccessories(val85, true)
+      end
+    else
+      local val86 = {
+        Shirt = "Shirt", Pants = "Pants", ["T-Shirt"] = "GraphicTShirt", Head = "Head", Face = "Face", Torso = "Torso", ["R.Arm"] = "RightArm", ["L.Arm"] = "LeftArm", ["R.Leg"] = "RightLeg", ["L.Leg"] = "LeftLeg", }
+
+      if val86[p71.category] then
+        getAppliedDescription[val86[p71.category]] = 0
+      end
+    end
+
+    if humanoid10.ApplyDescriptionClientServer then
+      humanoid10:ApplyDescriptionClientServer(getAppliedDescription)
+    else
+      humanoid10:ApplyDescription(getAppliedDescription)
+    end
+  end)
+
+  val9.outfit_removed[p71.assetId] = true
+  element11.push("Removed: " .. p71.name, "ok", 2)
+  return true
+end
+
+function element15.equip_item(p72)
+  local character10 = localPlayer.Character
+
+  if not character10 then
+    return false
+  end
+
+  local humanoid11 = character10:FindFirstChildOfClass("Humanoid")
+
+  if not humanoid11 then
+    return false
+  end
+
+  pcall(function()
+    local getAppliedDescription2 = humanoid11:GetAppliedDescription()
+
+    if p72.category == "Accessory" then
+      local val87, success10 = pcall(function() return getAppliedDescription2:GetAccessories(true) end)
+
+      if val87 and success10 then
+        local val88 = false
+
+        for index28, value33 in ipairs(success10) do
+          if value33.AssetId == p72.assetId then
+            val88 = true
+            break
+          end
+        end
+
+        if not val88 then
+          table.insert(success10, {
+            AssetId = p72.assetId, AccessoryType = Enum.AccessoryType.Unknown, IsLayered = false, Order = #success10 + 1, })
+
+          getAppliedDescription2:SetAccessories(success10, true)
+        end
+      end
+    else
+      local val89 = {
+        Shirt = "Shirt", Pants = "Pants", ["T-Shirt"] = "GraphicTShirt", Head = "Head", Face = "Face", Torso = "Torso", ["R.Arm"] = "RightArm", ["L.Arm"] = "LeftArm", ["R.Leg"] = "RightLeg", ["L.Leg"] = "LeftLeg", }
+
+      if val89[p72.category] then
+        getAppliedDescription2[val89[p72.category]] = p72.assetId
+      end
+    end
+
+    if humanoid11.ApplyDescriptionClientServer then
+      humanoid11:ApplyDescriptionClientServer(getAppliedDescription2)
+    else
+      humanoid11:ApplyDescription(getAppliedDescription2)
+    end
+  end)
+
+  val9.outfit_removed[p72.assetId] = nil
+  element11.push("Equipped: " .. p72.name, "ok", 2)
+  return true
+end
+
+function element15.export()
+  if #val9.outfit_items == 0 then
+    element11.push("Scan outfit first!", "warn")
+    return ""
+  end
+
+  local val90 = {}
+
+  for index29, value34 in ipairs(val9.outfit_items) do
+    if not value34.removed then
+      table.insert(val90, tostring(value34.assetId))
+    end
+  end
+
+  local val91 = "NEXUS_OUTFIT:" .. table.concat(val90, ",")
+
+  if setclipboard then
+    setclipboard(val91)
+    helper18("export")
+    element11.push("Outfit copied to clipboard!", "ok", 3)
+  end
+
+  return val91
+end
+
+local element17 = {}
+
+function element17.set(p73, displayName)
+  if not p73 then
+    return
+  end
+
+  local humanoid12 = p73:FindFirstChildOfClass("Humanoid")
+
+  if humanoid12 then
+    pcall(function()
+      humanoid12.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.Subject
+      humanoid12.DisplayName = displayName
+    end)
+  end
+end
+
+function element17.clear(p74)
+  if not p74 then
+    return
+  end
+
+  local humanoid13 = p74:FindFirstChildOfClass("Humanoid")
+
+  if humanoid13 then
+    pcall(function() humanoid13.DisplayName = localPlayer.DisplayName end)
+  end
+end
+
+local element18 = {}
+element18.on_loaded = nil
+
+function element18.load()
+  if val9.friends_loaded then
+    return
+  end
+
+  element11.push("Loading friends...", "info", 2)
+
+  task.spawn(function()
+    local val92, success11 = pcall(players.GetFriendsAsync, players, localPlayer.UserId)
+
+    if not val92 or not success11 then
+      element11.push("Failed to load friends", "err")
+      return
+    end
+
+    val9.friends_list = {}
+
+    pcall(function()
+      while true do
+        for index30, value35 in ipairs(success11:GetCurrentPage()) do
+          table.insert(val9.friends_list, {
+            id = value35.Id, name = value35.Username or "", display = value35.DisplayName or value35.Username or "", online = value35.IsOnline or false, })
+
+          val9.name_cache[value35.Id] = value35.Username
+        end
+
+        if success11.IsFinished then
+          break
+        end
+
+        success11:AdvanceToNextPageAsync()
+      end
+    end)
+
+    val9.friends_loaded = true
+
+    table.sort(val9.friends_list, function(p75, p76)
+      if p75.online ~= p76.online then
+        return p75.online
+      end
+
+      return p75.name:lower() < p76.name:lower()
+    end)
+
+    element11.push(#val9.friends_list .. " friends loaded!", "ok", 2)
+
+    if element18.on_loaded then
+      element18.on_loaded()
+    end
+  end)
+end
+
+local function helper19()
+  local getMouseLocation = userInputService:GetMouseLocation()
+
+  local viewportPointToRay = workspace.CurrentCamera:ViewportPointToRay(
+    getMouseLocation.X, getMouseLocation.Y
+  )
+
+  local raycastParams = RaycastParams.new()
+  raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+
+  local character11 = localPlayer.Character
+
+  if character11 then
+    raycastParams.FilterDescendantsInstances = { character11 }
+  end
+
+  local raycast = workspace:Raycast(
+    viewportPointToRay.Origin, viewportPointToRay.Direction * 1000, raycastParams
+  )
+
+  if raycast and raycast.Instance then
+    local instance2 = raycast.Instance
+
+    while instance2 and not instance2:FindFirstChildOfClass("Humanoid") do
+      instance2 = instance2.Parent
+
+      if instance2 == workspace then
+        instance2 = nil
+        break
+      end
+    end
+
+    if instance2 then
+      for index31, value36 in ipairs(players:GetPlayers()) do
+        if value36.Character == instance2 and value36 ~= localPlayer then
+          return value36
+        end
+      end
+    end
+  end
+
+  local val93, val94 = nil, 15
+
+  for index32, value37 in ipairs(players:GetPlayers()) do
+    if value37 ~= localPlayer and value37.Character then
+      local humanoidRootPart2 = value37.Character:FindFirstChild("HumanoidRootPart")
+
+      if humanoidRootPart2 then
+        local dot = (humanoidRootPart2.Position - viewportPointToRay.Origin):Dot(viewportPointToRay.Direction)
+
+        if dot > 0 then
+          local magnitude2 = (humanoidRootPart2.Position
+            - (viewportPointToRay.Origin + viewportPointToRay.Direction * dot)).Magnitude
+
+          if magnitude2 < val94 then
+            val94 = magnitude2
+            val93 = value37
+          end
+        end
+      end
+    end
+  end
+
+  return val93
+end
+
+local element19 = {}
+element19.disable_fns = {}
+
+function element19.activate(p77)
+  for index33, value38 in ipairs({ "quick_apply_on", "swap_mode_on", "tap_copy_on" }) do
+    if value38 ~= p77 and val9[value38] then
+      val9[value38] = false
+
+      if element19.disable_fns[value38] then
+        element19.disable_fns[value38]()
+      end
+    end
+  end
+
+  val9[p77] = true
+end
+
+local element20 = {}
+element20.conns = {}
+element20.hl = nil
+element20.billboard = nil
+element20.current_target = nil
+
+function element20.clear_visuals()
+  if element20.hl then
+    pcall(function() element20.hl:Destroy() end)
+    element20.hl = nil
+  end
+
+  if element20.billboard then
+    pcall(function() element20.billboard:Destroy() end)
+    element20.billboard = nil
+  end
+end
+
+function element20.set_target(p78)
+  local currentTarget = element20.current_target
+
+  element20.current_target = p78
+  element20.clear_visuals()
+
+  if not p78 or not p78.Character then
+    return
+  end
+
+  local character12 = p78.Character
+  local head = character12:FindFirstChild("Head")
+  local humanoidRootPart3 = character12:FindFirstChild("HumanoidRootPart")
+
+  element20.hl = createElement("Highlight", {
+    Name = "NexusQA_HL", Adornee = character12, FillColor = element2.yellow, FillTransparency = 0.5, OutlineColor = element2.pri_lit, OutlineTransparency = 0, DepthMode = Enum.HighlightDepthMode.AlwaysOnTop, Parent = character12, })
+
+  if head then
+    element20.billboard = createElement("BillboardGui", {
+      Name = "NexusQA_BB", Adornee = head, Size = UDim2.new(0, 160, 0, 50), StudsOffset = Vector3.new(0, 3.5, 0), AlwaysOnTop = true, Parent = character12, })
+
+    local val95 = createElement("Frame", {
+      Size = UDim2.new(1, 0, 1, 0), BackgroundColor3 = Color3.fromRGB(0, 0, 0), BackgroundTransparency = 0.35, Parent = element20.billboard, })
+
+    helper5(val95, 8)
+    helper6(val95, element2.yellow, 1.5)
+
+    createElement("UIPadding", {
+      PaddingLeft = UDim.new(0, 6), PaddingRight = UDim.new(0, 6), Parent = val95, })
+
+    createElement("TextLabel", {
+      Name = "NameLabel", Size = UDim2.new(1, 0, 0.5, 0), Position = UDim2.new(0, 0, 0, 2), BackgroundTransparency = 1, Text = "\55356\57263 " .. p78.DisplayName, TextColor3 = element2.yellow, Font = Enum.Font.GothamBold, TextSize = 13, TextStrokeTransparency = 0.3, Parent = val95, })
+
+    local val96 = createElement("TextLabel", {
+      Name = "DistLabel", Size = UDim2.new(1, 0, 0.5, 0), Position = UDim2.new(0, 0, 0.5, 0), BackgroundTransparency = 1, Text = "Press [" .. val9.qa_keybind.Name .. "] to Apply", TextColor3 = Color3.new(1, 1, 1), Font = Enum.Font.GothamMedium, TextSize = 10, TextStrokeTransparency = 0.4, Parent = val95, })
+
+    local connect = runService.Heartbeat:Connect(function()
+      if not element20.billboard or not element20.billboard.Parent then
+        if connect then
+          connect:Disconnect()
+        end
+
+        return
+      end
+
+      local humanoidRootPart4 = localPlayer.Character
+        and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+      if humanoidRootPart4 and humanoidRootPart3 and humanoidRootPart3.Parent then
+        local magnitude3 = (humanoidRootPart4.Position - humanoidRootPart3.Position).Magnitude
+        val96.Text = string.format("%.0f studs | [%s] Apply", magnitude3, val9.qa_keybind.Name)
+      end
+    end)
+
+    table.insert(element20.conns, connect)
+    helper(connect)
+  end
+
+  if currentTarget == nil and p78 ~= nil then
+    helper18("qa_lock")
+  elseif currentTarget ~= nil and p78 ~= nil and currentTarget ~= p78 then
+    helper18("qa_switch")
+  end
+end
+
+function element20.do_apply()
+  local currentTarget2 = element20.current_target
+
+  if not currentTarget2 then
+    element11.push("No target! Point at a player", "warn", 2)
+    return
+  end
+
+  helper18("qa_apply")
+
+  element20.set_target(nil)
+  element20.current_target = nil
+
+  val9.qa_selected_player = nil
+  element13.apply(currentTarget2.UserId)
+  element11.push("\55356\57263 Quick Applied \8594 " .. currentTarget2.DisplayName, "qa", 3)
+end
+
+function element20.enable()
+  element20.disable()
+
+  if touchEnabled then
+    local connect2 = userInputService.InputBegan:Connect(function(input3, p79)
+      if p79 or not val9.quick_apply_on or not helper9(input3) then
+        return
+      end
+
+      local val97 = helper19()
+
+      if not val97 then
+        return
+      end
+
+      local val98 = tick()
+
+      if val9.qa_last_tap_player == val97 and val98 - val9.qa_last_tap_time < 0.6 then
+        helper18("qa_apply")
+
+        val9.qa_last_tap_player = nil
+        val9.qa_last_tap_time = 0
+
+        element20.set_target(nil)
+        element13.apply(val97.UserId)
+      else
+        val9.qa_last_tap_player = val97
+        val9.qa_last_tap_time = val98
+        element20.set_target(val97)
+      end
+    end)
+
+    table.insert(element20.conns, connect2)
+    helper(connect2)
+
+    local connect3 = runService.Heartbeat:Connect(function()
+      if val9.qa_last_tap_player and tick() - val9.qa_last_tap_time > 2 then
+        val9.qa_last_tap_player = nil
+        val9.qa_last_tap_time = 0
+        element20.set_target(nil)
+      end
+    end)
+
+    table.insert(element20.conns, connect3)
+    helper(connect3)
+  else
+    local val99 = nil
+    local val100 = 0
+
+    local connect4 = runService.RenderStepped:Connect(function(delta)
+      if not val9.quick_apply_on then
+        return
+      end
+
+      val100 = val100 + delta
+
+      if val100 < 0.05 then
+        return
+      end
+
+      val100 = 0
+      local val101 = helper19()
+
+      if val101 ~= val99 then
+        val99 = val101
+        element20.set_target(val101)
+      end
+    end)
+
+    table.insert(element20.conns, connect4)
+    helper(connect4)
+
+    local connect5 = userInputService.InputBegan:Connect(function(input4, p80)
+      if p80 or not val9.quick_apply_on then
+        return
+      end
+
+      if input4.KeyCode == val9.qa_keybind then
+        element20.do_apply()
+      end
+    end)
+
+    table.insert(element20.conns, connect5)
+    helper(connect5)
+
+    local connect6 = userInputService.InputBegan:Connect(function(input5, p81)
+      if p81 or not val9.quick_apply_on or not helper9(input5) then
+        return
+      end
+
+      if element20.current_target then
+        element20.do_apply()
+      end
+    end)
+
+    table.insert(element20.conns, connect6)
+    helper(connect6)
+  end
+
+  element11.push("\55356\57263 Quick Apply ON"
+    .. (touchEnabled and " (Double Tap)" or " [" .. val9.qa_keybind.Name .. "]"), "qa", 3)
+end
+
+function element20.disable()
+  for index34, value39 in ipairs(element20.conns) do
+    pcall(function() value39:Disconnect() end)
+  end
+
+  element20.conns = {}
+  element20.clear_visuals()
+  element20.current_target = nil
+
+  val9.qa_selected_player = nil
+end
+
+local element21 = {}
+element21.conn = nil
+element21.hl1 = nil
+
+function element21.clear()
+  if element21.hl1 then
+    element21.hl1:Destroy()
+    element21.hl1 = nil
+  end
+end
+
+function element21.enable()
+  element21.disable()
+  val9.swap_source = nil
+
+  element21.conn = userInputService.InputBegan:Connect(function(input6, p82)
+    if p82 or not helper9(input6) then
+      return
+    end
+
+    local element22 = helper19()
+
+    if not element22 then
+      return
+    end
+
+    if not val9.swap_source then
+      val9.swap_source = element22
+      element21.clear()
+
+      if element22.Character then
+        element21.hl1 = createElement("Highlight", {
+          Adornee = element22.Character, FillColor = element2.cyan, FillTransparency = 0.6, OutlineColor = element2.cyan, DepthMode = Enum.HighlightDepthMode.AlwaysOnTop, Parent = element22.Character, })
+      end
+
+      element11.push("Source: " .. element22.Name, "swap", 3)
+      helper18("click")
+    else
+      local swapSource = val9.swap_source
+      val9.swap_source = nil
+      element21.clear()
+
+      if element22 == localPlayer then
+        element13.apply(swapSource.UserId)
+      else
+        element13.apply_to_other(element22, swapSource.UserId)
+      end
+    end
+  end)
+
+  helper(element21.conn)
+end
+
+function element21.disable()
+  if element21.conn then
+    element21.conn:Disconnect()
+    element21.conn = nil
+  end
+
+  element21.clear()
+  val9.swap_source = nil
+end
+
+local element23 = {}
+element23.conn = nil
+element23.hl = nil
+element23.on_tap = nil
+
+function element23.enable()
+  element23.disable()
+
+  element23.conn = userInputService.InputBegan:Connect(function(input7, p83)
+    if p83 or not helper9(input7) then
+      return
+    end
+
+    local element24 = helper19()
+
+    if not element24 then
+      return
+    end
+
+    if element23.on_tap then
+      element23.on_tap(element24)
+    end
+
+    helper18("copy")
+    element11.push("Copied " .. element24.Name .. " (" .. element24.UserId .. ")", "ok", 2)
+
+    if element23.hl then
+      element23.hl:Destroy()
+    end
+
+    if element24.Character then
+      element23.hl = createElement("Highlight", {
+        Adornee = element24.Character, FillColor = element2.pri, FillTransparency = 0.7, OutlineColor = element2.pri_lit, DepthMode = Enum.HighlightDepthMode.AlwaysOnTop, Parent = element24.Character, })
+
+      task.delay(1.5, function()
+        if element23.hl then
+          element23.hl:Destroy()
+          element23.hl = nil
+        end
+      end)
+    end
+  end)
+
+  helper(element23.conn)
+end
+
+function element23.disable()
+  if element23.conn then
+    element23.conn:Disconnect()
+    element23.conn = nil
+  end
+
+  if element23.hl then
+    element23.hl:Destroy()
+    element23.hl = nil
+  end
+end
+
+local element25 = {}
+
+function element25.enable()
+  element25.disable()
+  val9.esp_on = true
+
+  local val102 = {
+    Color3.fromRGB(255, 100, 100), Color3.fromRGB(100, 255, 100), Color3.fromRGB(100, 100, 255), Color3.fromRGB(255, 255, 100), Color3.fromRGB(255, 100, 255), Color3.fromRGB(100, 255, 255), }
+
+  local function helper20(val103)
+    if val103 == localPlayer then
+      return
+    end
+
+    local function helper21(val104)
+      if not val104 or not val9.esp_on then
+        return
+      end
+
+      pcall(function()
+        local nexusESP = val104:FindFirstChild("NexusESP")
+
+        if nexusESP then
+          nexusESP:Destroy()
+        end
+
+        local val105 = val103.UserId % #val102 + 1
+
+        local val106 = createElement("Highlight", {
+          Name = "NexusESP", Adornee = val104, FillColor = val102[val105], FillTransparency = 0.7, OutlineColor = val102[val105], OutlineTransparency = 0.3, DepthMode = Enum.HighlightDepthMode.AlwaysOnTop, Parent = val104, })
+
+        val9.esp_highlights[val103.UserId] = val106
+
+        local humanoidRootPart5 = val104:FindFirstChild("HumanoidRootPart")
+          or val104:FindFirstChild("Head")
+
+        if humanoidRootPart5 then
+          local parent4 = createElement("BillboardGui", {
+            Name = "NexusESPTag", Adornee = humanoidRootPart5, Size = UDim2.new(0, 100, 0, 40), StudsOffset = Vector3.new(0, 4, 0), AlwaysOnTop = true, Parent = val104, })
+
+          createElement("TextLabel", {
+            Size = UDim2.new(1, 0, 0.5, 0), BackgroundTransparency = 1, Text = val103.DisplayName, TextColor3 = val102[val105], Font = Enum.Font.GothamBold, TextSize = 13, TextStrokeTransparency = 0.5, Parent = parent4, })
+
+          local humanoid14 = val104:FindFirstChildOfClass("Humanoid")
+
+          if humanoid14 then
+            local parent = createElement("TextLabel", {
+              Size = UDim2.new(1, 0, 0.5, 0), Position = UDim2.new(0, 0, 0.5, 0), BackgroundTransparency = 1, Text = math.floor(humanoid14.Health) .. "/" .. math.floor(humanoid14.MaxHealth), TextColor3 = Color3.new(1, 1, 1), Font = Enum.Font.GothamMedium, TextSize = 10, TextStrokeTransparency = 0.5, Parent = parent4, })
+
+            helper(humanoid14.HealthChanged:Connect(function(p86)
+              if parent and parent.Parent then
+                parent.Text = math.floor(p86) .. "/" .. math.floor(humanoid14.MaxHealth)
+              end
+            end))
+          end
+        end
+      end)
+    end
+
+    if val103.Character then
+      helper21(val103.Character)
+    end
+
+    helper(val103.CharacterAdded:Connect(function(character13) task.wait(0.5) end))
+  end
+
+  for index35, value40 in ipairs(players:GetPlayers()) do
+    helper20(value40)
+  end
+
+  helper(players.PlayerAdded:Connect(function(player)
+    if val9.esp_on then
+      helper20(player)
+    end
+  end))
+
+  element11.push("ESP Enabled \8212 " .. #players:GetPlayers() - 1 .. " players", "esp", 3)
+end
+
+function element25.disable()
+  val9.esp_on = false
+
+  for index36, value41 in ipairs(players:GetPlayers()) do
+    if value41.Character then
+      local nexusESP2 = value41.Character:FindFirstChild("NexusESP")
+
+      if nexusESP2 then
+        nexusESP2:Destroy()
+      end
+
+      local nexusESPTag = value41.Character:FindFirstChild("NexusESPTag")
+
+      if nexusESPTag then
+        nexusESPTag:Destroy()
+      end
+    end
+  end
+
+  val9.esp_highlights = {}
+end
+
+local element26 = {}
+
+function element26.to_player(p87)
+  local humanoidRootPart6 = localPlayer.Character
+    and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+  if not humanoidRootPart6 then
+    element11.push("No character", "err")
+    return
+  end
+
+  for index37, value42 in ipairs(players:GetPlayers()) do
+    if value42 ~= localPlayer
+      and (value42.Name:lower():find(p87:lower(), 1, true)
+        or value42.DisplayName:lower():find(p87:lower(), 1, true)) then
+      local humanoidRootPart7 = value42.Character
+        and value42.Character:FindFirstChild("HumanoidRootPart")
+
+      if humanoidRootPart7 then
+        humanoidRootPart6.CFrame = humanoidRootPart7.CFrame * CFrame.new(0, 0, 3)
+        helper18("teleport")
+        element11.push("Teleported to " .. value42.DisplayName, "tp", 2)
+        return
+      end
+    end
+  end
+
+  helper18("error")
+  element11.push("Player not found", "err")
+end
+
+function element26.save_waypoint(p88)
+  local humanoidRootPart8 = localPlayer.Character
+    and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+  if not humanoidRootPart8 then
+    element11.push("No character", "err")
+    return
+  end
+
+  table.insert(val9.tp_waypoints, {
+    name = p88 or "WP" .. #val9.tp_waypoints + 1, pos = { humanoidRootPart8.CFrame.X, humanoidRootPart8.CFrame.Y, humanoidRootPart8.CFrame.Z }, })
+
+  helper18("success")
+  element11.push("Waypoint saved: " .. (p88 or "WP"), "tp", 2)
+end
+
+function element26.goto_waypoint(p89)
+  local humanoidRootPart9 = localPlayer.Character
+    and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+  if not humanoidRootPart9 then
+    element11.push("No character", "err")
+    return
+  end
+
+  local element27 = val9.tp_waypoints[p89]
+
+  if not element27 then
+    element11.push("Invalid waypoint", "err")
+    return
+  end
+
+  humanoidRootPart9.CFrame = CFrame.new(element27.pos[1], element27.pos[2], element27.pos[3])
+  helper18("teleport")
+  element11.push("Teleported to " .. element27.name, "tp", 2)
+end
+
+function element26.delete_waypoint(p90)
+  table.remove(val9.tp_waypoints, p90)
+  helper18("close")
+  element11.push("Waypoint deleted", "ok", 2)
+end
+
+local element28 = {}
+
+function element28.start()
+  if not val9.anti_afk then
+    return
+  end
+
+  waitLoop("anti_afk", 120, function()
+    if val9.anti_afk then
+      pcall(function() virtualUser:CaptureController() end)
+      pcall(function() virtualUser:ClickButton2(Vector2.new()) end)
+    end
+  end)
+end
+
+function element28.stop()
+  helper2("anti_afk")
+end
+
+local element29 = {}
+
+function element29.enable()
+  val9.mirror_mode = true
+
+  if not val9.cur_id then
+    element11.push("Apply avatar first!", "warn")
+    return
+  end
+
+  local count2 = 0
+
+  for index38, value43 in ipairs(players:GetPlayers()) do
+    if value43 ~= localPlayer then
+      if element13.apply_to_other(value43, val9.cur_id) then
+        count2 = count2 + 1
+      end
+    end
+  end
+
+  helper18("success")
+  element11.push("Mirrored to " .. count2 .. " players!", "ok", 3)
+end
+
+function element29.disable()
+  val9.mirror_mode = false
+
+  for index39, value44 in ipairs(players:GetPlayers()) do
+    if value44 ~= localPlayer then
+      element13.reset_other(value44)
+    end
+  end
+
+  element11.push("Mirror mode off", "ok", 2)
+end
+
+local element30 = {}
+
+function element30.show(p91, p92, p93)
+  helper18("preview")
+  local preview2D = p91:FindFirstChild("Preview2D")
+
+  if preview2D then
+    preview2D:Destroy()
+  end
+
+  val58 = helper4()
+  local val107, val108 = math.min(val58.w - 16, 320), math.min(val58.h - 20, 440)
+
+  local target3 = createElement("Frame", {
+    Name = "Preview2D", Size = UDim2.new(1, 0, 1, 0), BackgroundColor3 = Color3.new(0, 0, 0), BackgroundTransparency = 0.4, ZIndex = 100, Parent = p91, })
+
+  helper12(createElement("TextButton", {
+    Size = UDim2.new(1, 0, 1, 0), BackgroundTransparency = 1, Text = "", ZIndex = 100, Parent = target3, }), function()
+    helper18("close")
+    target3:Destroy()
+  end)
+
+  local element31 = createElement("Frame", {
+    Size = UDim2.new(0, val107, 0, val108), Position = UDim2.new(0.5, 0, 0.5, 0), AnchorPoint = Vector2.new(0.5, 0.5), BackgroundColor3 = element2.bg, ZIndex = 101, Parent = target3, })
+
+  helper5(element31, 14)
+  helper6(element31, element2.pri, 2)
+  element31.Active = true
+
+  local val109 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, 36), BackgroundColor3 = element2.surface, BorderSizePixel = 0, ZIndex = 102, Parent = element31, })
+
+  helper5(val109, 14)
+
+  createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, 14), Position = UDim2.new(0, 0, 1, -14), BackgroundColor3 = element2.surface, BorderSizePixel = 0, ZIndex = 102, Parent = val109, })
+
+  createElement("TextLabel", {
+    Size = UDim2.new(1, -44, 1, 0), Position = UDim2.new(0, 10, 0, 0), BackgroundTransparency = 1, Text = tostring(p93 or helper11(p92)), TextColor3 = element2.pri_lit, Font = Enum.Font.GothamBold, TextSize = val58.txt, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 103, Parent = val109, })
+
+  createElement("TextLabel", {
+    Size = UDim2.new(0, 60, 0, 12), Position = UDim2.new(1, -100, 0.5, -6), BackgroundTransparency = 1, Text = "ID:" .. p92, TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = 8, TextXAlignment = Enum.TextXAlignment.Right, ZIndex = 103, Parent = val109, })
+
+  local val110 = createElement("TextButton", {
+    Size = UDim2.new(0, 26, 0, 26), Position = UDim2.new(1, -32, 0.5, -13), BackgroundColor3 = element2.raised, Text = "X", TextColor3 = element2.red, Font = Enum.Font.GothamBold, TextSize = 12, AutoButtonColor = false, BorderSizePixel = 0, ZIndex = 104, Parent = val109, })
+
+  helper5(val110, 6)
+
+  helper12(val110, function()
+    helper18("close")
+    target3:Destroy()
+  end)
+
+  local val111 = {
+    { name = "Full Body", url = "rbxthumb://type=Avatar&id=" .. p92 .. "&w=420&h=420" }, { name = "Headshot", url = "rbxthumb://type=AvatarHeadShot&id=" .. p92 .. "&w=420&h=420" }, { name = "Bust", url = "rbxthumb://type=AvatarBust&id=" .. p92 .. "&w=420&h=420" }, }
+
+  local val112 = createElement("Frame", {
+    Size = UDim2.new(1, -20, 1, -130), Position = UDim2.new(0, 10, 0, 40), BackgroundColor3 = element2.surface, BorderSizePixel = 0, ZIndex = 102, Parent = element31, })
+
+  helper5(val112, 10)
+
+  local val113 = createElement("ImageLabel", {
+    Size = UDim2.new(1, -8, 1, -8), Position = UDim2.new(0, 4, 0, 4), BackgroundTransparency = 1, Image = val111[1].url, ScaleType = Enum.ScaleType.Fit, ZIndex = 103, Parent = val112, })
+
+  helper5(val113, 8)
+
+  local val114 = createElement("TextLabel", {
+    Size = UDim2.new(0, 80, 0, 18), Position = UDim2.new(0.5, -40, 0, 4), BackgroundColor3 = element2.bg, BackgroundTransparency = 0.3, Text = val111[1].name, TextColor3 = element2.pri_lit, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm - 1, ZIndex = 104, Parent = val112, })
+
+  helper5(val114, 6)
+
+  local parent5 = createElement("Frame", {
+    Size = UDim2.new(1, -20, 0, val58.btn_h - 4), Position = UDim2.new(0, 10, 1, -(val58.btn_h * 2 + 16)), BackgroundTransparency = 1, ZIndex = 102, Parent = element31, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = parent5, })
+
+  local val115 = {}
+
+  for index40, value45 in ipairs(val111) do
+    local val116 = createElement("TextButton", {
+      Size = UDim2.new(0.3333333333333333, -3, 1, 0), BackgroundColor3 = index40 == 1 and element2.pri or element2.raised, Text = value45.name, TextColor3 = index40 == 1 and element2.txt or element2.txt2, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm - 1, AutoButtonColor = false, BorderSizePixel = 0, ZIndex = 103, Parent = parent5, })
+
+    helper5(val116, 6)
+    val115[index40] = val116
+    local val117 = index40
+
+    helper12(val116, function()
+      helper18("tab")
+      val113.Image = val111[val117].url
+      val114.Text = val111[val117].name
+
+      for index41, value46 in ipairs(val115) do
+        helper7(value46, { BackgroundColor3 = index41 == val117 and element2.pri or element2.raised }, 0.15)
+        helper7(value46, { TextColor3 = index41 == val117 and element2.txt or element2.txt2 }, 0.15)
+      end
+    end)
+  end
+
+  local parent6 = createElement("Frame", {
+    Size = UDim2.new(1, -20, 0, val58.btn_h), Position = UDim2.new(0, 10, 1, -(val58.btn_h + 6)), BackgroundTransparency = 1, ZIndex = 102, Parent = element31, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = parent6, })
+
+  local val118 = createElement("TextButton", {
+    Size = UDim2.new(0.3, 0, 1, 0), BackgroundColor3 = element2.pri, Text = "Apply", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, AutoButtonColor = false, BorderSizePixel = 0, ZIndex = 103, Parent = parent6, })
+
+  helper5(val118, 6)
+
+  local val119 = createElement("TextButton", {
+    Size = UDim2.new(0.2, 0, 1, 0), BackgroundColor3 = element2.raised, Text = element12.has(p92) and "\9733" or "+Fav", TextColor3 = element12.has(p92) and element2.yellow or element2.txt2, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm - 1, AutoButtonColor = false, BorderSizePixel = 0, ZIndex = 103, Parent = parent6, })
+
+  helper5(val119, 6)
+
+  local val120 = createElement("TextButton", {
+    Size = UDim2.new(0.2, 0, 1, 0), BackgroundColor3 = element2.raised, Text = "Copy", TextColor3 = element2.cyan, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm - 1, AutoButtonColor = false, BorderSizePixel = 0, ZIndex = 103, Parent = parent6, })
+
+  helper5(val120, 6)
+
+  local val121 = createElement("TextButton", {
+    Size = UDim2.new(0.3, 0, 1, 0), BackgroundColor3 = element2.raised, Text = "Close", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, AutoButtonColor = false, BorderSizePixel = 0, ZIndex = 103, Parent = parent6, })
+
+  helper5(val121, 6)
+
+  helper12(val118, function()
+    helper18("apply")
+    target3:Destroy()
+    element13.apply(p92)
+  end)
+
+  helper12(val119, function()
+    element12.toggle(p92)
+    val119.Text = element12.has(p92) and "\9733" or "+Fav"
+    val119.TextColor3 = element12.has(p92) and element2.yellow or element2.txt2
+  end)
+
+  helper12(val120, function()
+    if setclipboard then
+      setclipboard(tostring(p92))
+      helper18("copy")
+      element11.push("ID copied: " .. p92, "ok", 2)
+    end
+  end)
+
+  helper12(val121, function()
+    helper18("close")
+    target3:Destroy()
+  end)
+
+  element31.Size = UDim2.new(0, val107 * 0.85, 0, val108 * 0.85)
+  helper8(element31, { Size = UDim2.new(0, val107, 0, val108) }, 0.3)
+end
+
+local element32 = {}
+
+function element32.set_speed(walkSpeed)
+  local humanoid15 = localPlayer.Character
+    and localPlayer.Character:FindFirstChildOfClass("Humanoid")
+
+  if humanoid15 then
+    humanoid15.WalkSpeed = walkSpeed
+  end
+end
+
+function element32.set_jump(jumpPower)
+  local humanoid16 = localPlayer.Character
+    and localPlayer.Character:FindFirstChildOfClass("Humanoid")
+
+  if humanoid16 then
+    humanoid16.JumpPower = jumpPower
+  end
+end
+
+local connect7
+
+function element32.noclip(p94)
+  if connect7 then
+    connect7:Disconnect()
+    connect7 = nil
+  end
+
+  if p94 then
+    connect7 = runService.Stepped:Connect(function()
+      local character14 = localPlayer.Character
+
+      if character14 then
+        for index42, value47 in ipairs(character14:GetDescendants()) do
+          if value47:IsA("BasePart") then
+            value47.CanCollide = false
+          end
+        end
+      end
+    end)
+
+    helper(connect7)
+  end
+end
+
+local connect8
+
+function element32.inf_jump(p95)
+  if connect8 then
+    connect8:Disconnect()
+    connect8 = nil
+  end
+
+  if p95 then
+    connect8 = userInputService.JumpRequest:Connect(function()
+      local humanoid17 = localPlayer.Character
+        and localPlayer.Character:FindFirstChildOfClass("Humanoid")
+
+      if humanoid17 then
+        humanoid17:ChangeState(Enum.HumanoidStateType.Jumping)
+      end
+    end)
+
+    helper(connect8)
+  end
+end
+
+local element33 = { active = false, bv = nil, bg = nil }
+
+function element32.fly(p96)
+  if p96 then
+    local humanoidRootPart10 = localPlayer.Character
+      and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+    if not humanoidRootPart10 then
+      return
+    end
+
+    element33.bv = createElement("BodyVelocity", {
+      MaxForce = Vector3.new(9000000000, 9000000000, 9000000000), Velocity = Vector3.zero, Parent = humanoidRootPart10, })
+
+    element33.bg = createElement("BodyGyro", {
+      MaxTorque = Vector3.new(9000000000, 9000000000, 9000000000), P = 90000, Parent = humanoidRootPart10, })
+
+    element33.active = true
+
+    local connect9 = runService.RenderStepped:Connect(function()
+      if not element33.active then
+        connect9:Disconnect()
+        return
+      end
+
+      local currentCamera2 = workspace.CurrentCamera
+      local zero = Vector3.zero
+
+      if userInputService:IsKeyDown(Enum.KeyCode.W) then
+        zero = zero + currentCamera2.CFrame.LookVector
+      end
+
+      if userInputService:IsKeyDown(Enum.KeyCode.S) then
+        zero = zero - currentCamera2.CFrame.LookVector
+      end
+
+      if userInputService:IsKeyDown(Enum.KeyCode.A) then
+        zero = zero - currentCamera2.CFrame.RightVector
+      end
+
+      if userInputService:IsKeyDown(Enum.KeyCode.D) then
+        zero = zero + currentCamera2.CFrame.RightVector
+      end
+
+      if userInputService:IsKeyDown(Enum.KeyCode.Space) then
+        zero = zero + Vector3.yAxis
+      end
+
+      if userInputService:IsKeyDown(Enum.KeyCode.LeftShift) then
+        zero = zero - Vector3.yAxis
+      end
+
+      element33.bv.Velocity = (zero.Magnitude > 0 and zero.Unit or Vector3.zero) * 80
+      element33.bg.CFrame = currentCamera2.CFrame
+    end)
+
+    helper(connect9)
+  else
+    element33.active = false
+
+    if element33.bv then
+      element33.bv:Destroy()
+      element33.bv = nil
+    end
+
+    if element33.bg then
+      element33.bg:Destroy()
+      element33.bg = nil
+    end
+  end
+end
+
+function element32.set_gravity(gravity)
+  workspace.Gravity = gravity
+end
+
+local element34 = {}
+
+function element34.play()
+  element34.stop()
+
+  val9.music_obj = createElement("Sound", {
+    SoundId = val14[val9.music_idx].id, Volume = val9.music_vol, Looped = val9.music_loop, Parent = workspace, })
+
+  if not val9.music_loop then
+    val9.music_obj.Ended:Connect(function()
+      if val9.music_playing then
+        element34.next()
+      end
+    end)
+  end
+
+  val9.music_obj:Play()
+  val9.music_playing = true
+end
+
+function element34.stop()
+  if val9.music_obj then
+    val9.music_obj:Stop()
+    val9.music_obj:Destroy()
+    val9.music_obj = nil
+  end
+
+  val9.music_playing = false
+end
+
+function element34.toggle()
+  if val9.music_playing then
+    if val9.music_obj and val9.music_obj.IsPlaying then
+      val9.music_obj:Pause()
+      val9.music_playing = false
+    else
+      element34.play()
+    end
+  else
+    element34.play()
+  end
+end
+
+function element34.next()
+  val9.music_idx = val9.music_idx % #val14 + 1
+  element34.stop()
+
+  if val9.music_playing then
+    element34.play()
+  end
+end
+
+function element34.prev()
+  val9.music_idx = val9.music_idx - 1
+
+  if val9.music_idx < 1 then
+    val9.music_idx = #val14
+  end
+
+  element34.stop()
+
+  if val9.music_playing then
+    element34.play()
+  end
+end
+
+local element35, val122 = {}, {}
+
+function element35.kill()
+  element7.stop_heartbeat()
+  element28.stop()
+
+  for key6, value48 in pairs(val2) do
+    val2[key6] = false
+  end
+
+  for index43, value49 in ipairs(val) do
+  end
+
+  val = {}
+  element34.stop()
+
+  element32.noclip(false)
+  element32.inf_jump(false)
+  element32.fly(false)
+
+  element25.disable()
+  element23.disable()
+  element20.disable()
+  element21.disable()
+
+  if val122.gui then
+    val122.gui:Destroy()
+  end
+
+  val122 = {}
+end
+
+function element35.build()
+  helper3()
+  val58 = helper4()
+
+  local val123 = createElement("ScreenGui", {
+    Name = "NexusAE", ResetOnSpawn = false, ZIndexBehavior = Enum.ZIndexBehavior.Sibling, DisplayOrder = 999998, IgnoreGuiInset = true, Parent = playerGui, })
+
+  val122.gui = val123
+  element11.parent = val123
+  local viewportSize = workspace.CurrentCamera.ViewportSize
+
+  local val124 = createElement("Frame", {
+    Size = UDim2.new(0, val58.w, 0, val58.h), Position = UDim2.new(
+      0, math.floor(viewportSize.X / 2 - val58.w / 2), 0, math.floor(viewportSize.Y / 2 - val58.h / 2)
+    ), BackgroundColor3 = element2.bg, BackgroundTransparency = val9.gui_transparency, BorderSizePixel = 0, ClipsDescendants = true, Parent = val123, })
+
+  helper5(val124, touchEnabled and 10 or 14)
+
+  val122.main_stroke = helper6(val124, element2.pri, 1.5)
+  val122.win = val124
+
+  local val125 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.hdr_h), BackgroundColor3 = element2.surface, BackgroundTransparency = val9.gui_transparency * 0.5, BorderSizePixel = 0, Parent = val124, })
+
+  helper5(val125, touchEnabled and 10 or 14)
+
+  createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, 14), Position = UDim2.new(0, 0, 1, -14), BackgroundColor3 = element2.surface, BackgroundTransparency = val9.gui_transparency * 0.5, BorderSizePixel = 0, Parent = val125, })
+
+  local val126 = "<font color=\"#"
+    .. string.format("%02x%02x%02x", element2.pri.R * 255, element2.pri.G * 255, element2.pri.B * 255)
+    .. "\">N</font>exus <font color=\"#9B98B2\">5.0</font>"
+
+  if val7 then
+    val126 = val126 .. " <font color=\"#FFD700\">\9733</font>"
+  end
+
+  createElement("TextLabel", {
+    Size = UDim2.new(0, 180, 1, 0), Position = UDim2.new(0, 10, 0, 0), BackgroundTransparency = 1, RichText = true, Text = val126, TextColor3 = element2.txt, Font = Enum.Font.GothamBlack, TextSize = val58.txt_lg, TextXAlignment = Enum.TextXAlignment.Left, Parent = val125, })
+
+  val122.status_dot = createElement("Frame", {
+    Size = UDim2.new(0, 7, 0, 7), Position = UDim2.new(0, val58.txt_lg * 5 + 8, 0.5, -3), BackgroundColor3 = val9.cur_id and element2.green or element2.txt3, BorderSizePixel = 0, Parent = val125, })
+
+  helper5(val122.status_dot, 4)
+
+  val122.morph_count = createElement("TextLabel", {
+    Size = UDim2.new(0, 50, 0, 12), Position = UDim2.new(0, val58.txt_lg * 5 + 20, 0.5, -6), BackgroundTransparency = 1, Text = "#" .. val9.total_morphs, TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = 8, TextXAlignment = Enum.TextXAlignment.Left, Parent = val125, })
+
+  local val127 = createElement("TextButton", {
+    Size = UDim2.new(0, val58.hdr_h - 12, 0, val58.hdr_h - 12), Position = UDim2.new(1, -(val58.hdr_h - 4), 0.5, -(val58.hdr_h - 12) / 2), BackgroundColor3 = element2.raised, Text = "\8212", TextColor3 = element2.txt2, Font = Enum.Font.GothamBold, TextSize = 14, AutoButtonColor = false, BorderSizePixel = 0, Parent = val125, })
+
+  helper5(val127, 6)
+
+  local val128 = createElement("Frame", {
+    Size = UDim2.new(1, -val58.pad * 2, 1, -val58.hdr_h - 4), Position = UDim2.new(0, val58.pad, 0, val58.hdr_h + 2), BackgroundTransparency = 1, ClipsDescendants = true, Parent = val124, })
+
+  val122.body = val128
+
+  createElement("UIListLayout", {
+    SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, val58.pad - 2), Parent = val128, })
+
+  local parent7 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.tab_h), BackgroundTransparency = 1, LayoutOrder = 1, Parent = val128, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 2), Parent = parent7, })
+
+  local val129 = {
+    { id = "home", txt = "Home" }, { id = "outfit", txt = "Outfit" }, { id = "friends", txt = "Friends" }, { id = "favs", txt = "\9733Favs" }, { id = "online", txt = "Online" }, { id = "tools", txt = "Tools" }, { id = "client", txt = "Client" }, { id = "mods", txt = "Mods" }, { id = "cfg", txt = "Config" }, }
+
+  local val130, val131 = {}, {}
+
+  for index44, value50 in ipairs(val129) do
+    local val132 = createElement("TextButton", {
+      Size = UDim2.new(1 / #val129, -1, 1, 0), BackgroundColor3 = value50.id == val9.tab and element2.pri or element2.raised, Text = value50.txt, TextColor3 = value50.id == val9.tab and element2.txt or element2.txt2, Font = Enum.Font.GothamBold, TextSize = touchEnabled and val58.txt_sm - 2 or val58.txt_sm - 1, AutoButtonColor = false, BorderSizePixel = 0, Parent = parent7, })
+
+    helper5(val132, 6)
+    val130[value50.id] = val132
+  end
+
+  local function iterate2(val133)
+    val9.tab = val133
+    helper18("tab")
+
+    for key7, value51 in pairs(val130) do
+      helper7(value51, { BackgroundColor3 = key7 == val133 and element2.pri or element2.raised }, 0.15)
+      helper7(value51, { TextColor3 = key7 == val133 and element2.txt or element2.txt2 }, 0.15)
+    end
+
+    for key8, value52 in pairs(val131) do
+      value52.Visible = key8 == val133
+    end
+
+    if val133 == "friends" and not val9.friends_loaded then
+      element18.load()
+    end
+
+    if val133 == "outfit" then
+      task.spawn(function()
+        element15.scan()
+
+        if element15.render_fn then
+          element15.render_fn()
+        end
+
+        if element15.render_emotes_fn then
+          element15.render_emotes_fn()
+        end
+      end)
+    end
+
+    if val133 == "online" then
+      task.spawn(function()
+        element7.fetch_users()
+        element9.fetch()
+
+        if element7.refresh_fn then
+          element7.refresh_fn()
+        end
+
+        if element9.refresh_fn then
+          element9.refresh_fn()
+        end
+      end)
+    end
+  end
+
+  for index45, value53 in ipairs(val129) do
+    helper12(val130[value53.id], function() iterate2(value53.id) end)
+  end
+
+  local function helper22(visible, val134)
+    local val135 = createElement("ScrollingFrame", {
+      Size = UDim2.new(1, 0, 1, -(val58.tab_h + val58.pad)), BackgroundTransparency = 1, ScrollBarThickness = 3, ScrollBarImageColor3 = element2.pri, CanvasSize = UDim2.new(0, 0, 0, 0), AutomaticCanvasSize = Enum.AutomaticSize.Y, Visible = visible, LayoutOrder = val134 or 2, BorderSizePixel = 0, Parent = val128, })
+
+    createElement("UIListLayout", {
+      SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, val58.pad - 2), Parent = val135, })
+
+    createElement("UIPadding", { PaddingBottom = UDim.new(0, 30), Parent = val135 })
+
+    return val135
+  end
+
+  local function helper23(parent8, val136, raised, val137, btnH, val138)
+    btnH = btnH or val58.btn_h
+    raised = raised or element2.raised
+
+    local element36 = createElement("TextButton", {
+      Size = UDim2.new(val137 or 1, 0, 0, btnH), BackgroundColor3 = raised, Text = val136 or "", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt, AutoButtonColor = false, LayoutOrder = val138 or 0, BorderSizePixel = 0, Parent = parent8, })
+
+    helper5(element36, 7)
+
+    element36.MouseEnter:Connect(function()
+      helper7(element36, {
+        BackgroundColor3 = Color3.new(
+          math.min(raised.R * 1.15, 1), math.min(raised.G * 1.15, 1), math.min(raised.B * 1.15, 1)
+        ), }, 0.08)
+
+      helper18("hover")
+    end)
+
+    element36.MouseLeave:Connect(function() helper7(element36, { BackgroundColor3 = raised }, 0.08) end)
+
+    return element36
+  end
+
+  local function helper24(parent9, text3, val139)
+    createElement("TextLabel", {
+      Size = UDim2.new(1, 0, 0, 16), BackgroundTransparency = 1, Text = text3, TextColor3 = element2.txt2, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, LayoutOrder = val139 or 0, Parent = parent9, })
+  end
+
+  local function helper25(parent10, text4, val140, val141, val142)
+    local val143 = createElement("Frame", {
+      Size = UDim2.new(1, 0, 0, val58.btn_h - 4), BackgroundColor3 = element2.card, BackgroundTransparency = val9.gui_transparency * 0.3, LayoutOrder = val142 or 0, BorderSizePixel = 0, Parent = parent10, })
+
+    helper5(val143, 7)
+
+    createElement("TextLabel", {
+      Size = UDim2.new(1, -50, 1, 0), Position = UDim2.new(0, 8, 0, 0), BackgroundTransparency = 1, Text = text4, TextColor3 = element2.txt, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, Parent = val143, })
+
+    local val144 = createElement("Frame", {
+      Size = UDim2.new(0, 32, 0, 17), Position = UDim2.new(1, -40, 0.5, -8), BackgroundColor3 = val140 and element2.pri or element2.ghost, BorderSizePixel = 0, Parent = val143, })
+
+    helper5(val144, 9)
+
+    local val145 = createElement("Frame", {
+      Size = UDim2.new(0, 13, 0, 13), Position = val140 and UDim2.new(1, -15, 0.5, -6) or UDim2.new(0, 2, 0.5, -6), BackgroundColor3 = element2.txt, BorderSizePixel = 0, Parent = val144, })
+
+    helper5(val145, 7)
+    local val146 = val140
+
+    helper12(createElement("TextButton", {
+      Size = UDim2.new(1, 0, 1, 0), BackgroundTransparency = 1, Text = "", Parent = val143, }), function()
+      val146 = not val146
+      helper18(val146 and "toggle_on" or "toggle_off")
+      helper7(val144, { BackgroundColor3 = val146 and element2.pri or element2.ghost }, 0.15)
+
+      helper8(
+        val145, { Position = val146 and UDim2.new(1, -15, 0.5, -6) or UDim2.new(0, 2, 0.5, -6) }, 0.18
+      )
+
+      if val141 then
+        val141(val146)
+      end
+    end)
+
+    return val143, function() return val146 end, function(p106)
+      val146 = p106
+      helper7(val144, { BackgroundColor3 = p106 and element2.pri or element2.ghost }, 0.15)
+
+      helper8(
+        val145, { Position = p106 and UDim2.new(1, -15, 0.5, -6) or UDim2.new(0, 2, 0.5, -6) }, 0.18
+      )
+    end
+  end
+
+  local function helper26(parent11, text5, val147, val148, val149, val150, val151, val152)
+    val152 = val152 or "%.0f"
+
+    local val153 = createElement("Frame", {
+      Size = UDim2.new(1, 0, 0, 44), BackgroundColor3 = element2.card, BackgroundTransparency = val9.gui_transparency * 0.3, LayoutOrder = val151 or 0, BorderSizePixel = 0, Parent = parent11, })
+
+    helper5(val153, 7)
+
+    createElement("TextLabel", {
+      Size = UDim2.new(0.6, 0, 0, 16), Position = UDim2.new(0, 8, 0, 3), BackgroundTransparency = 1, Text = text5, TextColor3 = element2.txt, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, Parent = val153, })
+
+    local val154 = createElement("TextLabel", {
+      Size = UDim2.new(0, 42, 0, 16), Position = UDim2.new(1, -50, 0, 3), BackgroundTransparency = 1, Text = string.format(val152, val149), TextColor3 = element2.pri_lit, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Right, Parent = val153, })
+
+    local val155 = createElement("Frame", {
+      Size = UDim2.new(1, -16, 0, 5), Position = UDim2.new(0, 8, 0, 26), BackgroundColor3 = element2.ghost, BorderSizePixel = 0, Parent = val153, })
+
+    helper5(val155, 3)
+    local val156 = math.clamp((val149 - val147) / (val148 - val147), 0, 1)
+
+    local element37 = createElement("Frame", {
+      Size = UDim2.new(val156, 0, 1, 0), BackgroundColor3 = element2.pri, BorderSizePixel = 0, Parent = val155, })
+
+    helper5(element37, 3)
+
+    local element38 = createElement("Frame", {
+      Size = UDim2.new(0, 12, 0, 12), Position = UDim2.new(val156, -6, 0.5, -6), BackgroundColor3 = element2.txt, BorderSizePixel = 0, ZIndex = 2, Parent = val155, })
+
+    helper5(element38, 6)
+    local val157 = false
+    local val158 = val149
+
+    local function helper27(val159)
+      local val160 = math.clamp((val159.X - val155.AbsolutePosition.X) / val155.AbsoluteSize.X, 0, 1)
+      element37.Size = UDim2.new(val160, 0, 1, 0)
+      element38.Position = UDim2.new(val160, -6, 0.5, -6)
+      local val161 = val147 + val160 * (val148 - val147)
+      val154.Text = string.format(val152, val161)
+      local val162 = (val148 - val147) * 0.05
+
+      if math.abs(val161 - val158) >= val162 then
+        val158 = val161
+        helper18("slider")
+      end
+
+      if val150 then
+        val150(val161)
+      end
+    end
+
+    val155.InputBegan:Connect(function(input8)
+      if helper9(input8) then
+        val157 = true
+        helper27(userInputService:GetMouseLocation())
+      end
+    end)
+
+    element38.InputBegan:Connect(function(input9)
+      if helper9(input9) then
+        val157 = true
+      end
+    end)
+
+    helper(userInputService.InputChanged:Connect(function(input10)
+      if not val157 then
+        return
+      end
+
+      if input10.UserInputType == Enum.UserInputType.MouseMovement
+        or input10.UserInputType == Enum.UserInputType.Touch then
+        helper27(userInputService:GetMouseLocation())
+      end
+    end))
+
+    helper(userInputService.InputEnded:Connect(function(input11)
+      if helper9(input11) and val157 then
+        val157 = false
+      end
+    end))
+
+    return val153
+  end
+
+  local function helper28(parent12, val163, val164)
+    local val165 = createElement("Frame", {
+      Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundColor3 = element2.input_bg, LayoutOrder = val164 or 0, BorderSizePixel = 0, Parent = parent12, })
+
+    helper5(val165, 7)
+    helper6(val165, element2.outline)
+
+    return val165, (createElement("TextBox", {
+      Size = UDim2.new(1, -12, 1, 0), Position = UDim2.new(0, 6, 0, 0), BackgroundTransparency = 1, Text = "", PlaceholderText = val163 or "", PlaceholderColor3 = element2.txt3, TextColor3 = element2.txt, Font = Enum.Font.GothamMedium, TextSize = val58.txt, TextXAlignment = Enum.TextXAlignment.Left, ClearTextOnFocus = false, Parent = val165, }))
+  end
+
+  local val166 = helper22(true, 2)
+  val131.home = val166
+
+  local parent13 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundTransparency = 1, LayoutOrder = 1, Parent = val166, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = parent13, })
+
+  local val167 = createElement("Frame", {
+    Size = UDim2.new(1, -(val58.btn_h + 4), 0, val58.btn_h), BackgroundColor3 = element2.input_bg, BorderSizePixel = 0, Parent = parent13, })
+
+  helper5(val167, 7)
+  helper6(val167, element2.outline)
+
+  val122.input = createElement("TextBox", {
+    Size = UDim2.new(1, -10, 1, 0), Position = UDim2.new(0, 5, 0, 0), BackgroundTransparency = 1, Text = val9.cur_id and tostring(val9.cur_id) or "", PlaceholderText = "Username / ID", PlaceholderColor3 = element2.txt3, TextColor3 = element2.txt, Font = Enum.Font.GothamMedium, TextSize = val58.txt, TextXAlignment = Enum.TextXAlignment.Left, ClearTextOnFocus = false, Parent = val167, })
+
+  val122.fav_btn = createElement("TextButton", {
+    Size = UDim2.new(0, val58.btn_h, 0, val58.btn_h), BackgroundColor3 = element2.raised, Text = val9.cur_id and element12.has(val9.cur_id) and "\9733" or "+", TextColor3 = val9.cur_id and element12.has(val9.cur_id) and element2.yellow or element2.txt2, Font = Enum.Font.GothamBold, TextSize = 14, AutoButtonColor = false, BorderSizePixel = 0, Parent = parent13, })
+
+  helper5(val122.fav_btn, 7)
+  helper24(val166, "ACTIONS", 2)
+
+  local val168 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundTransparency = 1, LayoutOrder = 3, Parent = val166, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = val168, })
+
+  val122.apply_btn = helper23(val168, "\9889 APPLY", element2.pri, 0.55)
+  val122.random_btn = helper23(val168, "\55356\57266 RANDOM", element2.raised, 0.45)
+
+  local val169 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundTransparency = 1, LayoutOrder = 4, Parent = val166, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = val169, })
+
+  val122.reset_btn = helper23(val169, "RESET", element2.raised, 0.33)
+  val122.undo_btn = helper23(val169, "< UNDO", element2.raised, 0.33)
+  val122.redo_btn = helper23(val169, "REDO >", element2.raised, 0.34)
+
+  local val170 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, 62), BackgroundColor3 = element2.card, BackgroundTransparency = val9.gui_transparency * 0.3, LayoutOrder = 5, BorderSizePixel = 0, Parent = val166, })
+
+  helper5(val170, 8)
+  helper6(val170, element2.outline)
+
+  val122.stat_name = createElement("TextLabel", {
+    Size = UDim2.new(1, -12, 0, 16), Position = UDim2.new(0, 8, 0, 4), BackgroundTransparency = 1, Text = val9.cur_id and helper11(val9.cur_id) or "-- No avatar --", TextColor3 = val9.cur_id and element2.pri_lit or element2.txt3, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, Parent = val170, })
+
+  val122.stat_id = createElement("TextLabel", {
+    Size = UDim2.new(0.6, 0, 0, 12), Position = UDim2.new(0, 8, 0, 22), BackgroundTransparency = 1, Text = val9.cur_id and "ID: " .. val9.cur_id or "", TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 1, TextXAlignment = Enum.TextXAlignment.Left, Parent = val170, })
+
+  val122.stat_hist = createElement("TextLabel", {
+    Size = UDim2.new(0, 80, 0, 12), Position = UDim2.new(1, -88, 0, 22), BackgroundTransparency = 1, Text = "Hist:" .. #val9.hist, TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 1, TextXAlignment = Enum.TextXAlignment.Right, Parent = val170, })
+
+  val122.stat_uptime = createElement("TextLabel", {
+    Size = UDim2.new(0.5, 0, 0, 12), Position = UDim2.new(0, 8, 0, 38), BackgroundTransparency = 1, Text = "Uptime: 0s", TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 2, TextXAlignment = Enum.TextXAlignment.Left, Parent = val170, })
+
+  val122.stat_total = createElement("TextLabel", {
+    Size = UDim2.new(0.5, 0, 0, 12), Position = UDim2.new(0.5, 0, 0, 38), BackgroundTransparency = 1, Text = "Morphs: " .. val9.total_morphs, TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 2, TextXAlignment = Enum.TextXAlignment.Right, Parent = val170, })
+
+  val122.stat_thumb = createElement("ImageLabel", {
+    Size = UDim2.new(0, 48, 0, 48), Position = UDim2.new(1, -56, 0, 6), BackgroundColor3 = element2.surface, BackgroundTransparency = val9.cur_id and 0 or 1, Image = val9.cur_id and "rbxthumb://type=AvatarHeadShot&id=" .. val9.cur_id .. "&w=150&h=150"
+      or "", ScaleType = Enum.ScaleType.Fit, Parent = val170, })
+
+  helper5(val122.stat_thumb, 24)
+  helper6(val122.stat_thumb, element2.pri, 1)
+
+  helper25(
+    val166, "Auto-Apply on Respawn", val9.auto_apply, function(autoApply) val9.auto_apply = autoApply end, 6
+  )
+
+  helper25(
+    val166, "Morph Animation \10024", val9.morph_anim, function(morphAnim) val9.morph_anim = morphAnim end, 7
+  )
+
+  helper24(val166, "INTERACTION MODES", 8)
+
+  local v184, v185, val171 = helper25(val166, "Quick Apply"
+    .. (touchEnabled and " (2xTap)" or " [" .. val9.qa_keybind.Name .. "]"), val9.quick_apply_on, function(p116)
+    if p116 then
+      element19.activate("quick_apply_on")
+      element20.enable()
+    else
+      val9.quick_apply_on = false
+      element20.disable()
+    end
+  end, 9)
+
+  local v187, v188, val172 = helper25(val166, "Swap Mode", val9.swap_mode_on, function(p117)
+    if p117 then
+      element19.activate("swap_mode_on")
+      element21.enable()
+    else
+      val9.swap_mode_on = false
+      element21.disable()
+    end
+  end, 10)
+
+  function element19.disable_fns.quick_apply_on()
+    element20.disable()
+    val171(false)
+  end
+
+  function element19.disable_fns.swap_mode_on()
+    element21.disable()
+    val172(false)
+  end
+
+  helper24(val166, "PRESETS", 11)
+  local v190, val173 = helper28(val166, "Search presets...", 12)
+
+  local val174 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h - 6), BackgroundTransparency = 1, LayoutOrder = 13, Parent = val166, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = val174, })
+
+  val122.pprev = helper23(val174, "< Prev", element2.raised, 0.3, val58.btn_h - 6)
+  val122.pnext = helper23(val174, "Next >", element2.raised, 0.3, val58.btn_h - 6)
+  val122.prand = helper23(val174, "Shuffle", element2.raised, 0.4, val58.btn_h - 6)
+
+  val122.pgrid = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, math.ceil(2) * (val58.btn_h - 6 + 4)), BackgroundTransparency = 1, LayoutOrder = 14, Parent = val166, })
+
+  createElement("UIGridLayout", {
+    CellSize = UDim2.new(0.25, -3, 0, val58.btn_h - 6), CellPadding = UDim2.new(0, 3, 0, 4), Parent = val122.pgrid, })
+
+  local function helper29()
+    local lower = val9.search_preset:lower()
+
+    if lower == "" then
+      return val13
+    end
+
+    local val175 = {}
+
+    for index46, value54 in ipairs(val13) do
+      if value54.n:lower():find(lower, 1, true) or tostring(value54.id):find(lower, 1, true) then
+        table.insert(val175, value54)
+      end
+    end
+
+    return val175
+  end
+
+  local function iterate3()
+    for index47, value55 in ipairs(val122.pgrid:GetChildren()) do
+      if value55:IsA("TextButton") then
+        value55:Destroy()
+      end
+    end
+
+    local val176 = helper29()
+    local val177 = (val9.preset_page - 1) * 8 + 1
+
+    for k = val177, math.min(val177 + 7, #val176) do
+      local element39 = val176[k]
+
+      local element40 = helper23(val122.pgrid, element39.n, element2.raised, nil, val58.btn_h - 8)
+      element40.TextSize = val58.txt_sm - 1
+      element40.Size = UDim2.new(0, 0, 0, 0)
+
+      local id2 = element39.id
+
+      helper12(element40, function()
+        helper18("click")
+        val122.input.Text = tostring(id2)
+        element13.apply(id2)
+      end)
+    end
+  end
+
+  iterate3()
+
+  val173:GetPropertyChangedSignal("Text"):Connect(function()
+    val9.search_preset = val173.Text
+    val9.preset_page = 1
+    iterate3()
+  end)
+
+  helper24(val166, "MUSIC", 15)
+
+  local val178 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h * 2 + 8), BackgroundColor3 = element2.card, BackgroundTransparency = val9.gui_transparency * 0.3, LayoutOrder = 16, BorderSizePixel = 0, Parent = val166, })
+
+  helper5(val178, 8)
+  helper6(val178, element2.outline)
+
+  val122.mus_name = createElement("TextLabel", {
+    Size = UDim2.new(1, -12, 0, 14), Position = UDim2.new(0, 8, 0, 4), BackgroundTransparency = 1, Text = "\9834 " .. val14[val9.music_idx].n, TextColor3 = element2.pri_lit, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, Parent = val178, })
+
+  local val179 = createElement("Frame", {
+    Size = UDim2.new(1, -12, 0, val58.btn_h - 6), Position = UDim2.new(0, 6, 0, 20), BackgroundTransparency = 1, Parent = val178, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 3), Parent = val179, })
+
+  val122.mprev = helper23(val179, "<<", element2.raised, 0.18, val58.btn_h - 6)
+  val122.mplay = helper23(val179, val9.music_playing and "||" or "\9654", element2.pri, 0.22, val58.btn_h - 6)
+  val122.mnext = helper23(val179, ">>", element2.raised, 0.18, val58.btn_h - 6)
+
+  val122.mloop = helper23(
+    val179, val9.music_loop and "Loop" or "Once", val9.music_loop and element2.pri or element2.raised, 0.2, val58.btn_h - 6
+  )
+
+  val122.mstop = helper23(val179, "Stop", element2.red, 0.22, val58.btn_h - 6)
+
+  helper26(val178, "Volume", 0, 100, val9.music_vol * 100, function(p118)
+    val9.music_vol = p118 / 100
+
+    if val9.music_obj then
+      val9.music_obj.Volume = p118 / 100
+    end
+  end, 0, "%.0f%%")
+
+  local val180 = helper22(false, 2)
+  val131.outfit = val180
+
+  local val181 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, 52), BackgroundColor3 = element2.card, BackgroundTransparency = val9.gui_transparency * 0.3, LayoutOrder = 1, BorderSizePixel = 0, Parent = val180, })
+
+  helper5(val181, 8)
+  helper6(val181, element2.pri, 1)
+
+  createElement("TextLabel", {
+    Size = UDim2.new(0.6, 0, 0, 18), Position = UDim2.new(0, 10, 0, 5), BackgroundTransparency = 1, Text = "CURRENT OUTFIT", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm + 1, TextXAlignment = Enum.TextXAlignment.Left, Parent = val181, })
+
+  val122.ototal = createElement("TextLabel", {
+    Size = UDim2.new(1, -20, 0, 16), Position = UDim2.new(0, 10, 0, 28), BackgroundTransparency = 1, Text = "Total: 0 R$", TextColor3 = element2.yellow, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, Parent = val181, })
+
+  local val182 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundTransparency = 1, LayoutOrder = 2, Parent = val180, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = val182, })
+
+  local val183 = helper23(val182, "Refresh / Scan", element2.pri, 0.6, val58.btn_h)
+  local val184 = helper23(val182, "\55357\56523 Export", element2.raised, 0.4, val58.btn_h)
+  helper24(val180, "ITEMS", 3)
+
+  val122.ocon = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, 10), BackgroundTransparency = 1, LayoutOrder = 4, Parent = val180, })
+
+  local element41 = createElement("UIListLayout", {
+    SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 4), Parent = val122.ocon, })
+
+  element41:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    val122.ocon.Size = UDim2.new(1, 0, 0, element41.AbsoluteContentSize.Y)
+  end)
+
+  helper24(val180, "EMOTES / ANIMATIONS", 5)
+  local val185 = helper23(val180, "Stop All Emotes", element2.red, 1, val58.btn_h - 4, 6)
+
+  val122.econ = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, 10), BackgroundTransparency = 1, LayoutOrder = 7, Parent = val180, })
+
+  local element42 = createElement("UIListLayout", {
+    SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 4), Parent = val122.econ, })
+
+  element42:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    val122.econ.Size = UDim2.new(1, 0, 0, element42.AbsoluteContentSize.Y)
+  end)
+
+  helper12(val185, function()
+    helper18("click")
+    element15.stop_emotes()
+  end)
+
+  local function iterate4()
+    for index48, value56 in ipairs(val122.ocon:GetChildren()) do
+      if value56:IsA("Frame") and value56.Name ~= "" then
+        value56:Destroy()
+      end
+    end
+
+    if #val9.outfit_items == 0 then
+      createElement("TextLabel", {
+        Name = "empty", Size = UDim2.new(1, 0, 0, 60), BackgroundTransparency = 1, Text = [[
+No items
+Apply avatar first!]], TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt, TextWrapped = true, Parent = val122.ocon, })
+
+      val122.ototal.Text = "Total: 0 R$"
+      return
+    end
+
+    local total, count3 = 0, 0
+
+    for index49, value57 in ipairs(val9.outfit_items) do
+      if not value57.removed then
+        total = total + (value57.price or 0)
+        count3 = count3 + 1
+      end
+    end
+
+    val122.ototal.Text = "Total: " .. helper16(total) .. " R$ | " .. count3 .. "/" .. #val9.outfit_items
+    local val186 = touchEnabled and 40 or 48
+    local val187 = math.max(val186 + 8, val58.btn_h + 16)
+
+    for index50, value58 in ipairs(val9.outfit_items) do
+      local removed = value58.removed or false
+
+      local val188 = createElement("Frame", {
+        Name = "O" .. index50, Size = UDim2.new(1, 0, 0, val187), BackgroundColor3 = removed and element2.ghost or element2.card, BackgroundTransparency = val9.gui_transparency * 0.3, LayoutOrder = index50, BorderSizePixel = 0, Parent = val122.ocon, })
+
+      helper5(val188, 8)
+      local pri2 = element2.pri
+
+      if value58.category == "Accessory" then
+        pri2 = element2.cyan
+      elseif value58.category == "Shirt" or value58.category == "Pants"
+        or value58.category == "T-Shirt" then
+        pri2 = element2.green
+      elseif value58.category == "Face" or value58.category == "Head" then
+        pri2 = element2.orange
+      end
+
+      local val189 = createElement("Frame", {
+        Size = UDim2.new(0, val186, 0, val186), Position = UDim2.new(0, 4, 0.5, -val186 / 2), BackgroundColor3 = element2.surface, BorderSizePixel = 0, Parent = val188, })
+
+      helper5(val189, 6)
+      helper6(val189, pri2, 1)
+
+      createElement("ImageLabel", {
+        Size = UDim2.new(1, -4, 1, -4), Position = UDim2.new(0, 2, 0, 2), BackgroundTransparency = 1, Image = helper13(value58.assetId, 150), ScaleType = Enum.ScaleType.Fit, ImageTransparency = removed and 0.5 or 0, Parent = val189, })
+
+      local val190 = val186 + 10
+
+      createElement("TextLabel", {
+        Size = UDim2.new(1, -(val190 + 60), 0, 15), Position = UDim2.new(0, val190, 0, 4), BackgroundTransparency = 1, Text = value58.name, TextColor3 = removed and element2.txt3 or element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Parent = val188, })
+
+      createElement("TextLabel", {
+        Size = UDim2.new(1, -(val190 + 60), 0, 11), Position = UDim2.new(0, val190, 0, 20), BackgroundTransparency = 1, Text = (val73[value58.asset_type] or value58.category) .. " | " .. value58.assetId, TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 2, TextXAlignment = Enum.TextXAlignment.Left, Parent = val188, })
+
+      local text6 = value58.price > 0 and helper16(value58.price) .. " R$" or "Free"
+
+      createElement("TextLabel", {
+        Size = UDim2.new(1, -(val190 + 60), 0, 12), Position = UDim2.new(0, val190, 0, 33), BackgroundTransparency = 1, Text = text6, TextColor3 = removed and element2.txt3 or value58.price > 0 and element2.yellow or element2.green, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm - 1, TextXAlignment = Enum.TextXAlignment.Left, Parent = val188, })
+
+      local val191 = touchEnabled and 44 or 54
+      local element43 = value58
+
+      if removed then
+        local val192 = createElement("TextButton", {
+          Size = UDim2.new(0, val191, 0, val58.btn_h - 8), Position = UDim2.new(1, -(val191 + 6), 0.5, -(val58.btn_h - 8) / 2), BackgroundColor3 = element2.pri, Text = "Equip", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm - 1, AutoButtonColor = false, BorderSizePixel = 0, Parent = val188, })
+
+        helper5(val192, 5)
+
+        helper12(val192, function()
+          helper18("click")
+          element15.equip_item(element43)
+          element43.removed = false
+          task.delay(0.3, iterate4)
+        end)
+      else
+        local val193 = createElement("TextButton", {
+          Size = UDim2.new(0, val191, 0, val58.btn_h - 8), Position = UDim2.new(1, -(val191 + 6), 0.5, -(val58.btn_h - 8) / 2), BackgroundColor3 = element2.red, Text = "Remove", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm - 1, AutoButtonColor = false, BorderSizePixel = 0, Parent = val188, })
+
+        helper5(val193, 5)
+
+        helper12(val193, function()
+          helper18("click")
+          element15.remove_item(element43)
+          element43.removed = true
+          task.delay(0.3, iterate4)
+        end)
+      end
+    end
+  end
+
+  local function iterate5()
+    for index51, value59 in ipairs(val122.econ:GetChildren()) do
+      if value59:IsA("Frame") and value59.Name ~= "" then
+        value59:Destroy()
+      end
+    end
+
+    if #val9.outfit_emotes == 0 then
+      createElement("TextLabel", {
+        Name = "empty_e", Size = UDim2.new(1, 0, 0, 40), BackgroundTransparency = 1, Text = "No emotes found", TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt, Parent = val122.econ, })
+
+      return
+    end
+
+    for index52, value60 in ipairs(val9.outfit_emotes) do
+      local val194 = createElement("Frame", {
+        Name = "E" .. index52, Size = UDim2.new(1, 0, 0, val58.btn_h + 8), BackgroundColor3 = element2.card, BackgroundTransparency = val9.gui_transparency * 0.3, LayoutOrder = index52, BorderSizePixel = 0, Parent = val122.econ, })
+
+      helper5(val194, 8)
+
+      local text7 = value60.emote_type == "equipped" and "EQ"
+        or value60.emote_type == "anim" and "ANIM" or "AVL"
+
+      local green = value60.emote_type == "equipped" and element2.green
+        or value60.emote_type == "anim" and element2.orange or element2.txt3
+
+      createElement("TextLabel", {
+        Size = UDim2.new(0, 30, 0, 14), Position = UDim2.new(0, 6, 0.5, -7), BackgroundColor3 = green, BackgroundTransparency = 0.7, Text = text7, TextColor3 = green, Font = Enum.Font.GothamBold, TextSize = 7, Parent = val194, })
+
+      createElement("TextLabel", {
+        Size = UDim2.new(0.5, 0, 0, 14), Position = UDim2.new(0, 42, 0, 3), BackgroundTransparency = 1, Text = value60.name, TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Parent = val194, })
+
+      if value60.assetId > 0 then
+        createElement("TextLabel", {
+          Size = UDim2.new(0, 80, 0, 11), Position = UDim2.new(0, 42, 0, 18), BackgroundTransparency = 1, Text = "ID:" .. value60.assetId, TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 2, TextXAlignment = Enum.TextXAlignment.Left, Parent = val194, })
+      end
+
+      local val195 = touchEnabled and 36 or 44
+      local name3 = value60.name
+
+      local val196 = createElement("TextButton", {
+        Size = UDim2.new(0, val195, 0, val58.btn_h - 8), Position = UDim2.new(1, -(val195 + 6), 0.5, -(val58.btn_h - 8) / 2), BackgroundColor3 = element2.pri, Text = "\9654 Play", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm - 1, AutoButtonColor = false, BorderSizePixel = 0, Parent = val194, })
+
+      helper5(val196, 5)
+
+      helper12(val196, function()
+        helper18("click")
+        element15.play_emote(name3)
+      end)
+    end
+  end
+
+  element15.render_fn = iterate4
+  element15.render_emotes_fn = iterate5
+
+  helper12(val183, function()
+    helper18("click")
+    val9.outfit_removed = {}
+
+    task.spawn(function()
+      element15.scan()
+      iterate4()
+      iterate5()
+    end)
+  end)
+
+  helper12(val184, function() element15.export() end)
+
+  local val197 = helper22(false, 2)
+  val131.friends = val197
+  local v221, val198 = helper28(val197, "Search friends...", 1)
+  local val199 = helper23(val197, "Refresh", element2.raised, 1, val58.btn_h - 4, 2)
+
+  val122.fcnt = createElement("TextLabel", {
+    Size = UDim2.new(1, 0, 0, 14), BackgroundTransparency = 1, Text = "Tap to load", TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 1, TextXAlignment = Enum.TextXAlignment.Left, LayoutOrder = 3, Parent = val197, })
+
+  val122.fcon = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, 10), BackgroundTransparency = 1, LayoutOrder = 4, Parent = val197, })
+
+  local element44 = createElement("UIListLayout", {
+    SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 3), Parent = val122.fcon, })
+
+  element44:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    val122.fcon.Size = UDim2.new(1, 0, 0, element44.AbsoluteContentSize.Y)
+  end)
+
+  local val200 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h - 6), BackgroundTransparency = 1, LayoutOrder = 5, Parent = val197, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = val200, })
+
+  val122.fpp = helper23(val200, "< Prev", element2.raised, 0.35, val58.btn_h - 6)
+
+  val122.fpgl = createElement("TextLabel", {
+    Size = UDim2.new(0.3, 0, 0, val58.btn_h - 6), BackgroundTransparency = 1, Text = "1/1", TextColor3 = element2.txt2, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, Parent = val200, })
+
+  val122.fpn = helper23(val200, "Next >", element2.raised, 0.35, val58.btn_h - 6)
+
+  local function iterate6(val201)
+    for index53, value61 in ipairs(val122.fcon:GetChildren()) do
+      if value61:IsA("Frame") then
+        value61:Destroy()
+      end
+    end
+
+    if not val9.friends_loaded then
+      val122.fcnt.Text = "Loading..."
+      return
+    end
+
+    local val202, lower2 = {}, (val201 or ""):lower()
+
+    for index54, value62 in ipairs(val9.friends_list) do
+      if lower2 == "" or value62.name:lower():find(lower2, 1, true)
+        or value62.display:lower():find(lower2, 1, true) then
+        table.insert(val202, value62)
+      end
+    end
+
+    val122.fcnt.Text = #val202 .. " friends" .. (lower2 ~= "" and " (filtered)" or "")
+    local val203 = math.max(1, math.ceil(#val202 / 8))
+    val9.friends_page = math.clamp(val9.friends_page, 1, val203)
+    val122.fpgl.Text = val9.friends_page .. "/" .. val203
+    local val204 = (val9.friends_page - 1) * 8 + 1
+
+    for m = val204, math.min(val204 + 8 - 1, #val202) do
+      local element45 = val202[m]
+      local val205 = touchEnabled and 32 or 38
+
+      local val206 = createElement("Frame", {
+        Size = UDim2.new(1, 0, 0, val58.btn_h + 14), BackgroundColor3 = element2.card, BackgroundTransparency = val9.gui_transparency * 0.3, LayoutOrder = m, BorderSizePixel = 0, Parent = val122.fcon, })
+
+      helper5(val206, 7)
+
+      local val207 = createElement("Frame", {
+        Size = UDim2.new(0, val205, 0, val205), Position = UDim2.new(0, 4, 0.5, -val205 / 2), BackgroundColor3 = element2.surface, BorderSizePixel = 0, Parent = val206, })
+
+      helper5(val207, val205 / 2)
+
+      createElement("ImageLabel", {
+        Size = UDim2.new(1, -2, 1, -2), Position = UDim2.new(0, 1, 0, 1), BackgroundTransparency = 1, Image = "rbxthumb://type=AvatarHeadShot&id=" .. element45.id .. "&w=150&h=150", ScaleType = Enum.ScaleType.Fit, Parent = val207, })
+
+      createElement("Frame", {
+        Size = UDim2.new(0, 8, 0, 8), Position = UDim2.new(0, val205 + 8, 0, 6), BackgroundColor3 = element45.online and element2.green or element2.txt3, BorderSizePixel = 0, Parent = val206, })
+
+      local val208 = val205 + 20
+
+      createElement("TextLabel", {
+        Size = UDim2.new(0.35, 0, 0, 14), Position = UDim2.new(0, val208, 0, 3), BackgroundTransparency = 1, Text = element45.display, TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Parent = val206, })
+
+      createElement("TextLabel", {
+        Size = UDim2.new(0.35, 0, 0, 11), Position = UDim2.new(0, val208, 0, 18), BackgroundTransparency = 1, Text = "@" .. element45.name, TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 2, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Parent = val206, })
+
+      local id3, display = element45.id, element45.display
+      local val209 = touchEnabled and 26 or 32
+
+      local parent14 = createElement("Frame", {
+        Size = UDim2.new(0, val209 * 2 + 10, 0, val58.btn_h - 4), Position = UDim2.new(1, -(val209 * 2 + 14), 0.5, -(val58.btn_h - 4) / 2), BackgroundTransparency = 1, Parent = val206, })
+
+      createElement("UIListLayout", {
+        FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 3), Parent = parent14, })
+
+      local val210 = createElement("TextButton", {
+        Size = UDim2.new(0, val209 + 2, 0, val58.btn_h - 4), BackgroundColor3 = element2.raised, Text = "View", TextColor3 = element2.cyan, Font = Enum.Font.GothamBold, TextSize = touchEnabled and 8 or 9, AutoButtonColor = false, BorderSizePixel = 0, Parent = parent14, })
+
+      helper5(val210, 5)
+      helper12(val210, function() element30.show(val123, id3, display) end)
+
+      local val211 = createElement("TextButton", {
+        Size = UDim2.new(0, val209 + 2, 0, val58.btn_h - 4), BackgroundColor3 = element2.pri, Text = "Use", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = touchEnabled and 8 or 9, AutoButtonColor = false, BorderSizePixel = 0, Parent = parent14, })
+
+      helper5(val211, 5)
+
+      helper12(val211, function()
+        helper18("apply")
+        val122.input.Text = tostring(id3)
+        element13.apply(id3)
+      end)
+    end
+  end
+
+  function element18.on_loaded()
+    iterate6(val198.Text)
+  end
+
+  val198:GetPropertyChangedSignal("Text"):Connect(function()
+    val9.friends_page = 1
+    iterate6(val198.Text)
+  end)
+
+  helper12(val199, function()
+    helper18("click")
+
+    val9.friends_loaded = false
+    val9.friends_list = {}
+
+    iterate6("")
+    element18.load()
+  end)
+
+  helper12(val122.fpp, function()
+    helper18("click")
+    val9.friends_page = math.max(1, val9.friends_page - 1)
+    iterate6(val198.Text)
+  end)
+
+  helper12(val122.fpn, function()
+    helper18("click")
+    val9.friends_page = val9.friends_page + 1
+    iterate6(val198.Text)
+  end)
+
+  local val212 = helper22(false, 2)
+  val131.favs = val212
+  val122.fvl = val212
+
+  local function iterate7()
+    for index55, value63 in ipairs(val122.fvl:GetChildren()) do
+      if value63:IsA("Frame") and value63.Name ~= "UIPadding" or value63:IsA("TextLabel") then
+        value63:Destroy()
+      end
+    end
+
+    if #val9.favs == 0 then
+      createElement("TextLabel", {
+        Size = UDim2.new(1, 0, 0, 60), BackgroundTransparency = 1, Text = "No favorites yet\nAdd with \9733 button!", TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt, TextWrapped = true, Parent = val122.fvl, })
+
+      return
+    end
+
+    for index56, value64 in ipairs(val9.favs) do
+      local val213 = createElement("Frame", {
+        Size = UDim2.new(1, 0, 0, val58.btn_h + 8), BackgroundColor3 = element2.card, BackgroundTransparency = val9.gui_transparency * 0.3, LayoutOrder = index56, BorderSizePixel = 0, Parent = val122.fvl, })
+
+      helper5(val213, 7)
+      local val214 = touchEnabled and 28 or 34
+
+      local val215 = createElement("Frame", {
+        Size = UDim2.new(0, val214, 0, val214), Position = UDim2.new(0, 4, 0.5, -val214 / 2), BackgroundColor3 = element2.surface, BorderSizePixel = 0, Parent = val213, })
+
+      helper5(val215, val214 / 2)
+
+      createElement("ImageLabel", {
+        Size = UDim2.new(1, -2, 1, -2), Position = UDim2.new(0, 1, 0, 1), BackgroundTransparency = 1, Image = "rbxthumb://type=AvatarHeadShot&id=" .. value64.id .. "&w=150&h=150", ScaleType = Enum.ScaleType.Fit, Parent = val215, })
+
+      createElement("TextLabel", {
+        Size = UDim2.new(0.3, 0, 0, 14), Position = UDim2.new(0, val214 + 8, 0, 3), BackgroundTransparency = 1, Text = value64.name, TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Parent = val213, })
+
+      createElement("TextLabel", {
+        Size = UDim2.new(0.2, 0, 0, 11), Position = UDim2.new(0, val214 + 8, 0, 18), BackgroundTransparency = 1, Text = "ID:" .. value64.id, TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 1, TextXAlignment = Enum.TextXAlignment.Left, Parent = val213, })
+
+      local id4, name4 = value64.id, value64.name
+
+      local val216 = createElement("TextButton", {
+        Size = UDim2.new(0, 18, 0, 14), Position = UDim2.new(1, -140, 0.5, -16), BackgroundColor3 = element2.raised, Text = "\9650", TextColor3 = element2.txt2, Font = Enum.Font.GothamBold, TextSize = 8, AutoButtonColor = false, BorderSizePixel = 0, Parent = val213, })
+
+      helper5(val216, 3)
+
+      local val217 = createElement("TextButton", {
+        Size = UDim2.new(0, 18, 0, 14), Position = UDim2.new(1, -140, 0.5, 2), BackgroundColor3 = element2.raised, Text = "\9660", TextColor3 = element2.txt2, Font = Enum.Font.GothamBold, TextSize = 8, AutoButtonColor = false, BorderSizePixel = 0, Parent = val213, })
+
+      helper5(val217, 3)
+
+      helper12(val216, function()
+        helper18("click")
+
+        if element12.move_up(id4) then
+          iterate7()
+        end
+      end)
+
+      helper12(val217, function()
+        helper18("click")
+
+        if element12.move_down(id4) then
+          iterate7()
+        end
+      end)
+
+      local val218 = createElement("TextButton", {
+        Size = UDim2.new(0, 28, 0, val58.btn_h - 6), Position = UDim2.new(1, -104, 0.5, -(val58.btn_h - 6) / 2), BackgroundColor3 = element2.raised, Text = "View", TextColor3 = element2.cyan, Font = Enum.Font.GothamBold, TextSize = 8, AutoButtonColor = false, BorderSizePixel = 0, Parent = val213, })
+
+      helper5(val218, 5)
+      helper12(val218, function() element30.show(val123, id4, name4) end)
+
+      local val219 = createElement("TextButton", {
+        Size = UDim2.new(0, 44, 0, val58.btn_h - 6), Position = UDim2.new(1, -72, 0.5, -(val58.btn_h - 6) / 2), BackgroundColor3 = element2.pri, Text = "Apply", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm - 1, AutoButtonColor = false, BorderSizePixel = 0, Parent = val213, })
+
+      helper5(val219, 5)
+
+      helper12(val219, function()
+        helper18("apply")
+        val122.input.Text = tostring(id4)
+        iterate2("home")
+        element13.apply(id4)
+      end)
+
+      local val220 = createElement("TextButton", {
+        Size = UDim2.new(0, 22, 0, val58.btn_h - 6), Position = UDim2.new(1, -22, 0.5, -(val58.btn_h - 6) / 2), BackgroundColor3 = element2.raised, Text = "X", TextColor3 = element2.red, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, AutoButtonColor = false, BorderSizePixel = 0, Parent = val213, })
+
+      helper5(val220, 5)
+
+      helper12(val220, function()
+        element12.rem(id4)
+        iterate7()
+      end)
+    end
+  end
+
+  local val221 = helper22(false, 2)
+  val131.online = val221
+
+  local val222 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, 62), BackgroundColor3 = element2.card, BackgroundTransparency = val9.gui_transparency * 0.3, LayoutOrder = 1, BorderSizePixel = 0, Parent = val221, })
+
+  helper5(val222, 8)
+  helper6(val222, element2.blue, 1)
+
+  createElement("TextLabel", {
+    Size = UDim2.new(0.6, 0, 0, 18), Position = UDim2.new(0, 10, 0, 5), BackgroundTransparency = 1, Text = "NEXUS ONLINE", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm + 1, TextXAlignment = Enum.TextXAlignment.Left, Parent = val222, })
+
+  val122.on_count = createElement("TextLabel", {
+    Size = UDim2.new(1, -20, 0, 14), Position = UDim2.new(0, 10, 0, 26), BackgroundTransparency = 1, Text = "0 users online", TextColor3 = element2.blue, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, Parent = val222, })
+
+  val122.on_status = createElement("TextLabel", {
+    Size = UDim2.new(1, -20, 0, 12), Position = UDim2.new(0, 10, 0, 42), BackgroundTransparency = 1, Text = val9.online_visible and "Status: Online \9679" or "Status: Offline \9675", TextColor3 = val9.online_visible and element2.green or element2.red, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 1, TextXAlignment = Enum.TextXAlignment.Left, Parent = val222, })
+
+  helper25(val221, "Show me online", val9.online_visible, function(p120)
+    element7.set_visible(p120)
+    val122.on_status.Text = p120 and "Status: Online \9679" or "Status: Offline \9675"
+    val122.on_status.TextColor3 = p120 and element2.green or element2.red
+  end, 2)
+
+  local val223 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundTransparency = 1, LayoutOrder = 3, Parent = val221, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = val223, })
+
+  local val224 = helper23(val223, "Refresh Users", element2.pri, 0.5, val58.btn_h)
+  local val225 = helper23(val223, "Refresh Chat", element2.raised, 0.5, val58.btn_h)
+
+  if val7 then
+    helper24(val221, "OWNER TOOLS", 4)
+
+    local val226 = createElement("Frame", {
+      Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundTransparency = 1, LayoutOrder = 5, Parent = val221, })
+
+    createElement("UIListLayout", {
+      FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = val226, })
+
+    helper12(helper23(val226, "Clear Chat", element2.red, 0.5, val58.btn_h), function()
+      helper18("click")
+      element9.clear_all()
+      element11.push("Chat cleared", "owner", 2)
+
+      if element9.refresh_fn then
+        element9.refresh_fn()
+      end
+    end)
+
+    local v252, label = helper28(val221, "UserID to ban/timeout...", 6)
+
+    local val227 = createElement("Frame", {
+      Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundTransparency = 1, LayoutOrder = 7, Parent = val221, })
+
+    createElement("UIListLayout", {
+      FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = val227, })
+
+    local val228 = helper23(val227, "Ban", element2.red, 0.33)
+    local val229 = helper23(val227, "Timeout", element2.orange, 0.34)
+    local val230 = helper23(val227, "Unban", element2.green, 0.33)
+
+    helper12(val228, function()
+      helper18("click")
+      local numVal = tonumber(label.Text)
+
+      if not numVal then
+        element11.push("Enter valid UID", "err")
+        return
+      end
+
+      element6.ban_user(numVal, helper11(numVal))
+      element11.push("Banned: " .. helper11(numVal), "owner", 3)
+    end)
+
+    helper12(val229, function()
+      helper18("click")
+      local numVal2 = tonumber(label.Text)
+
+      if not numVal2 then
+        element11.push("Enter valid UID", "err")
+        return
+      end
+
+      element6.timeout_user(numVal2, helper11(numVal2), 10)
+      element11.push("Timeout 10m", "owner", 3)
+    end)
+
+    helper12(val230, function()
+      helper18("click")
+      local numVal3 = tonumber(label.Text)
+
+      if not numVal3 then
+        return
+      end
+
+      element6.unban_user(numVal3)
+      element11.push("Unbanned", "owner", 3)
+    end)
+  end
+
+  helper24(val221, "ACTIVE USERS", val7 and 8 or 4)
+
+  val122.on_con = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, 10), BackgroundTransparency = 1, LayoutOrder = val7 and 9 or 5, Parent = val221, })
+
+  local element46 = createElement("UIListLayout", {
+    SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 4), Parent = val122.on_con, })
+
+  element46:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    val122.on_con.Size = UDim2.new(1, 0, 0, element46.AbsoluteContentSize.Y)
+  end)
+
+  helper24(val221, "TODAY'S CHAT", val7 and 10 or 6)
+
+  local parent15 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundTransparency = 1, LayoutOrder = val7 and 11 or 7, Parent = val221, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = parent15, })
+
+  local val231 = createElement("Frame", {
+    Size = UDim2.new(1, -(val58.btn_h + 8), 0, val58.btn_h), BackgroundColor3 = element2.input_bg, BorderSizePixel = 0, Parent = parent15, })
+
+  helper5(val231, 7)
+  helper6(val231, element2.outline)
+
+  val122.chat_input = createElement("TextBox", {
+    Size = UDim2.new(1, -10, 1, 0), Position = UDim2.new(0, 5, 0, 0), BackgroundTransparency = 1, Text = "", PlaceholderText = "Type a message...", PlaceholderColor3 = element2.txt3, TextColor3 = element2.txt, Font = Enum.Font.GothamMedium, TextSize = val58.txt, TextXAlignment = Enum.TextXAlignment.Left, ClearTextOnFocus = false, Parent = val231, })
+
+  local val232 = createElement("TextButton", {
+    Size = UDim2.new(0, val58.btn_h + 4, 0, val58.btn_h), BackgroundColor3 = element2.pri, Text = "\8594", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = 16, AutoButtonColor = false, BorderSizePixel = 0, Parent = parent15, })
+
+  helper5(val232, 7)
+
+  val122.chat_con = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, 10), BackgroundTransparency = 1, LayoutOrder = val7 and 12 or 8, Parent = val221, })
+
+  local element47 = createElement("UIListLayout", {
+    SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 3), Parent = val122.chat_con, })
+
+  element47:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    val122.chat_con.Size = UDim2.new(1, 0, 0, element47.AbsoluteContentSize.Y)
+  end)
+
+  local function iterate8()
+    for index57, value65 in ipairs(val122.on_con:GetChildren()) do
+      if value65:IsA("Frame") and value65.Name ~= "" then
+        value65:Destroy()
+      end
+    end
+
+    val122.on_count.Text = #val9.online_users .. " users online"
+
+    if #val9.online_users == 0 then
+      createElement("TextLabel", {
+        Name = "empty_on", Size = UDim2.new(1, 0, 0, 50), BackgroundTransparency = 1, Text = "No one online yet", TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt, TextWrapped = true, Parent = val122.on_con, })
+
+      return
+    end
+
+    local val233 = touchEnabled and 36 or 42
+
+    for index58, value66 in ipairs(val9.online_users) do
+      local val234 = value66.userId == localPlayer.UserId
+      local val235 = value66.name == "Theerakarn_TH"
+
+      local val236 = createElement("Frame", {
+        Name = "U" .. index58, Size = UDim2.new(1, 0, 0, val233 + 12), BackgroundColor3 = val234 and Color3.fromRGB(28, 38, 28) or element2.card, BackgroundTransparency = val9.gui_transparency * 0.3, LayoutOrder = index58, BorderSizePixel = 0, Parent = val122.on_con, })
+
+      helper5(val236, 8)
+
+      if val234 then
+        helper6(val236, element2.green, 1)
+      elseif val235 then
+        helper6(val236, element2.owner, 1)
+      end
+
+      local val237 = createElement("Frame", {
+        Size = UDim2.new(0, val233, 0, val233), Position = UDim2.new(0, 4, 0.5, -val233 / 2), BackgroundColor3 = element2.surface, BorderSizePixel = 0, Parent = val236, })
+
+      helper5(val237, val233 / 2)
+
+      createElement("ImageLabel", {
+        Size = UDim2.new(1, -2, 1, -2), Position = UDim2.new(0, 1, 0, 1), BackgroundTransparency = 1, Image = "rbxthumb://type=AvatarHeadShot&id=" .. value66.userId .. "&w=150&h=150", ScaleType = Enum.ScaleType.Fit, Parent = val237, })
+
+      local val238 = val233 + 10
+      local displayName3 = value66.displayName
+
+      if val234 then
+        displayName3 = displayName3 .. " (You)"
+      end
+
+      if val235 then
+        displayName3 = displayName3 .. " \9733"
+      end
+
+      createElement("TextLabel", {
+        Size = UDim2.new(0.5, 0, 0, 14), Position = UDim2.new(0, val238, 0, 3), BackgroundTransparency = 1, Text = displayName3, TextColor3 = val235 and element2.owner or val234 and element2.green or element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Parent = val236, })
+
+      createElement("TextLabel", {
+        Size = UDim2.new(0.5, 0, 0, 11), Position = UDim2.new(0, val238, 0, 18), BackgroundTransparency = 1, Text = "@" .. value66.name, TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 2, TextXAlignment = Enum.TextXAlignment.Left, Parent = val236, })
+
+      local gameName = value66.gameName ~= "" and value66.gameName or "Place:" .. value66.gameId
+
+      if #gameName > 18 then
+        gameName = gameName:sub(1, 18) .. "..."
+      end
+
+      createElement("TextLabel", {
+        Size = UDim2.new(0.5, 0, 0, 11), Position = UDim2.new(0, val238, 0, 30), BackgroundTransparency = 1, Text = gameName .. " - " .. helper15(value66.timestamp), TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 2, TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd, Parent = val236, })
+
+      if not val234 then
+        local val239 = touchEnabled and 26 or 32
+
+        local parent16 = createElement("Frame", {
+          Size = UDim2.new(0, val239 * 2 + 6, 0, val58.btn_h - 6), Position = UDim2.new(1, -(val239 * 2 + 10), 0.5, -(val58.btn_h - 6) / 2), BackgroundTransparency = 1, Parent = val236, })
+
+        createElement("UIListLayout", {
+          FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 3), Parent = parent16, })
+
+        local val240 = createElement("TextButton", {
+          Size = UDim2.new(0, val239, 0, val58.btn_h - 6), BackgroundColor3 = element2.raised, Text = "View", TextColor3 = element2.cyan, Font = Enum.Font.GothamBold, TextSize = touchEnabled and 8 or 9, AutoButtonColor = false, BorderSizePixel = 0, Parent = parent16, })
+
+        helper5(val240, 5)
+        helper12(val240, function() element30.show(val123, value66.userId, value66.displayName) end)
+
+        local val241 = createElement("TextButton", {
+          Size = UDim2.new(0, val239, 0, val58.btn_h - 6), BackgroundColor3 = element2.pri, Text = "Use", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = touchEnabled and 8 or 9, AutoButtonColor = false, BorderSizePixel = 0, Parent = parent16, })
+
+        helper5(val241, 5)
+
+        helper12(val241, function()
+          helper18("apply")
+          val122.input.Text = tostring(value66.userId)
+          element13.apply(value66.userId)
+        end)
+      end
+    end
+  end
+
+  element7.refresh_fn = iterate8
+
+  local function iterate9()
+    for index59, value67 in ipairs(val122.chat_con:GetChildren()) do
+      if value67:IsA("Frame") and value67.Name ~= "" then
+        value67:Destroy()
+      end
+    end
+
+    if #val9.chat_messages == 0 then
+      createElement("TextLabel", {
+        Name = "empty_ch", Size = UDim2.new(1, 0, 0, 40), BackgroundTransparency = 1, Text = "No messages today. Say hello!", TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt, TextWrapped = true, Parent = val122.chat_con, })
+
+      return
+    end
+
+    for n = math.max(1, #val9.chat_messages - 49), #val9.chat_messages do
+      local element48 = val9.chat_messages[n]
+      local val242 = element48.senderId == localPlayer.UserId
+      local val243 = element48.senderName == "Theerakarn_TH"
+
+      local val244 = createElement("Frame", {
+        Name = "M" .. n, Size = UDim2.new(1, 0, 0, 0), BackgroundColor3 = val242 and Color3.fromRGB(30, 28, 50) or element2.card, BackgroundTransparency = val9.gui_transparency * 0.3, LayoutOrder = n, BorderSizePixel = 0, ClipsDescendants = true, AutomaticSize = Enum.AutomaticSize.Y, Parent = val122.chat_con, })
+
+      helper5(val244, 7)
+
+      if val242 then
+        helper6(val244, element2.pri, 0.5)
+      end
+
+      createElement("UIPadding", {
+        PaddingLeft = UDim.new(0, 8), PaddingRight = UDim.new(0, 8), PaddingTop = UDim.new(0, 5), PaddingBottom = UDim.new(0, 5), Parent = val244, })
+
+      createElement("UIListLayout", {
+        SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 2), Parent = val244, })
+
+      local parent17 = createElement("Frame", {
+        Size = UDim2.new(1, 0, 0, 14), BackgroundTransparency = 1, LayoutOrder = 1, Parent = val244, })
+
+      local sender = val242 and "You" or element48.sender
+
+      if val243 then
+        sender = sender .. " \9733"
+      end
+
+      createElement("TextLabel", {
+        Size = UDim2.new(0.6, 0, 1, 0), BackgroundTransparency = 1, Text = sender, TextColor3 = val243 and element2.owner or val242 and element2.pri_lit or element2.blue, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm - 1, TextXAlignment = Enum.TextXAlignment.Left, Parent = parent17, })
+
+      createElement("TextLabel", {
+        Size = UDim2.new(0.4, 0, 1, 0), Position = UDim2.new(0.6, 0, 0, 0), BackgroundTransparency = 1, Text = helper15(element48.timestamp), TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 2, TextXAlignment = Enum.TextXAlignment.Right, Parent = parent17, })
+
+      createElement("TextLabel", {
+        Size = UDim2.new(1, 0, 0, 0), BackgroundTransparency = 1, Text = element48.message, TextColor3 = element2.txt, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, TextWrapped = true, AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = 2, Parent = val244, })
+
+      if val7 and not val242 then
+        local val245 = createElement("TextButton", {
+          Size = UDim2.new(0, 30, 0, 14), BackgroundColor3 = element2.red, BackgroundTransparency = 0.5, Text = "Del", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = 7, AutoButtonColor = false, BorderSizePixel = 0, LayoutOrder = 3, Parent = val244, })
+
+        helper5(val245, 4)
+        local id5 = element48.id
+
+        helper12(val245, function()
+          helper18("click")
+          element9.delete_msg(id5)
+
+          task.delay(0.3, function()
+            element9.fetch()
+            iterate9()
+          end)
+        end)
+      end
+    end
+  end
+
+  element9.refresh_fn = iterate9
+
+  local function helper30()
+    local text8 = val122.chat_input.Text
+
+    if text8 == "" then
+      return
+    end
+
+    if not val9.online_visible then
+      element11.push("Go online first!", "warn")
+      return
+    end
+
+    val122.chat_input.Text = ""
+    helper18("msg_send")
+
+    task.spawn(function()
+      if element9.send(text8) then
+        task.wait(0.5)
+        element9.fetch()
+        iterate9()
+      end
+    end)
+  end
+
+  helper12(val232, helper30)
+
+  val122.chat_input.FocusLost:Connect(function(p121)
+    if p121 then
+      helper30()
+    end
+  end)
+
+  helper12(val224, function()
+    helper18("click")
+
+    task.spawn(function()
+      element7.fetch_users()
+      iterate8()
+    end)
+  end)
+
+  helper12(val225, function()
+    helper18("click")
+
+    task.spawn(function()
+      element9.fetch()
+      iterate9()
+    end)
+  end)
+
+  local val246 = helper22(false, 2)
+  val131.tools = val246
+  helper24(val246, "TELEPORT", 1)
+  local v280, label2 = helper28(val246, "Player name to TP...", 2)
+
+  helper12(helper23(val246, "\9889 Teleport to Player", element2.pri, 1, val58.btn_h, 3), function()
+    if label2.Text ~= "" then
+      element26.to_player(label2.Text)
+    end
+  end)
+
+  helper24(val246, "WAYPOINTS", 4)
+  local v282, val247 = helper28(val246, "Waypoint name...", 5)
+  local val248 = helper23(val246, "\55357\56525 Save Current Position", element2.green, 1, val58.btn_h, 6)
+
+  val122.wp_con = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, 10), BackgroundTransparency = 1, LayoutOrder = 7, Parent = val246, })
+
+  local element49 = createElement("UIListLayout", {
+    SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 3), Parent = val122.wp_con, })
+
+  element49:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    val122.wp_con.Size = UDim2.new(1, 0, 0, element49.AbsoluteContentSize.Y)
+  end)
+
+  local function iterate10()
+    for index60, value68 in ipairs(val122.wp_con:GetChildren()) do
+      if value68:IsA("Frame") then
+        value68:Destroy()
+      end
+    end
+
+    if #val9.tp_waypoints == 0 then
+      createElement("TextLabel", {
+        Size = UDim2.new(1, 0, 0, 30), BackgroundTransparency = 1, Text = "No waypoints", TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt, LayoutOrder = 1, Parent = val122.wp_con, })
+
+      return
+    end
+
+    for index61, value69 in ipairs(val9.tp_waypoints) do
+      local val249 = createElement("Frame", {
+        Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundColor3 = element2.card, LayoutOrder = index61, BorderSizePixel = 0, Parent = val122.wp_con, })
+
+      helper5(val249, 6)
+
+      createElement("TextLabel", {
+        Size = UDim2.new(0.5, 0, 1, 0), Position = UDim2.new(0, 8, 0, 0), BackgroundTransparency = 1, Text = "\55357\56525 " .. value69.name, TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, Parent = val249, })
+
+      local val250 = createElement("TextButton", {
+        Size = UDim2.new(0, 40, 0, val58.btn_h - 8), Position = UDim2.new(1, -88, 0.5, -(val58.btn_h - 8) / 2), BackgroundColor3 = element2.pri, Text = "Go", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, AutoButtonColor = false, BorderSizePixel = 0, Parent = val249, })
+
+      helper5(val250, 5)
+
+      local val251 = createElement("TextButton", {
+        Size = UDim2.new(0, 28, 0, val58.btn_h - 8), Position = UDim2.new(1, -40, 0.5, -(val58.btn_h - 8) / 2), BackgroundColor3 = element2.red, Text = "X", TextColor3 = element2.txt, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, AutoButtonColor = false, BorderSizePixel = 0, Parent = val249, })
+
+      helper5(val251, 5)
+      local val252 = index61
+
+      helper12(val250, function() element26.goto_waypoint(val252) end)
+
+      helper12(val251, function()
+        element26.delete_waypoint(val252)
+        iterate10()
+      end)
+    end
+  end
+
+  helper12(val248, function()
+    element26.save_waypoint(val247.Text ~= "" and val247.Text or nil)
+    val247.Text = ""
+    iterate10()
+  end)
+
+  iterate10()
+  helper24(val246, "ESP / HIGHLIGHT", 8)
+
+  helper25(val246, "ESP (See All Players)", val9.esp_on, function(p122)
+    if p122 then
+      element25.enable()
+    else
+      element25.disable()
+      element11.push("ESP Disabled", "ok", 2)
+    end
+  end, 9)
+
+  helper24(val246, "MIRROR MODE", 10)
+  local val253 = helper23(val246, "\55358\56990 Mirror My Avatar to All", element2.cyan, 1, val58.btn_h, 11)
+  local val254 = helper23(val246, "Reset All Players", element2.raised, 1, val58.btn_h, 12)
+
+  helper12(val253, function()
+    helper18("click")
+    element29.enable()
+  end)
+
+  helper12(val254, function()
+    helper18("click")
+    element29.disable()
+  end)
+
+  helper24(val246, "GRAVITY", 13)
+
+  helper26(
+    val246, "Gravity", 0, 500, workspace.Gravity, function(p123) element32.set_gravity(p123) end, 14, "%.0f"
+  )
+
+  helper24(val246, "UTILITIES", 15)
+
+  helper25(val246, "Anti-AFK", val9.anti_afk, function(p124)
+    val9.anti_afk = p124
+
+    if p124 then
+      element28.start()
+    else
+      element28.stop()
+    end
+  end, 16)
+
+  helper12(helper23(val246, "\55357\56523 Copy Current Avatar ID", element2.raised, 1, val58.btn_h, 17), function()
+    if not val9.cur_id then
+      helper18("error")
+      element11.push("No avatar applied!", "warn")
+      return
+    end
+
+    if setclipboard then
+      setclipboard(tostring(val9.cur_id))
+      helper18("copy")
+      element11.push("Copied ID: " .. val9.cur_id, "ok", 2)
+    else
+      helper18("error")
+      element11.push("Clipboard not available", "err")
+    end
+  end)
+
+  helper12(helper23(val246, "\55357\56522 Server Info", element2.raised, 1, val58.btn_h, 18), function()
+    helper18("click")
+    local val255 = #players:GetPlayers()
+    local name5 = "Unknown"
+    pcall(function() name5 = marketplaceService:GetProductInfo(game.PlaceId).Name end)
+    local floorVal = math.floor(1 / runService.RenderStepped:Wait())
+
+    element11.push(
+      name5 .. " | " .. val255 .. "/" .. players.MaxPlayers .. " | FPS:" .. floorVal, "stat", 5
+    )
+  end)
+
+  helper12(helper23(val246, "\55357\56580 Rejoin Server", element2.orange, 1, val58.btn_h, 19), function()
+    helper18("teleport")
+    element11.push("Rejoining...", "info", 2)
+    element7.go_offline()
+
+    task.delay(0.5, function()
+      pcall(function() teleportService:TeleportToPlaceInstance(game.PlaceId, game.JobId) end)
+    end)
+  end)
+
+  helper12(helper23(val246, "\55356\57104 Server Hop (New Server)", element2.raised, 1, val58.btn_h, 20), function()
+    helper18("teleport")
+    element11.push("Hopping to new server...", "info", 2)
+    element7.go_offline()
+    task.delay(0.5, function() pcall(function() teleportService:Teleport(game.PlaceId) end) end)
+  end)
+
+  local val256 = helper22(false, 2)
+  val131.client = val256
+  helper24(val256, "APPLY TO OTHERS", 1)
+  local v295, val257 = helper28(val256, "Player name...", 2)
+  local v297, val258 = helper28(val256, "Avatar ID...", 3)
+
+  local val259 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundTransparency = 1, LayoutOrder = 4, Parent = val256, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = val259, })
+
+  local val260 = helper23(val259, "Apply", element2.pri, 0.33)
+  local val261 = helper23(val259, "Reset", element2.raised, 0.33)
+  local val262 = helper23(val259, "Apply All", element2.raised, 0.34)
+  helper24(val256, "COPY PLAYER", 5)
+  local v303, val263 = helper28(val256, "Player to copy...", 6)
+  local val264 = helper23(val256, "\55357\56549 Copy Player Avatar", element2.pri, 1, val58.btn_h, 7)
+  helper24(val256, "TAP MODE", 8)
+
+  local v306, v307, val265 = helper25(val256, "Tap to Copy ID", val9.tap_copy_on, function(p125)
+    if p125 then
+      element19.activate("tap_copy_on")
+
+      function element23.on_tap(p126)
+        val122.input.Text = tostring(p126.UserId)
+        val258.Text = tostring(p126.UserId)
+        val257.Text = p126.Name
+      end
+
+      element23.enable()
+    else
+      val9.tap_copy_on = false
+      element23.disable()
+    end
+  end, 9)
+
+  function element19.disable_fns.tap_copy_on()
+    element23.disable()
+    val265(false)
+  end
+
+  helper24(val256, "NAME SPOOF", 10)
+  local v309, val266 = helper28(val256, "Target ('me')...", 11)
+  local v311, val267 = helper28(val256, "New name...", 12)
+
+  local val268 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundTransparency = 1, LayoutOrder = 13, Parent = val256, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = val268, })
+
+  local val269 = helper23(val268, "Set Name", element2.pri, 0.5)
+  local val270 = helper23(val268, "Clear", element2.raised, 0.5)
+  helper24(val256, "FULL CLONE", 14)
+  local v316, val271 = helper28(val256, "Player to clone...", 15)
+  local val272 = helper23(val256, "\55357\56420 Clone Avatar & Name", element2.pri, 1, val58.btn_h, 16)
+  helper24(val256, "MASS ACTIONS", 17)
+
+  local val273 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundTransparency = 1, LayoutOrder = 18, Parent = val256, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = val273, })
+
+  local val274 = helper23(val273, "All\8594Bacon", element2.raised, 0.33)
+  local val275 = helper23(val273, "All\8594Noob", element2.raised, 0.33)
+  local val276 = helper23(val273, "Reset All", element2.red, 0.34)
+
+  helper12(val274, function()
+    helper18("apply")
+    element13.apply_to_all(289438135)
+  end)
+
+  helper12(val275, function()
+    helper18("apply")
+    element13.apply_to_all(5254879171)
+  end)
+
+  helper12(val276, function()
+    helper18("reset")
+    local count4 = 0
+
+    for index62, value70 in ipairs(players:GetPlayers()) do
+      if value70 ~= localPlayer and val9.player_orig_descs[value70.UserId] then
+        element13.reset_other(value70)
+        count4 = count4 + 1
+      end
+    end
+
+    element11.push("Reset " .. count4 .. " players", "ok", 2)
+  end)
+
+  local val277 = helper22(false, 2)
+  val131.mods = val277
+  helper24(val277, "BODY SCALE", 1)
+
+  helper25(val277, "Width", val9.scale_w_on, function(scaleWOn)
+    val9.scale_w_on = scaleWOn
+
+    if val9.cur_id then
+      element13.apply_scales(localPlayer.Character)
+    end
+  end, 2)
+
+  helper26(val277, "Width", 0.5, 2, val9.scale_w, function(scaleW)
+    val9.scale_w = scaleW
+
+    if val9.scale_w_on then
+      element13.apply_scales(localPlayer.Character)
+    end
+  end, 3, "%.1fx")
+
+  helper25(val277, "Height", val9.scale_h_on, function(scaleHOn)
+    val9.scale_h_on = scaleHOn
+
+    if val9.cur_id then
+      element13.apply_scales(localPlayer.Character)
+    end
+  end, 4)
+
+  helper26(val277, "Height", 0.5, 2, val9.scale_h, function(scaleH)
+    val9.scale_h = scaleH
+
+    if val9.scale_h_on then
+      element13.apply_scales(localPlayer.Character)
+    end
+  end, 5, "%.1fx")
+
+  helper25(val277, "Head", val9.scale_head_on, function(scaleHeadOn)
+    val9.scale_head_on = scaleHeadOn
+
+    if val9.cur_id then
+      element13.apply_scales(localPlayer.Character)
+    end
+  end, 6)
+
+  helper26(val277, "Head", 0.5, 3, val9.scale_head, function(scaleHead)
+    val9.scale_head = scaleHead
+
+    if val9.scale_head_on then
+      element13.apply_scales(localPlayer.Character)
+    end
+  end, 7, "%.1fx")
+
+  helper24(val277, "CHARACTER", 8)
+
+  helper25(val277, "Speed", val9.speed_on, function(p127)
+    val9.speed_on = p127
+    element32.set_speed(p127 and val9.speed_val or 16)
+  end, 9)
+
+  helper26(val277, "Speed", 16, 200, val9.speed_val, function(p128)
+    val9.speed_val = p128
+
+    if val9.speed_on then
+      element32.set_speed(p128)
+    end
+  end, 10)
+
+  helper25(val277, "Jump", val9.jump_on, function(p129)
+    val9.jump_on = p129
+    element32.set_jump(p129 and val9.jump_val or 50)
+  end, 11)
+
+  helper26(val277, "Jump", 50, 300, val9.jump_val, function(p130)
+    val9.jump_val = p130
+
+    if val9.jump_on then
+      element32.set_jump(p130)
+    end
+  end, 12)
+
+  helper25(val277, "Noclip", val9.noclip_on, function(p131)
+    val9.noclip_on = p131
+    element32.noclip(p131)
+  end, 13)
+
+  helper25(val277, "Inf Jump", val9.inf_jump_on, function(p132)
+    val9.inf_jump_on = p132
+    element32.inf_jump(p132)
+  end, 14)
+
+  helper25(val277, "Fly (WASD+Space/Shift)", val9.fly_on, function(p133)
+    val9.fly_on = p133
+    element32.fly(p133)
+  end, 15)
+
+  helper24(val277, "FLY SETTINGS", 16)
+  helper26(val277, "Fly Speed", 20, 300, 80, function(p134) v628 = p134 end, 17)
+  helper24(val277, "CHARACTER LOOK", 18)
+
+  helper26(val277, "Body Transparency", 0, 100, 0, function(p135)
+    local character15 = localPlayer.Character
+
+    if not character15 then
+      return
+    end
+
+    local transparency = p135 / 100
+
+    for index63, value71 in ipairs(character15:GetDescendants()) do
+      if value71:IsA("BasePart") and value71.Name ~= "HumanoidRootPart" then
+        pcall(function() value71.Transparency = transparency end)
+      end
+    end
+  end, 19, "%.0f%%")
+
+  helper24(val277, "CAMERA", 20)
+
+  helper26(val277, "Field of View", 30, 120, workspace.CurrentCamera.FieldOfView, function(fieldOfView)
+    pcall(function() workspace.CurrentCamera.FieldOfView = fieldOfView end)
+  end, 21, "%.0f\176")
+
+  local val278 = helper22(false, 2)
+  val131.cfg = val278
+  helper24(val278, "UI SIZE", 1)
+
+  local val279 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundTransparency = 1, LayoutOrder = 2, Parent = val278, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = val279, })
+
+  for index64, value72 in ipairs({ "small", "medium", "large" }) do
+    helper12(helper23(
+      val279, value72:sub(1, 1):upper() .. value72:sub(2), value72 == val9.ui_size and element2.pri or element2.raised, 0.33
+    ), function()
+      helper18("click")
+      val9.ui_size = value72
+      element11.push("Reloading UI...", "ok", 1)
+
+      task.delay(0.3, function()
+        element35.kill()
+        element35.build()
+      end)
+    end)
+  end
+
+  helper24(val278, "THEME", 3)
+
+  local val280 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, math.ceil(#val10 / 4) * (val58.btn_h - 4)), BackgroundTransparency = 1, LayoutOrder = 4, Parent = val278, })
+
+  createElement("UIGridLayout", {
+    CellSize = UDim2.new(0.25, -3, 0, val58.btn_h - 8), CellPadding = UDim2.new(0, 3, 0, 3), Parent = val280, })
+
+  for index65, value73 in ipairs(val10) do
+    local val281 = createElement("TextButton", {
+      BackgroundColor3 = value73.pri, Text = value73.name, TextColor3 = Color3.new(1, 1, 1), Font = Enum.Font.GothamBold, TextSize = val58.txt_sm - 1, AutoButtonColor = false, BorderSizePixel = 0, Parent = val280, })
+
+    helper5(val281, 5)
+
+    if index65 == val9.theme_idx then
+      helper6(val281, Color3.new(1, 1, 1), 2)
+    end
+
+    helper12(val281, function()
+      helper18("click")
+      val9.theme_idx = index65
+      helper3()
+      val122.main_stroke.Color = element2.pri
+
+      for key9, value74 in pairs(val130) do
+        if key9 == val9.tab then
+          helper7(value74, { BackgroundColor3 = element2.pri }, 0.2)
+        end
+      end
+
+      element11.push("Theme: " .. value73.name, "ok", 2)
+
+      for index66, value75 in ipairs(val280:GetChildren()) do
+        if value75:IsA("TextButton") then
+          local uiStroke = value75:FindFirstChildOfClass("UIStroke")
+
+          if uiStroke then
+            uiStroke:Destroy()
+          end
+        end
+      end
+
+      helper6(val281, Color3.new(1, 1, 1), 2)
+    end)
+  end
+
+  helper24(val278, "APPEARANCE", 5)
+
+  helper25(val278, "Dark Mode", val9.dark_mode, function(p136)
+    val9.dark_mode = p136
+    element11.push("Reloading for " .. (p136 and "Dark" or "Light") .. " mode...", "ok", 1)
+
+    task.delay(0.3, function()
+      element35.kill()
+      element35.build()
+    end)
+  end, 6)
+
+  helper24(val278, "GUI TRANSPARENCY", 7)
+
+  helper26(val278, "Transparency", 0, 80, val9.gui_transparency * 100, function(p137)
+    val9.gui_transparency = p137 / 100
+    val124.BackgroundTransparency = p137 / 100
+  end, 8, "%.0f%%")
+
+  helper24(val278, "GENERAL", 9)
+
+  helper25(val278, "Sound Effects", val9.sfx, function(sfx) val9.sfx = sfx end, 10)
+  helper25(val278, "Notifications", val9.notif_on, function(notifOn) val9.notif_on = notifOn end, 11)
+
+  helper24(val278, "KEYBINDS", 12)
+
+  local val282 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundColor3 = element2.card, LayoutOrder = 13, BorderSizePixel = 0, Parent = val278, })
+
+  helper5(val282, 7)
+
+  createElement("TextLabel", {
+    Size = UDim2.new(0.4, 0, 1, 0), Position = UDim2.new(0, 8, 0, 0), BackgroundTransparency = 1, Text = "Toggle UI Key", TextColor3 = element2.txt, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, Parent = val282, })
+
+  val122.kbl = createElement("TextLabel", {
+    Size = UDim2.new(0.25, 0, 1, 0), Position = UDim2.new(0.4, 0, 0, 0), BackgroundTransparency = 1, Text = val9.keybind.Name, TextColor3 = element2.pri_lit, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, Parent = val282, })
+
+  local element50 = helper23(val282, "Set", element2.raised, nil, val58.btn_h - 8)
+  element50.Size = UDim2.new(0, 40, 0, val58.btn_h - 8)
+  element50.Position = UDim2.new(1, -48, 0.5, -(val58.btn_h - 8) / 2)
+
+  local val283 = false
+
+  helper12(element50, function()
+    if val283 then
+      return
+    end
+
+    val283 = true
+    val122.kbl.Text = "..."
+    element50.Text = "..."
+    helper18("click")
+
+    local connect10 = userInputService.InputBegan:Connect(function(input12)
+      if input12.UserInputType == Enum.UserInputType.Keyboard then
+        val9.keybind = input12.KeyCode
+        val122.kbl.Text = input12.KeyCode.Name
+        element50.Text = "Set"
+        val283 = false
+        connect10:Disconnect()
+        helper18("success")
+      end
+    end)
+
+    task.delay(5, function()
+      if val283 then
+        val283 = false
+        val122.kbl.Text = val9.keybind.Name
+        element50.Text = "Set"
+        pcall(function() connect10:Disconnect() end)
+      end
+    end)
+  end)
+
+  local val284 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundColor3 = element2.card, LayoutOrder = 14, BorderSizePixel = 0, Parent = val278, })
+
+  helper5(val284, 7)
+
+  createElement("TextLabel", {
+    Size = UDim2.new(0.4, 0, 1, 0), Position = UDim2.new(0, 8, 0, 0), BackgroundTransparency = 1, Text = "Quick Apply Key", TextColor3 = element2.txt, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm, TextXAlignment = Enum.TextXAlignment.Left, Parent = val284, })
+
+  val122.qa_kbl = createElement("TextLabel", {
+    Size = UDim2.new(0.25, 0, 1, 0), Position = UDim2.new(0.4, 0, 0, 0), BackgroundTransparency = 1, Text = val9.qa_keybind.Name, TextColor3 = element2.yellow, Font = Enum.Font.GothamBold, TextSize = val58.txt_sm, Parent = val284, })
+
+  local element51 = helper23(val284, "Set", element2.raised, nil, val58.btn_h - 8)
+  element51.Size = UDim2.new(0, 40, 0, val58.btn_h - 8)
+  element51.Position = UDim2.new(1, -48, 0.5, -(val58.btn_h - 8) / 2)
+
+  local val285 = false
+
+  helper12(element51, function()
+    if val285 then
+      return
+    end
+
+    val285 = true
+    val122.qa_kbl.Text = "..."
+    element51.Text = "..."
+    helper18("click")
+
+    local connect11 = userInputService.InputBegan:Connect(function(input13)
+      if input13.UserInputType == Enum.UserInputType.Keyboard then
+        val9.qa_keybind = input13.KeyCode
+        val122.qa_kbl.Text = input13.KeyCode.Name
+        element51.Text = "Set"
+        val285 = false
+        connect11:Disconnect()
+        helper18("success")
+        element11.push("Quick Apply key: " .. input13.KeyCode.Name, "qa", 2)
+
+        if val9.quick_apply_on then
+          element20.disable()
+          element20.enable()
+        end
+      end
+    end)
+
+    task.delay(5, function()
+      if val285 then
+        val285 = false
+        val122.qa_kbl.Text = val9.qa_keybind.Name
+        element51.Text = "Set"
+        pcall(function() connect11:Disconnect() end)
+      end
+    end)
+  end)
+
+  createElement("TextLabel", {
+    Size = UDim2.new(1, 0, 0, 22), BackgroundTransparency = 1, RichText = true, Text = "<font color=\"#FEB131\">Quick Apply:</font> Point cursor at player \8594 press key to morph instantly!", TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 2, TextWrapped = true, LayoutOrder = 15, Parent = val278, })
+
+  helper24(val278, "DATA", 16)
+
+  local val286 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, val58.btn_h), BackgroundTransparency = 1, LayoutOrder = 17, Parent = val278, })
+
+  createElement("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal, Padding = UDim.new(0, 4), Parent = val286, })
+
+  local val287 = helper23(val286, "\55357\56548 Export Data", element2.raised, 0.5)
+  local val288 = helper23(val286, "\55357\56785 Clear Cache", element2.red, 0.5)
+
+  helper12(val287, function()
+    helper18("export")
+
+    if setclipboard then
+      setclipboard((httpService:JSONEncode({
+        favs = val9.favs, theme = val9.theme_idx, total_morphs = val9.total_morphs, waypoints = val9.tp_waypoints, })))
+
+      element11.push("Settings exported to clipboard!", "ok", 3)
+    else
+      element11.push("Clipboard not available", "err")
+    end
+  end)
+
+  helper12(val288, function()
+    helper18("click")
+
+    val9.cache = {}
+    val9.name_cache = {}
+
+    element15.price_cache = {}
+    element11.push("Cache cleared! \55357\56785", "ok", 2)
+  end)
+
+  helper24(val278, "STATISTICS", 18)
+
+  local val289 = createElement("Frame", {
+    Size = UDim2.new(1, 0, 0, 80), BackgroundColor3 = element2.card, BackgroundTransparency = val9.gui_transparency * 0.3, LayoutOrder = 19, BorderSizePixel = 0, Parent = val278, })
+
+  helper5(val289, 8)
+
+  local label3 = createElement("TextLabel", {
+    Size = UDim2.new(1, -16, 1, 0), Position = UDim2.new(0, 8, 0, 0), BackgroundTransparency = 1, TextColor3 = element2.txt2, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 1, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, TextWrapped = true, Parent = val289, })
+
+  label3.Text = "Total Morphs: " .. val9.total_morphs .. "\nFavorites: " .. #val9.favs
+    .. "\nPresets: " .. #val13 .. "\nThemes: " .. #val10 .. "\nTracks: " .. #val14 .. "\nWaypoints: "
+    .. #val9.tp_waypoints
+
+  createElement("TextLabel", {
+    Size = UDim2.new(1, 0, 0, 24), BackgroundTransparency = 1, RichText = true, Text = "<font color=\"#6C5CE7\">Nexus Avatar Engine</font> <font color=\"#9B98B2\">val8.0.1 \"Phoenix\"</font>", TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm, LayoutOrder = 20, Parent = val278, })
+
+  createElement("TextLabel", {
+    Size = UDim2.new(1, 0, 0, 14), BackgroundTransparency = 1, Text = "by Theerakarn_TH", TextColor3 = element2.txt3, Font = Enum.Font.GothamMedium, TextSize = val58.txt_sm - 2, LayoutOrder = 21, Parent = val278, })
+
+  function element13.on_change(p138)
+    if p138 then
+      val122.stat_name.Text = helper11(p138)
+      val122.stat_name.TextColor3 = element2.pri_lit
+      val122.stat_id.Text = "ID: " .. p138
+      val122.fav_btn.Text = element12.has(p138) and "\9733" or "+"
+      val122.fav_btn.TextColor3 = element12.has(p138) and element2.yellow or element2.txt2
+      val122.status_dot.BackgroundColor3 = element2.green
+      val122.stat_thumb.Image = "rbxthumb://type=AvatarHeadShot&id=" .. p138 .. "&w=150&h=150"
+      val122.stat_thumb.BackgroundTransparency = 0
+      val122.morph_count.Text = "#" .. val9.total_morphs
+    else
+      val122.stat_name.Text = "-- No avatar --"
+      val122.stat_name.TextColor3 = element2.txt3
+      val122.stat_id.Text = ""
+      val122.fav_btn.Text = "+"
+      val122.fav_btn.TextColor3 = element2.txt2
+      val122.status_dot.BackgroundColor3 = element2.txt3
+      val122.stat_thumb.Image = ""
+      val122.stat_thumb.BackgroundTransparency = 1
+    end
+
+    val122.stat_hist.Text = "Hist:" .. #val9.hist
+    val122.stat_total.Text = "Morphs: " .. val9.total_morphs
+  end
+
+  helper12(val122.apply_btn, function()
+    if val122.input.Text == "" then
+      helper18("error")
+      element11.push("Enter username or ID", "warn")
+      return
+    end
+
+    helper18("apply")
+    element13.apply(val122.input.Text)
+  end)
+
+  helper12(val122.random_btn, function()
+    local val290 = element13.random()
+
+    if val290 then
+      val122.input.Text = tostring(val290)
+    end
+  end)
+
+  helper12(val122.reset_btn, function()
+    helper18("reset")
+    element13.reset()
+  end)
+
+  helper12(val122.undo_btn, function() element13.undo() end)
+  helper12(val122.redo_btn, function() element13.redo() end)
+
+  helper12(val122.fav_btn, function()
+    if not val9.cur_id then
+      helper18("error")
+      element11.push("Apply avatar first!", "warn")
+      return
+    end
+
+    element12.toggle(val9.cur_id)
+
+    val122.fav_btn.Text = element12.has(val9.cur_id) and "\9733" or "+"
+    val122.fav_btn.TextColor3 = element12.has(val9.cur_id) and element2.yellow or element2.txt2
+
+    iterate7()
+  end)
+
+  val122.input.FocusLost:Connect(function(p139)
+    if p139 and val122.input.Text ~= "" then
+      helper18("apply")
+      element13.apply(val122.input.Text)
+    end
+  end)
+
+  helper12(val122.pprev, function()
+    helper18("click")
+    val9.preset_page = val9.preset_page - 1
+
+    if val9.preset_page < 1 then
+      val9.preset_page = math.ceil(#helper29() / 8)
+    end
+
+    iterate3()
+  end)
+
+  helper12(val122.pnext, function()
+    helper18("click")
+    val9.preset_page = val9.preset_page + 1
+
+    if val9.preset_page > math.ceil(#helper29() / 8) then
+      val9.preset_page = 1
+    end
+
+    iterate3()
+  end)
+
+  helper12(val122.prand, function()
+    helper18("random")
+    local val291 = helper29()
+    val9.preset_page = math.random(1, math.max(1, math.ceil(#val291 / 8)))
+    iterate3()
+  end)
+
+  helper12(val122.mprev, function()
+    helper18("music_prev")
+    element34.prev()
+
+    val122.mus_name.Text = "\9834 " .. val14[val9.music_idx].n
+    val122.mplay.Text = val9.music_playing and "||" or "\9654"
+  end)
+
+  helper12(val122.mplay, function()
+    helper18("music_play")
+    element34.toggle()
+    val122.mplay.Text = val9.music_playing and "||" or "\9654"
+    helper7(val122.mplay, { BackgroundColor3 = val9.music_playing and element2.green or element2.pri }, 0.15)
+  end)
+
+  helper12(val122.mnext, function()
+    helper18("music_next")
+    element34.next()
+
+    val122.mus_name.Text = "\9834 " .. val14[val9.music_idx].n
+    val122.mplay.Text = val9.music_playing and "||" or "\9654"
+  end)
+
+  helper12(val122.mloop, function()
+    helper18("click")
+    val9.music_loop = not val9.music_loop
+
+    if val9.music_obj then
+      val9.music_obj.Looped = val9.music_loop
+    end
+
+    val122.mloop.Text = val9.music_loop and "Loop" or "Once"
+    helper7(val122.mloop, { BackgroundColor3 = val9.music_loop and element2.pri or element2.raised }, 0.15)
+  end)
+
+  helper12(val122.mstop, function()
+    helper18("music_stop")
+    element34.stop()
+    val122.mplay.Text = "\9654"
+    helper7(val122.mplay, { BackgroundColor3 = element2.pri }, 0.15)
+  end)
+
+  helper12(val260, function()
+    helper18("click")
+
+    if val257.Text == "" or val258.Text == "" then
+      element11.push("Fill both fields!", "warn")
+      return
+    end
+
+    local val292
+
+    for index67, value76 in ipairs(players:GetPlayers()) do
+      if value76 ~= localPlayer
+        and (value76.Name:lower():find(val257.Text:lower(), 1, true)
+          or value76.DisplayName:lower():find(val257.Text:lower(), 1, true)) then
+        val292 = value76
+        break
+      end
+    end
+
+    if not val292 then
+      helper18("error")
+      element11.push("Player not found", "err")
+      return
+    end
+
+    if element13.apply_to_other(val292, val258.Text) then
+      helper18("success")
+      element11.push("Applied to " .. val292.Name .. "!", "ok")
+    end
+  end)
+
+  helper12(val261, function()
+    helper18("click")
+
+    if val257.Text == "" then
+      element11.push("Enter player name", "warn")
+      return
+    end
+
+    local val293
+
+    for index68, value77 in ipairs(players:GetPlayers()) do
+      if value77 ~= localPlayer
+        and (value77.Name:lower():find(val257.Text:lower(), 1, true)
+          or value77.DisplayName:lower():find(val257.Text:lower(), 1, true)) then
+        val293 = value77
+        break
+      end
+    end
+
+    if not val293 then
+      helper18("error")
+      element11.push("Player not found", "err")
+      return
+    end
+
+    element13.reset_other(val293)
+  end)
+
+  helper12(val262, function()
+    helper18("apply")
+
+    if val258.Text == "" then
+      element11.push("Enter avatar ID", "warn")
+      return
+    end
+
+    element13.apply_to_all(val258.Text)
+  end)
+
+  helper12(val264, function()
+    helper18("apply")
+
+    if val263.Text == "" then
+      element11.push("Enter player name", "warn")
+      return
+    end
+
+    element13.copy_player_avatar(val263.Text)
+  end)
+
+  helper12(val269, function()
+    helper18("click")
+    local text9, text10 = val266.Text, val267.Text
+
+    if text9 == "" or text10 == "" then
+      element11.push("Fill both fields!", "warn")
+      return
+    end
+
+    local element52
+
+    if text9:lower() == "me" or text9:lower() == localPlayer.Name:lower() then
+      element52 = localPlayer
+    else
+      for index69, value78 in ipairs(players:GetPlayers()) do
+        if value78.Name:lower():find(text9:lower(), 1, true)
+          or value78.DisplayName:lower():find(text9:lower(), 1, true) then
+          element52 = value78
+          break
+        end
+      end
+    end
+
+    if not element52 or not element52.Character then
+      helper18("error")
+      element11.push("Player not found", "err")
+      return
+    end
+
+    element17.set(element52.Character, text10)
+    helper18("success")
+    element11.push("Name set: " .. text10, "ok")
+  end)
+
+  helper12(val270, function()
+    helper18("click")
+    local text11 = val266.Text
+
+    if text11 == "" then
+      element11.push("Enter player name", "warn")
+      return
+    end
+
+    local element53
+
+    if text11:lower() == "me" or text11:lower() == localPlayer.Name:lower() then
+      element53 = localPlayer
+    else
+      for index70, value79 in ipairs(players:GetPlayers()) do
+        if value79.Name:lower():find(text11:lower(), 1, true) then
+          element53 = value79
+          break
+        end
+      end
+    end
+
+    if not element53 or not element53.Character then
+      element11.push("Player not found", "err")
+      return
+    end
+
+    element17.clear(element53.Character)
+    element11.push("Name cleared", "ok")
+  end)
+
+  helper12(val272, function()
+    helper18("apply")
+
+    if val271.Text == "" then
+      element11.push("Enter player name", "warn")
+      return
+    end
+
+    local val294
+
+    for index71, value80 in ipairs(players:GetPlayers()) do
+      if value80 ~= localPlayer
+        and (value80.Name:lower():find(val271.Text:lower(), 1, true)
+          or value80.DisplayName:lower():find(val271.Text:lower(), 1, true)) then
+        val294 = value80
+        break
+      end
+    end
+
+    if not val294 then
+      helper18("error")
+      element11.push("Player not found", "err")
+      return
+    end
+
+    element13.apply(val294.UserId)
+
+    task.delay(2, function()
+      if localPlayer.Character then
+        element17.set(localPlayer.Character, val294.DisplayName)
+      end
+    end)
+  end)
+
+  local val295, vector, vector2 = false, nil, nil
+
+  val125.InputBegan:Connect(function(input14)
+    if helper9(input14) then
+      val295 = true
+      vector = Vector2.new(input14.Position.X, input14.Position.Y)
+      vector2 = Vector2.new(val124.AbsolutePosition.X, val124.AbsolutePosition.Y)
+    end
+  end)
+
+  helper(userInputService.InputChanged:Connect(function(input15)
+    if not val295 then
+      return
+    end
+
+    if input15.UserInputType == Enum.UserInputType.MouseMovement
+      or input15.UserInputType == Enum.UserInputType.Touch then
+      local vector2 = Vector2.new(input15.Position.X, input15.Position.Y) - vector
+      val124.Position = UDim2.new(0, vector2.X + vector2.X, 0, vector2.Y + vector2.Y)
+    end
+  end))
+
+  helper(userInputService.InputEnded:Connect(function(input16)
+    if helper9(input16) and val295 then
+      val295 = false
+      local viewportSize2 = workspace.CurrentCamera.ViewportSize
+      local absoluteSize = val124.AbsoluteSize
+
+      helper7(val124, {
+        Position = UDim2.new(0, math.clamp(
+          val124.AbsolutePosition.X, 5, viewportSize2.X - absoluteSize.X - 5
+        ), 0, math.clamp(
+          val124.AbsolutePosition.Y, 5, viewportSize2.Y - absoluteSize.Y - 5
+        )), }, 0.12)
+    end
+  end))
+
+  helper12(val127, function()
+    val9.minimized = not val9.minimized
+    helper18(val9.minimized and "minimize" or "maximize")
+
+    if val9.minimized then
+      helper7(val124, { Size = UDim2.new(0, val58.w, 0, val58.hdr_h) }, 0.2)
+      val122.body.Visible = false
+      val127.Text = "+"
+    else
+      helper7(val124, { Size = UDim2.new(0, val58.w, 0, val58.h) }, 0.2)
+      task.delay(0.08, function() val122.body.Visible = true end)
+      val127.Text = "\8212"
+    end
+  end)
+
+  helper(userInputService.InputBegan:Connect(function(input17, p140)
+    if p140 or input17.KeyCode ~= val9.keybind then
+      return
+    end
+
+    if val9.quick_apply_on and element20.current_target then
+      return
+    end
+
+    if val124 and val124.Parent then
+      val124.Visible = not val124.Visible
+      val9.hidden = not val124.Visible
+      helper18("hide_ui")
+    end
+  end))
+
+  helper(localPlayer.CharacterAdded:Connect(function(character16)
+    local curId = val9.cur_id
+    local waitForChild = character16:WaitForChild("Humanoid", 10)
+    character16:WaitForChild("HumanoidRootPart", 10)
+
+    if not waitForChild then
+      return
+    end
+
+    task.wait(0.7)
+
+    val9.orig_desc = nil
+    val9.cur_id = nil
+
+    if curId and val9.auto_apply then
+      element13.apply(curId, true)
+    end
+
+    if val9.speed_on then
+      element32.set_speed(val9.speed_val)
+    end
+
+    if val9.jump_on then
+      element32.set_jump(val9.jump_val)
+    end
+  end))
+
+  iterate2(val9.tab)
+  iterate7()
+
+  if val9.friends_loaded then
+    iterate6("")
+  end
+
+  if val9.quick_apply_on then
+    element20.enable()
+  end
+
+  if val9.swap_mode_on then
+    element21.enable()
+  end
+
+  if val9.tap_copy_on then
+    function element23.on_tap(p141)
+      val122.input.Text = tostring(p141.UserId)
+      val258.Text = tostring(p141.UserId)
+      val257.Text = p141.Name
+    end
+
+    element23.enable()
+  end
+
+  element7.start_heartbeat()
+
+  waitLoop("chat_auto_refresh", 8, function()
+    if val9.tab == "online" and val9.online_heartbeat_active then
+      element9.fetch()
+
+      if element9.refresh_fn then
+        element9.refresh_fn()
+      end
+    end
+  end)
+
+  waitLoop("online_auto_refresh", 15, function()
+    if val9.tab == "online" and val9.online_heartbeat_active then
+      element7.fetch_users()
+
+      if element7.refresh_fn then
+        element7.refresh_fn()
+      end
+    end
+  end)
+
+  waitLoop("uptime_update", 5, function()
+    if val122.stat_uptime and val122.stat_uptime.Parent then
+      val122.stat_uptime.Text = "Uptime: " .. helper17()
+    end
+  end)
+
+  if val9.anti_afk then
+    element28.start()
+  end
+end
+
+helper3()
+element35.build()
+
+if val9.cur_id and val9.auto_apply and localPlayer.Character then
+  task.delay(1, function() element13.apply(val9.cur_id, true) end)
+end
+
+game:BindToClose(function() element7.go_offline() end)
+pcall(function() localPlayer.OnTeleport:Connect(function() element7.go_offline() end) end)
+element.__NAE5__ = { kill = function() element35.kill() end }
+
+task.delay(1.5, function()
+  helper18("success")
+  element11.push("Nexus val8.0.1 Phoenix loaded! \55357\56613", "ok", 4)
+
+  if val7 then
+    element11.push("Welcome back, Owner! \9733", "owner", 3)
+  end
+
+  if not touchEnabled then
+    task.delay(1, function()
+      element11.push("Quick Apply: Enable in Home \8594 point cursor \8594 [" .. val9.qa_keybind.Name
+        .. "]", "qa", 5)
+    end)
+  end
+end)
+
+warn("[Nexus val8.0.1 Phoenix] Ready | UI:" .. val9.keybind.Name .. " | QA:" .. val9.qa_keybind.Name
+  .. " | " .. (val7 and "OWNER" or "User") .. " | Online: "
+  .. (val9.online_visible and "ON" or "OFF") .. " | Morphs: " .. val9.total_morphs)
