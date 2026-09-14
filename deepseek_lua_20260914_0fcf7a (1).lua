@@ -1,0 +1,577 @@
+local coreGui = game:GetService("CoreGui")
+local tweenService = game:GetService("TweenService")
+local userInputService = game:GetService("UserInputService")
+local players = game:GetService("Players")
+local runService = game:GetService("RunService")
+local lighting = game:GetService("Lighting")
+local workspace = game:GetService("Workspace")
+local localPlayer = players.LocalPlayer
+
+if coreGui:FindFirstChild("SourcesHubCore") then
+  coreGui.SourcesHubCore:Destroy()
+end
+
+local sourcesHubCore = Instance.new("ScreenGui")
+sourcesHubCore.Name = "SourcesHubCore"
+sourcesHubCore.ResetOnSpawn = false
+sourcesHubCore.Parent = coreGui
+
+local function createFrame(text)
+  local frame = Instance.new("Frame")
+  frame.Size = UDim2.new(0, 220, 0, 32)
+  frame.Position = UDim2.new(1, 10, 1, -45)
+  frame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+  frame.BackgroundTransparency = 0.1
+  frame.BorderSizePixel = 0
+  frame.Parent = sourcesHubCore
+
+  local uiCorner = Instance.new("UICorner")
+  uiCorner.CornerRadius = UDim.new(0, 6)
+  uiCorner.Parent = frame
+
+  local uiStroke = Instance.new("UIStroke")
+  uiStroke.Color = Color3.fromRGB(200, 180, 0) -- yellow
+  uiStroke.Thickness = 1
+  uiStroke.Parent = frame
+
+  local textLabel = Instance.new("TextLabel")
+  textLabel.Size = UDim2.new(1, -12, 1, 0)
+  textLabel.Position = UDim2.new(0, 6, 0, 0)
+  textLabel.BackgroundTransparency = 1
+  textLabel.Text = text
+  textLabel.TextColor3 = Color3.fromRGB(240, 240, 240)
+  textLabel.TextSize = 9
+  textLabel.Font = Enum.Font.GothamBold
+  textLabel.TextXAlignment = Enum.TextXAlignment.Left
+  textLabel.Parent = frame
+
+  tweenService:Create(
+    frame, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Position = UDim2.new(1, -230, 1, -45) }
+  ):Play()
+
+  task.delay(2.5, function()
+    local create = tweenService:Create(frame, TweenInfo.new(
+      0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.In
+    ), { Position = UDim2.new(1, 10, 1, -45) })
+
+    create:Play()
+    create.Completed:Connect(function() frame:Destroy() end)
+  end)
+end
+
+local iterate
+
+local function createFrame2()
+  local promptFrame = Instance.new("Frame")
+  promptFrame.Name = "PromptFrame"
+  promptFrame.Size = UDim2.new(0, 260, 0, 120)
+  promptFrame.Position = UDim2.new(0.5, -130, 0.5, -60)
+  promptFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+  promptFrame.BorderSizePixel = 0
+  promptFrame.ZIndex = 10
+  promptFrame.Parent = sourcesHubCore
+
+  local uiCorner2 = Instance.new("UICorner")
+  uiCorner2.CornerRadius = UDim.new(0, 8)
+  uiCorner2.Parent = promptFrame
+
+  local uiStroke2 = Instance.new("UIStroke")
+  uiStroke2.Color = Color3.fromRGB(200, 180, 0) -- yellow
+  uiStroke2.Thickness = 1.5
+  uiStroke2.Parent = promptFrame
+
+  local textLabel2 = Instance.new("TextLabel")
+  textLabel2.Size = UDim2.new(1, -20, 0, 50)
+  textLabel2.Position = UDim2.new(0, 10, 0, 10)
+  textLabel2.BackgroundTransparency = 1
+  textLabel2.Text = "Do you want to hide all players to reduce lag?"
+  textLabel2.TextColor3 = Color3.fromRGB(240, 240, 240)
+  textLabel2.TextSize = 11
+  textLabel2.Font = Enum.Font.GothamBold
+  textLabel2.TextWrapped = true
+  textLabel2.ZIndex = 11
+  textLabel2.Parent = promptFrame
+
+  local textButton = Instance.new("TextButton")
+  textButton.Size = UDim2.new(0, 100, 0, 30)
+  textButton.Position = UDim2.new(0, 20, 1, -40)
+  textButton.BackgroundColor3 = Color3.fromRGB(28, 28, 10) -- dark yellow tint
+  textButton.Text = "YES"
+  textButton.TextColor3 = Color3.fromRGB(50, 230, 100)
+  textButton.TextSize = 10
+  textButton.Font = Enum.Font.GothamBold
+  textButton.ZIndex = 11
+  textButton.Parent = promptFrame
+
+  local uiCorner3 = Instance.new("UICorner")
+  uiCorner3.CornerRadius = UDim.new(0, 4)
+  uiCorner3.Parent = textButton
+
+  local uiStroke3 = Instance.new("UIStroke")
+  uiStroke3.Color = Color3.fromRGB(30, 180, 70)
+  uiStroke3.Thickness = 1
+  uiStroke3.Parent = textButton
+
+  local textButton2 = Instance.new("TextButton")
+  textButton2.Size = UDim2.new(0, 100, 0, 30)
+  textButton2.Position = UDim2.new(1, -120, 1, -40)
+  textButton2.BackgroundColor3 = Color3.fromRGB(28, 28, 10) -- dark yellow tint
+  textButton2.Text = "NO"
+  textButton2.TextColor3 = Color3.fromRGB(255, 200, 50) -- yellow
+  textButton2.TextSize = 10
+  textButton2.Font = Enum.Font.GothamBold
+  textButton2.ZIndex = 11
+  textButton2.Parent = promptFrame
+
+  local uiCorner4 = Instance.new("UICorner")
+  uiCorner4.CornerRadius = UDim.new(0, 4)
+  uiCorner4.Parent = textButton2
+
+  local uiStroke4 = Instance.new("UIStroke")
+  uiStroke4.Color = Color3.fromRGB(180, 150, 0) -- yellow
+  uiStroke4.Thickness = 1
+  uiStroke4.Parent = textButton2
+
+  textButton.MouseButton1Click:Connect(function()
+    iterate()
+    promptFrame:Destroy()
+  end)
+
+  textButton2.MouseButton1Click:Connect(function() promptFrame:Destroy() end)
+end
+
+function iterate()
+  local function iterate2(val)
+    for key, value in pairs(val:GetDescendants()) do
+      if value:IsA("BasePart") or value:IsA("Decal") then
+        value.Transparency = 1
+      end
+    end
+  end
+
+  for key2, value2 in pairs(players:GetPlayers()) do
+    if value2 ~= localPlayer and value2.Character then
+      iterate2(value2.Character)
+    end
+  end
+
+  players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(character)
+      if player ~= localPlayer then
+        task.wait(0.5)
+        iterate2(character)
+      end
+    end)
+  end)
+
+  createFrame("Other Players Hidden")
+end
+
+local function iterate3()
+  pcall(function()
+    settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+
+    lighting.GlobalShadows = false
+    lighting.FogEnd = 9000000000
+    lighting.Brightness = 1
+
+    for index, value3 in ipairs(lighting:GetChildren()) do
+      if value3:IsA("PostEffect") or value3:IsA("BlurEffect") or value3:IsA("SunRaysEffect")
+        or value3:IsA("ColorCorrectionEffect") or value3:IsA("BloomEffect") then
+        value3.Enabled = false
+      end
+    end
+
+    local function helper(val2)
+      if val2:IsA("BasePart") then
+        val2.Material = Enum.Material.SmoothPlastic
+        val2.Reflectance = 0
+      elseif val2:IsA("Decal") or val2:IsA("Texture") then
+        val2.Transparency = 1
+      elseif val2:IsA("ParticleEmitter") or val2:IsA("Trail") or val2:IsA("Smoke") or val2:IsA("Fire")
+        or val2:IsA("Sparkles") then
+        val2.Enabled = false
+      end
+    end
+
+    for index2, value4 in ipairs(workspace:GetDescendants()) do
+      helper(value4)
+    end
+
+    workspace.DescendantAdded:Connect(function(descendant)
+      task.wait()
+      helper(descendant)
+    end)
+  end)
+
+  createFrame("Anti-Lag Activated")
+end
+
+iterate3()
+
+createFrame2()
+createFrame("Script Executed Successfully")
+
+local glowFrame = Instance.new("Frame")
+glowFrame.Name = "GlowFrame"
+glowFrame.Size = UDim2.new(0, 328, 0, 248)
+glowFrame.Position = UDim2.new(0.5, -164, 0.5, -124)
+glowFrame.BackgroundColor3 = Color3.fromRGB(255, 230, 30) -- yellow glow
+glowFrame.BackgroundTransparency = 0.65
+glowFrame.BorderSizePixel = 0
+glowFrame.Parent = sourcesHubCore
+
+local uiCorner5 = Instance.new("UICorner")
+uiCorner5.CornerRadius = UDim.new(0, 12)
+uiCorner5.Parent = glowFrame
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 320, 0, 240)
+mainFrame.Position = UDim2.new(0, 4, 0, 4)
+mainFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+mainFrame.BackgroundTransparency = 0.15
+mainFrame.BorderSizePixel = 0
+mainFrame.ClipsDescendants = true
+mainFrame.Parent = glowFrame
+
+local uiCorner6 = Instance.new("UICorner")
+uiCorner6.CornerRadius = UDim.new(0, 10)
+uiCorner6.Parent = mainFrame
+
+local uiStroke5 = Instance.new("UIStroke")
+uiStroke5.Color = Color3.fromRGB(200, 180, 0) -- yellow
+uiStroke5.Thickness = 1.5
+uiStroke5.Parent = mainFrame
+
+local uiGradient = Instance.new("UIGradient")
+
+uiGradient.Color = ColorSequence.new({
+  ColorSequenceKeypoint.new(0, Color3.fromRGB(12, 12, 12)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(55, 50, 10)), ColorSequenceKeypoint.new(1, Color3.fromRGB(12, 12, 12)), })
+
+uiGradient.Rotation = 45
+uiGradient.Parent = mainFrame
+
+local val3 = 0
+
+runService.RenderStepped:Connect(function(delta)
+  val3 = (val3 + delta * 1.5) % (math.pi * 2)
+  uiGradient.Rotation = 45 + math.sin(val3) * 15
+  glowFrame.BackgroundTransparency = 0.6 + math.sin(val3 * 2) * 0.1
+end)
+
+local topBar = Instance.new("Frame")
+topBar.Name = "TopBar"
+topBar.Size = UDim2.new(1, 0, 0, 34)
+topBar.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+topBar.BackgroundTransparency = 0.2
+topBar.BorderSizePixel = 0
+topBar.Parent = mainFrame
+
+local uiCorner7 = Instance.new("UICorner")
+uiCorner7.CornerRadius = UDim.new(0, 10)
+uiCorner7.Parent = topBar
+
+local textLabel3 = Instance.new("TextLabel")
+textLabel3.Size = UDim2.new(1, -40, 1, 0)
+textLabel3.Position = UDim2.new(0, 10, 0, 0)
+textLabel3.BackgroundTransparency = 1
+textLabel3.Text = "BEE HUB 🐝🍯 | PREMIUM 🍯"
+textLabel3.TextColor3 = Color3.fromRGB(255, 220, 40) -- yellow
+textLabel3.TextSize = 11
+textLabel3.Font = Enum.Font.GothamBold
+textLabel3.TextXAlignment = Enum.TextXAlignment.Left
+textLabel3.Parent = topBar
+
+local minimizeButton = Instance.new("TextButton")
+minimizeButton.Name = "MinimizeButton"
+minimizeButton.Size = UDim2.new(0, 24, 0, 24)
+minimizeButton.Position = UDim2.new(1, -28, 0.5, -12)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(28, 28, 10) -- dark yellow tint
+minimizeButton.Text = "_"
+minimizeButton.TextColor3 = Color3.fromRGB(255, 220, 40) -- yellow
+minimizeButton.TextSize = 14
+minimizeButton.Font = Enum.Font.GothamBold
+minimizeButton.Parent = topBar
+
+local uiCorner8 = Instance.new("UICorner")
+uiCorner8.CornerRadius = UDim.new(0, 6)
+uiCorner8.Parent = minimizeButton
+
+local scrollContainer = Instance.new("ScrollingFrame")
+scrollContainer.Name = "ScrollContainer"
+scrollContainer.Size = UDim2.new(1, -12, 1, -42)
+scrollContainer.Position = UDim2.new(0, 6, 0, 38)
+scrollContainer.BackgroundTransparency = 1
+scrollContainer.BorderSizePixel = 0
+scrollContainer.ScrollBarThickness = 2
+scrollContainer.ScrollBarImageColor3 = Color3.fromRGB(200, 180, 0) -- yellow
+scrollContainer.Parent = mainFrame
+
+local uiListLayout = Instance.new("UIListLayout")
+uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+uiListLayout.Padding = UDim.new(0, 6)
+uiListLayout.Parent = scrollContainer
+
+uiListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+  scrollContainer.CanvasSize = UDim2.new(0, 0, 0, uiListLayout.AbsoluteContentSize.Y + 8)
+end)
+
+local val4 = {
+  {
+    Name = "AIRFLOW HUB", Script = "loadstring(game:HttpGet(\"https://airflowscript.com/loader\"))()", }, {
+    Name = "AJJANS HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/virtuososvisualedits-prog/Ww/refs/heads/main/final-obfuscated.lua\"))()", }, {
+    Name = "ANTI HIT", Script = "script_key = \"Trial\"; loadstring(game:HttpGet(\"https://api.getpolsec.com/scripts/hosted/6582551b42d21c6b7eb55f1d76d8d50ce53cb35592093d6615b5e83437594dc0.lua\"))()", }, {
+    Name = "ASVRA HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/asvraRoblox/stealegg/refs/heads/main/main\"))()", }, {
+    Name = "AXON HUB", Script = "loadstring(game:HttpGet(\"https://api.luarmor.net/files/element/loaders/97c3f6db55a2cf72141537a85458e5a7.lua\"))()", }, {
+    Name = "AXONIC HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/Kenniel123/Steal-A-Egg/refs/heads/main/Steal%20A%20Egg\"))()", }, {
+    Name = "BIGFROOT", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/hanniii1/Loader/refs/heads/main/BFLoader.lua\"))()", }, {
+    Name = "BK HUB", Script = "loadstring(game:HttpGet(\"https://api.luarmor.net/files/val5/loaders/9ee4edde227ac85f50872bf9e4226508.lua\"))()", }, {
+    Name = "BLYXO HUB", Script = "loadstring(game:HttpGet(\"https://flowauth.net/val3/loaders/69d3463240384f3a73fbe32c178093a2.lua\"))()", }, {
+    Name = "CLOVER HUB", Script = "loadstring(game:HttpGet(\"https://rawscripts.net/raw/Steal-An-Egg-Clover-Hub-or-Auto-Steal-Egg-Predictor-Auto-Hatch-and-ESP-226600\"))()", }, {
+    Name = "DECODE HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/ItzYumi/Decode/refs/heads/main/DE%3ACODE.lua\"))()", }, {
+    Name = "FLOW HUB", Script = "loadstring(game:HttpGet(\"https://api.luarmor.net/files/val5/loaders/5946add9ab91f1e04cb005346a8b1968.lua\"))()", }, {
+    Name = "FOXNAME HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/Bliqe/Upload/refs/heads/main/Games/RUO/12665928789.lua\"))()", }, { Name = "FYY HUB", Script = "loadstring(game:HttpGet(\"https://FyyCommunity.my.id\"))()" }, {
+    Name = "GS HUB", Script = "loadstring(game:HttpGet(\"https://gist.githubusercontent.com/spiritualgaming1123-beep/46ef55c5f8284e076aafc5ebd12233f4/raw/5b24749c3931c1838a76e64c9af508dcdd03700a/gistfile1.lua\"))()", }, {
+    Name = "HOSHI HUB", Script = "loadstring(game:HttpGet(\"https://hoshihub.site/loader.lua\"))()", }, {
+    Name = "KEXXE HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/premiumbuddy/kex/refs/heads/main/kexxxx\"))()", }, {
+    Name = "LENNON HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/lennonxscripts/lennonhubv2/main/stealaneggv2\"))()", }, {
+    Name = "LEST HUB", Script = "getgenv().SCRIPT_KEY = \"KEYLESS\"; loadstring(game:HttpGet(\"https://api.jnkie.com/api/val3/luascripts/public/c916d48837ab69c48a9b3cafb04b49c8d9253af84cf8e403b19e2be302cbe67a/download\"))()", }, {
+    Name = "LUMIN HUB", Script = "loadstring(game:HttpGet(\"http://luminon.top/loader.lua\"))()", }, {
+    Name = "MIRANDA HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/miirandahub/loader/refs/heads/main/stealaeggs\"))()", }, {
+    Name = "MOSHI HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/moshixzn/ahhagdienavd/refs/heads/main/Loader.lua.txt\"))()", }, {
+    Name = "NASI HUB PREMIUM", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/JualNasiRendang/loader/refs/heads/main/main.lua\"))()", }, {
+    Name = "NASI RENDANG HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/JualNasiRendang/loader/refs/heads/main/main.lua\"))()", }, {
+    Name = "NEMESIS HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/x2zu/loader/main/freeloader.lua\", true))()", }, {
+    Name = "NEOX HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/hassanxzayn-lua/NEOXHUBMAIN/refs/heads/main/loader\", true))()", }, {
+    Name = "NOVA HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/NovaHubRBLX/NovaHub/refs/heads/main/novahub.lua\"))()", }, {
+    Name = "ON HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/davizin713/ONhub/refs/heads/main/script.lua\"))()", }, {
+    Name = "OBUROSBOS", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/joustingmatch/Ouroboros/main/loader.lua\"))()", }, {
+    Name = "OMG HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/Omgshit/Scripts/main/MainLoader.lua\"))()", }, {
+    Name = "OXIDE HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/xulfo/Oxide-Loader/main/Main.lua\"))()", }, {
+    Name = "PET SPAWNER", Script = "loadstring(game:HttpGet(\"https://scriptversekey.xyz/s/steal-an-egg-pet-spawner\"))()", }, {
+    Name = "PIG HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/mopsscript7-gif/steal-an-egg/refs/heads/main/script.lua\"))()", }, {
+    Name = "PROBEST HUB", Script = "loadstring(game:HttpGet(\"https://api.jnkie.com/api/val3/luascripts/public/0199b576f5c2d5a34159f0f9f4e1de0a566b4d1da5b1cfa5d2f71ade9bdcaa24/download\"))()", }, {
+    Name = "RENE BATERBONIA SCRIPT", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/sabscrip-arch/srver/refs/heads/main/Stealanegg\"))()", }, {
+    Name = "RIFT HUB", Script = "loadstring(game:HttpGet(\"https://rifton.top/loader.lua\"))()", }, {
+    Name = "SAIOPS HUB", Script = "loadstring(game:HttpGet(\"https://api.saiops.cc/scripts/Steal-An-Egg-Script.lua\"))()", }, {
+    Name = "SCRIPTVERSE HUB", Script = "loadstring(game:HttpGet(\"https://scriptversekey.xyz/s/steal-an-egg\"))()", }, {
+    Name = "SENA HUB", Script = "loadstring(game:HttpGet('https://raw.githubusercontent.com/senarblx/sena/refs/heads/main/loader'))()", }, {
+    Name = "SERVER FINDER 1 PEOPLE", Script = "loadstring(game:HttpGet(\"https://api.obscuravm.com/scripts/8232205074136213997\"))()", }, {
+    Name = "SNOWY HUB", Script = "loadstring(game:HttpGet(\"https://flowauth.net/val3/ui/a87f00d9adf63658655fcd02ab86a4ef.lua\"))()", }, {
+    Name = "SOLIX HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/bao8jl/solixhub/main/loader\"))()", }, {
+    Name = "SPEED HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua\", true))()", }, {
+    Name = "SPORTSCLUB HUB", Script = "loadstring(game:HttpGet(\"https://loader.sportsclub.fun/loader.luau\"))()", }, {
+    Name = "STEAL AN EGG", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/Dodoyung24/script-core/main/Steal-An-Egg\"))()", }, {
+    Name = "UB HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/TeamUBHub/UBLoader/refs/heads/main/Loader.lua\"))()", }, {
+    Name = "VALINC HUB", Script = "loadstring(game:HttpGet(\"https://api.valincsyndicate.com/val3/releases/5502cba03703f4a3628d522d396b80d8.lua\"))()", }, {
+    Name = "VANTAGE HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/MisterNovitski/Vantage/refs/heads/main/mm2.txt\", true))()", }, {
+    Name = "VXEZE HUB", Script = "loadstring(game:HttpGet(\"https://vxezestudio.online/api/scripts/script_G5CGjqj2X3rOS/stream/init\"))()", }, {
+    Name = "YURI HUB", Script = "_G.autoExec = false; loadstring(game:HttpGet(\"https://raw.githubusercontent.com/iLove-yuri/leeeeesbian/refs/heads/main/homumado.lua\"))()", }, {
+    Name = "ZERO HUB", Script = "loadstring(game:HttpGet(\"https://www.zeroimpact.online/raw/loader\"))()", }, {
+    Name = "ZERO POINT HUB", Script = "loadstring(game:HttpGet(\"https://raw.githubusercontent.com/JaxRol/ZeroPoint/refs/heads/main/KeySystem\"))()", }, {
+    Name = "ZEROIN HUB", Script = "loadstring(game:HttpGet(\"https://zeroinhub.com/api/script\"))()", }, {
+    Name = "ZK HUB", Script = "_G.Config = {ApiKey = \"ZKCOMMUNITYcfdb742a751aad57d79b375ea6c7cbc7\"}; loadstring(game:HttpGet(\"https://zkcommunity.cloud/loader.lua\"))()", }, }
+
+table.sort(val4, function(p3, p4) return p3.Name:lower() < p4.Name:lower() end)
+
+for index3, value5 in ipairs(val4) do
+  local element = value5
+
+  local frame2 = Instance.new("Frame")
+  frame2.Name = element.Name
+  frame2.LayoutOrder = index3
+  frame2.Size = UDim2.new(1, -4, 0, 32)
+  frame2.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+  frame2.BackgroundTransparency = 0.2
+  frame2.Parent = scrollContainer
+
+  local uiCorner9 = Instance.new("UICorner")
+  uiCorner9.CornerRadius = UDim.new(0, 5)
+  uiCorner9.Parent = frame2
+
+  local uiStroke6 = Instance.new("UIStroke")
+  uiStroke6.Color = Color3.fromRGB(35, 35, 35)
+  uiStroke6.Thickness = 1
+  uiStroke6.Parent = frame2
+
+  local textLabel4 = Instance.new("TextLabel")
+  textLabel4.Size = UDim2.new(0.65, 0, 1, 0)
+  textLabel4.Position = UDim2.new(0, 8, 0, 0)
+  textLabel4.BackgroundTransparency = 1
+  textLabel4.Text = element.Name
+  textLabel4.TextColor3 = Color3.fromRGB(220, 220, 220)
+  textLabel4.TextSize = 9
+  textLabel4.Font = Enum.Font.GothamSemibold
+  textLabel4.TextXAlignment = Enum.TextXAlignment.Left
+  textLabel4.Parent = frame2
+
+  local textButton3 = Instance.new("TextButton")
+  textButton3.Size = UDim2.new(0, 75, 0, 22)
+  textButton3.Position = UDim2.new(1, -81, 0.5, -11)
+  textButton3.BackgroundColor3 = Color3.fromRGB(28, 28, 10) -- dark yellow tint
+  textButton3.Text = "EXECUTE"
+  textButton3.TextColor3 = Color3.fromRGB(255, 220, 40) -- yellow
+  textButton3.TextSize = 9
+  textButton3.Font = Enum.Font.GothamBold
+  textButton3.Parent = frame2
+
+  local uiCorner10 = Instance.new("UICorner")
+  uiCorner10.CornerRadius = UDim.new(0, 4)
+  uiCorner10.Parent = textButton3
+
+  local uiStroke7 = Instance.new("UIStroke")
+  uiStroke7.Color = Color3.fromRGB(180, 150, 0) -- yellow
+  uiStroke7.Thickness = 1
+  uiStroke7.Parent = textButton3
+
+  textButton3.MouseButton1Click:Connect(function()
+    pcall(function() loadstring(element.Script)() end)
+
+    textButton3.Text = "LOADED"
+    textButton3.TextColor3 = Color3.fromRGB(50, 230, 100)
+    textButton3.BackgroundColor3 = Color3.fromRGB(8, 36, 14)
+
+    uiStroke7.Color = Color3.fromRGB(30, 180, 70)
+    createFrame("Executed " .. element.Name)
+
+    task.delay(2, function()
+      textButton3.Text = "EXECUTE"
+      textButton3.TextColor3 = Color3.fromRGB(255, 220, 40) -- yellow
+      textButton3.BackgroundColor3 = Color3.fromRGB(28, 28, 10) -- dark yellow tint
+
+      uiStroke7.Color = Color3.fromRGB(180, 150, 0) -- yellow
+    end)
+  end)
+end
+
+local val5, position, position2
+
+topBar.InputBegan:Connect(function(input)
+  if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+    val5 = true
+    position = input.Position
+    position2 = glowFrame.Position
+
+    input.Changed:Connect(function()
+      if input.UserInputState == Enum.UserInputState.End then
+        val5 = false
+      end
+    end)
+  end
+end)
+
+local val6
+
+topBar.InputChanged:Connect(function(input2)
+  if input2.UserInputType == Enum.UserInputType.MouseMovement
+    or input2.UserInputType == Enum.UserInputType.Touch then
+    val6 = input2
+  end
+end)
+
+userInputService.InputChanged:Connect(function(input3)
+  if input3 == val6 and val5 then
+    local element2 = input3.Position - position
+
+    glowFrame.Position = UDim2.new(
+      position2.X.Scale, position2.X.Offset + element2.X, position2.Y.Scale, position2.Y.Offset + element2.Y
+    )
+  end
+end)
+
+local val7 = false
+
+minimizeButton.MouseButton1Click:Connect(function()
+  if val7 then
+    scrollContainer.Visible = true
+    minimizeButton.Text = "_"
+
+    tweenService:Create(
+      glowFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Size = UDim2.new(0, 328, 0, 248) }
+    ):Play()
+
+    tweenService:Create(
+      mainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Size = UDim2.new(0, 320, 0, 240) }
+    ):Play()
+
+    val7 = false
+  else
+    minimizeButton.Text = "+"
+
+    local create2 = tweenService:Create(glowFrame, TweenInfo.new(
+      0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out
+    ), { Size = UDim2.new(0, 328, 0, 42) })
+
+    tweenService:Create(
+      mainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), { Size = UDim2.new(0, 320, 0, 34) }
+    ):Play()
+
+    create2:Play()
+
+    create2.Completed:Connect(function()
+      if val7 then
+        scrollContainer.Visible = false
+      end
+    end)
+
+    val7 = true
+  end
+end)
+
+userInputService.InputBegan:Connect(function(input4, p5)
+  if not p5 then
+    if input4.KeyCode == Enum.KeyCode.RightControl or input4.KeyCode == Enum.KeyCode.Insert then
+      glowFrame.Visible = not glowFrame.Visible
+    end
+  end
+end)
+
+local function helper2(val8)
+  local textLabel5, val9
+
+  if not val8 then
+    return
+  else
+    local waitForChild = val8:WaitForChild("Head", 5)
+
+    if not waitForChild then
+      return
+    else
+      if waitForChild:FindFirstChild("SourcesHubTag") then
+        waitForChild.SourcesHubTag:Destroy()
+      end
+
+      local sourcesHubTag = Instance.new("BillboardGui")
+      sourcesHubTag.Name = "SourcesHubTag"
+      sourcesHubTag.Size = UDim2.new(0, 200, 0, 35)
+      sourcesHubTag.StudsOffset = Vector3.new(0, 2.5, 0)
+      sourcesHubTag.AlwaysOnTop = true
+      sourcesHubTag.Parent = waitForChild
+
+      textLabel5 = Instance.new("TextLabel")
+      textLabel5.Size = UDim2.new(1, 0, 1, 0)
+      textLabel5.BackgroundTransparency = 1
+      textLabel5.Text = "BEE HUB🐝🍯 | PREMIUM"
+      textLabel5.TextSize = 12
+      textLabel5.Font = Enum.Font.GothamBold
+      textLabel5.Parent = sourcesHubTag
+
+      val9 = 0
+
+      runService.RenderStepped:Connect(function(delta2)
+        val9 = (val9 + delta2 * 0.35) % 1
+        textLabel5.TextColor3 = Color3.fromHSV(val9, 0.85, 1)
+      end)
+
+      return
+    end
+  end
+end
+
+if localPlayer.Character then
+  helper2(localPlayer.Character)
+end
+
+localPlayer.CharacterAdded:Connect(helper2)
