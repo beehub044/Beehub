@@ -702,8 +702,8 @@ ownerTab:CreateButton("Discord", function(p29)
   helper3("https://discord.gg/M9ZnxTafE", p29, "Discord")
 end)
 
-ownerTab:CreateButton("Promoter: None", function(p30)
-  helper3("None", p30, "Promoter: None")
+ownerTab:CreateButton("Promoter: Tawewie", function(p30)
+  helper3("Tawewie", p30, "Promoter: Tawewie")
 end)
 
 ownerTab:CreateButton("Promoter - None", function(p31)
