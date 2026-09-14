@@ -1,0 +1,510 @@
+--[[
+	🐝 BEE HUB ESP | PREMIUM 👑
+	Yellow Neon Bee Effect + Honeycomb Theme
+	Toggle: Click button or press E
+	Place as LocalScript in StarterPlayerScripts
+]]
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+local ThemePreset = "Honey"
+
+local THEMES = {
+	Classic = {
+		BeeYellow = Color3.fromRGB(255, 220, 0),
+		BeeBlack = Color3.fromRGB(30, 30, 30),
+		GlowColor = Color3.fromRGB(255, 255, 100),
+		ButtonGradientTop = Color3.fromRGB(255, 255, 150),
+		ButtonGradientBottom = Color3.fromRGB(255, 200, 0),
+		TextColor = Color3.fromRGB(30, 30, 30),
+		ParticleTexture = "rbxasset://textures/particles/sparkles_main.dds",
+		ParticleRate = 25,
+		LightRange = 12,
+	},
+	Honey = {
+		BeeYellow = Color3.fromRGB(255, 180, 0),
+		BeeBlack = Color3.fromRGB(60, 30, 0),
+		GlowColor = Color3.fromRGB(255, 215, 90),
+		ButtonGradientTop = Color3.fromRGB(255, 200, 60),
+		ButtonGradientBottom = Color3.fromRGB(200, 120, 0),
+		TextColor = Color3.fromRGB(60, 30, 0),
+		ParticleTexture = "rbxasset://textures/particles/sparkles_main.dds",
+		ParticleRate = 35,
+		LightRange = 14,
+	},
+	Neon = {
+		BeeYellow = Color3.fromRGB(255, 255, 0),
+		BeeBlack = Color3.fromRGB(255, 0, 200),
+		GlowColor = Color3.fromRGB(200, 255, 255),
+		ButtonGradientTop = Color3.fromRGB(255, 255, 100),
+		ButtonGradientBottom = Color3.fromRGB(255, 0, 200),
+		TextColor = Color3.fromRGB(0, 0, 0),
+		ParticleTexture = "rbxasset://textures/particles/sparkles_main.dds",
+		ParticleRate = 50,
+		LightRange = 18,
+	},
+	Royal = {
+		BeeYellow = Color3.fromRGB(255, 215, 0),
+		BeeBlack = Color3.fromRGB(75, 0, 130),
+		GlowColor = Color3.fromRGB(255, 240, 200),
+		ButtonGradientTop = Color3.fromRGB(255, 225, 120),
+		ButtonGradientBottom = Color3.fromRGB(120, 60, 180),
+		TextColor = Color3.fromRGB(40, 0, 80),
+		ParticleTexture = "rbxasset://textures/particles/sparkles_main.dds",
+		ParticleRate = 40,
+		LightRange = 16,
+	},
+	Toxic = {
+		BeeYellow = Color3.fromRGB(180, 255, 0),
+		BeeBlack = Color3.fromRGB(0, 40, 0),
+		GlowColor = Color3.fromRGB(200, 255, 100),
+		ButtonGradientTop = Color3.fromRGB(200, 255, 50),
+		ButtonGradientBottom = Color3.fromRGB(80, 200, 0),
+		TextColor = Color3.fromRGB(0, 40, 0),
+		ParticleTexture = "rbxasset://textures/particles/smoke_main.dds",
+		ParticleRate = 30,
+		LightRange = 15,
+	},
+}
+
+local T = THEMES[ThemePreset] or THEMES.Honey
+
+local CONFIG = {
+	BeeYellow = T.BeeYellow,
+	BeeBlack = T.BeeBlack,
+	GlowColor = T.GlowColor,
+	ShowName = true,
+	ShowHealth = true,
+	ExcludeSelf = false,
+	PulseSpeed = 2.5,
+	BeeEmoji = "🐝",
+	NameTag = "BEE HUB 🐝 🍯 | PREMIUM 👑",
+	StartEnabled = true,
+}
+
+local ESPEnabled = CONFIG.StartEnabled
+local ActiveBees = {}
+
+local function createHexagon(parent, size, position, color, rotation)
+	local hex = Instance.new("ImageLabel")
+	hex.Parent = parent
+	hex.Size = UDim2.new(0, size, 0, size)
+	hex.Position = position
+	hex.BackgroundTransparency = 1
+	hex.Image = "rbxassetid://5028857084"
+	hex.ImageColor3 = color
+	hex.ImageTransparency = 0.75
+	hex.Rotation = rotation or 0
+	return hex
+end
+
+local function applyBeeEffect(character)
+	if not character then return end
+	if CONFIG.ExcludeSelf and character.Name == LocalPlayer.Name then return end
+	if ActiveBees[character] then return end
+
+	local humanoid = character:WaitForChild("Humanoid", 5)
+	local head = character:WaitForChild("Head", 5)
+	if not humanoid or not head then return end
+
+	local highlight = Instance.new("Highlight")
+	highlight.Name = "BeeHighlight"
+	highlight.Parent = character
+	highlight.Adornee = character
+	highlight.FillColor = CONFIG.BeeYellow
+	highlight.OutlineColor = CONFIG.BeeBlack
+	highlight.FillTransparency = 0.3
+	highlight.OutlineTransparency = 0
+	highlight.DepthMode = Enum.HighlightDepthMode.Occluded
+
+	local glow = Instance.new("PointLight")
+	glow.Name = "BeeGlow"
+	glow.Parent = head
+	glow.Color = CONFIG.GlowColor
+	glow.Range = T.LightRange
+	glow.Brightness = 2
+
+	local particles = Instance.new("ParticleEmitter")
+	particles.Name = "BeeParticles"
+	particles.Parent = head
+	particles.Texture = T.ParticleTexture
+	particles.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, CONFIG.BeeYellow),
+		ColorSequenceKeypoint.new(1, CONFIG.GlowColor),
+	})
+	particles.Size = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 0.25),
+		NumberSequenceKeypoint.new(1, 0),
+	})
+	particles.Transparency = NumberSequence.new({
+		NumberSequenceKeypoint.new(0, 0.2),
+		NumberSequenceKeypoint.new(1, 1),
+	})
+	particles.Lifetime = NumberRange.new(0.8, 1.4)
+	particles.Rate = T.ParticleRate
+	particles.Speed = NumberRange.new(2, 4)
+	particles.SpreadAngle = Vector2.new(180, 180)
+	particles.LightEmission = 1
+	particles.Rotation = NumberRange.new(0, 360)
+	particles.RotSpeed = NumberRange.new(-180, 180)
+
+	local billboard = Instance.new("BillboardGui")
+	billboard.Name = "BeeInfoGui"
+	billboard.Adornee = head
+	billboard.Parent = head
+	billboard.Size = UDim2.new(0, 300, 0, 100)
+	billboard.StudsOffset = Vector3.new(0, 3.8, 0)
+	billboard.AlwaysOnTop = true
+
+	local mainFrame = Instance.new("Frame")
+	mainFrame.Parent = billboard
+	mainFrame.Size = UDim2.new(1, 0, 1, 0)
+	mainFrame.BackgroundColor3 = CONFIG.BeeBlack
+	mainFrame.BackgroundTransparency = 0.15
+	mainFrame.BorderSizePixel = 0
+
+	local mainCorner = Instance.new("UICorner")
+	mainCorner.CornerRadius = UDim.new(0, 14)
+	mainCorner.Parent = mainFrame
+
+	local mainStroke = Instance.new("UIStroke")
+	mainStroke.Parent = mainFrame
+	mainStroke.Color = CONFIG.BeeYellow
+	mainStroke.Thickness = 2.5
+	mainStroke.Transparency = 0
+
+	local mainGradient = Instance.new("UIGradient")
+	mainGradient.Parent = mainFrame
+	mainGradient.Rotation = 45
+	mainGradient.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, CONFIG.BeeBlack),
+		ColorSequenceKeypoint.new(1, Color3.fromRGB(80, 50, 0)),
+	})
+
+	for i = 1, 3 do
+		local pos = UDim2.new(0.05 + (i - 1) * 0.42, 0, 0.55, 0)
+		createHexagon(mainFrame, 34, pos, CONFIG.BeeYellow, 0)
+	end
+
+	local tagLabel = Instance.new("TextLabel")
+	tagLabel.Parent = mainFrame
+	tagLabel.Size = UDim2.new(1, -10, 0.6, 0)
+	tagLabel.Position = UDim2.new(0, 5, 0, 2)
+	tagLabel.BackgroundTransparency = 1
+	tagLabel.Font = Enum.Font.GothamBlack
+	tagLabel.TextScaled = true
+	tagLabel.TextColor3 = CONFIG.BeeYellow
+	tagLabel.TextStrokeColor3 = CONFIG.BeeBlack
+	tagLabel.TextStrokeTransparency = 0
+	tagLabel.Text = CONFIG.NameTag
+	tagLabel.ZIndex = 2
+
+	local tagGradient = Instance.new("UIGradient")
+	tagGradient.Parent = tagLabel
+	tagGradient.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, CONFIG.GlowColor),
+		ColorSequenceKeypoint.new(0.5, CONFIG.BeeYellow),
+		ColorSequenceKeypoint.new(1, CONFIG.BeeYellow),
+	})
+	tagGradient.Offset = Vector2.new(-1, 0)
+
+	task.spawn(function()
+		while tagLabel.Parent do
+			for i = 0, 1, 0.05 do
+				if not tagLabel.Parent then break end
+				tagGradient.Offset = Vector2.new(-1 + i * 2, 0)
+				task.wait(0.03)
+			end
+		end
+	end)
+
+	local label = Instance.new("TextLabel")
+	label.Parent = mainFrame
+	label.Size = UDim2.new(1, -10, 0.4, 0)
+	label.Position = UDim2.new(0, 5, 0.6, 0)
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.GothamBold
+	label.TextScaled = true
+	label.TextColor3 = Color3.fromRGB(255, 255, 255)
+	label.TextStrokeColor3 = CONFIG.BeeBlack
+	label.TextStrokeTransparency = 0
+	label.ZIndex = 2
+
+	local function updateText()
+		local parts = {}
+		if CONFIG.ShowName then
+			table.insert(parts, CONFIG.BeeEmoji .. " " .. character.Name)
+		end
+		if CONFIG.ShowHealth and humanoid then
+			local h = math.floor(humanoid.Health)
+			local m = math.floor(humanoid.MaxHealth)
+			table.insert(parts, h .. "/" .. m)
+		end
+		label.Text = table.concat(parts, "  ")
+	end
+
+	updateText()
+	humanoid.HealthChanged:Connect(updateText)
+	humanoid:GetPropertyChangedSignal("MaxHealth"):Connect(updateText)
+
+	local time = 0
+	local connection
+	connection = RunService.Heartbeat:Connect(function(dt)
+		if not character.Parent then
+			connection:Disconnect()
+			return
+		end
+		time += dt * CONFIG.PulseSpeed
+		local pulse = (math.sin(time) + 1) / 2
+		highlight.FillTransparency = 0.2 + pulse * 0.4
+		if glow.Parent then
+			glow.Brightness = 1.5 + pulse * 2
+		end
+		highlight.OutlineTransparency = 0.1 - pulse * 0.1
+		if mainStroke.Parent then
+			mainStroke.Transparency = pulse * 0.5
+		end
+	end)
+
+	ActiveBees[character] = {
+		Highlight = highlight,
+		Glow = glow,
+		Particles = particles,
+		Billboard = billboard,
+		Connection = connection,
+	}
+end
+
+local function removeBeeEffect(character)
+	if not character then return end
+	local data = ActiveBees[character]
+	if data and data.Connection then
+		data.Connection:Disconnect()
+	end
+	for _, name in ipairs({ "BeeHighlight", "BeeInfoGui" }) do
+		local inst = character:FindFirstChild(name)
+		if inst then inst:Destroy() end
+	end
+	local head = character:FindFirstChild("Head")
+	if head then
+		for _, name in ipairs({ "BeeGlow", "BeeParticles", "BeeInfoGui" }) do
+			local inst = head:FindFirstChild(name)
+			if inst then inst:Destroy() end
+		end
+	end
+	ActiveBees[character] = nil
+end
+
+local function refreshAll()
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player.Character then
+			if ESPEnabled then
+				applyBeeEffect(player.Character)
+			else
+				removeBeeEffect(player.Character)
+			end
+		end
+	end
+end
+
+local function hookPlayer(player)
+	if player.Character and ESPEnabled then
+		task.wait(0.4)
+		applyBeeEffect(player.Character)
+	end
+	player.CharacterAdded:Connect(function(character)
+		task.wait(0.4)
+		if ESPEnabled then
+			applyBeeEffect(character)
+		end
+	end)
+	player.CharacterRemoving:Connect(removeBeeEffect)
+end
+
+for _, player in ipairs(Players:GetPlayers()) do
+	hookPlayer(player)
+end
+Players.PlayerAdded:Connect(hookPlayer)
+Players.PlayerRemoving:Connect(function(player)
+	if player.Character then
+		removeBeeEffect(player.Character)
+	end
+end)
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "BeeHubGui"
+screenGui.ResetOnSpawn = false
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Parent = PlayerGui
+
+local button = Instance.new("TextButton")
+button.Name = "ESPToggle"
+button.Parent = screenGui
+button.Size = UDim2.new(0, 260, 0, 75)
+button.Position = UDim2.new(0, 20, 0.5, -37)
+button.BackgroundColor3 = CONFIG.BeeYellow
+button.BorderSizePixel = 0
+button.Text = ""
+button.AutoButtonColor = false
+button.Active = true
+button.Draggable = true
+button.ClipsDescendants = true
+
+local buttonCorner = Instance.new("UICorner")
+buttonCorner.CornerRadius = UDim.new(0, 14)
+buttonCorner.Parent = button
+
+local buttonStroke = Instance.new("UIStroke")
+buttonStroke.Parent = button
+buttonStroke.Color = CONFIG.BeeBlack
+buttonStroke.Thickness = 3
+
+local buttonGradient = Instance.new("UIGradient")
+buttonGradient.Parent = button
+buttonGradient.Rotation = 90
+buttonGradient.Color = ColorSequence.new({
+	ColorSequenceKeypoint.new(0, T.ButtonGradientTop),
+	ColorSequenceKeypoint.new(1, T.ButtonGradientBottom),
+})
+
+for i = 1, 3 do
+	local posX = 0.02 + (i - 1) * 0.34
+	createHexagon(button, 44, UDim2.new(posX, 0, 0.4, 0), CONFIG.BeeBlack, 0)
+end
+
+local crown = Instance.new("TextLabel")
+crown.Parent = button
+crown.Size = UDim2.new(0, 32, 0, 32)
+crown.Position = UDim2.new(1, -36, 0, 4)
+crown.BackgroundTransparency = 1
+crown.Font = Enum.Font.GothamBlack
+crown.TextScaled = true
+crown.Text = "👑"
+crown.ZIndex = 3
+
+local beeIcon = Instance.new("TextLabel")
+beeIcon.Parent = button
+beeIcon.Size = UDim2.new(0, 28, 0, 28)
+beeIcon.Position = UDim2.new(0, 6, 1, -34)
+beeIcon.BackgroundTransparency = 1
+beeIcon.Font = Enum.Font.GothamBlack
+beeIcon.TextScaled = true
+beeIcon.Text = "🐝"
+beeIcon.ZIndex = 3
+
+local honeyIcon = Instance.new("TextLabel")
+honeyIcon.Parent = button
+honeyIcon.Size = UDim2.new(0, 28, 0, 28)
+honeyIcon.Position = UDim2.new(1, -34, 1, -34)
+honeyIcon.BackgroundTransparency = 1
+honeyIcon.Font = Enum.Font.GothamBlack
+honeyIcon.TextScaled = true
+honeyIcon.Text = "🍯"
+honeyIcon.ZIndex = 3
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Parent = button
+titleLabel.Size = UDim2.new(1, -60, 0.55, 0)
+titleLabel.Position = UDim2.new(0, 30, 0, 4)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Font = Enum.Font.GothamBlack
+titleLabel.TextScaled = true
+titleLabel.TextColor3 = T.TextColor
+titleLabel.TextStrokeTransparency = 1
+titleLabel.Text = "BEE HUB 🐝 🍯 | PREMIUM 👑"
+titleLabel.ZIndex = 2
+
+local statusLabel = Instance.new("TextLabel")
+statusLabel.Parent = button
+statusLabel.Size = UDim2.new(1, -60, 0.4, 0)
+statusLabel.Position = UDim2.new(0, 30, 0.55, 0)
+statusLabel.BackgroundTransparency = 1
+statusLabel.Font = Enum.Font.GothamBold
+statusLabel.TextScaled = true
+statusLabel.TextColor3 = T.TextColor
+statusLabel.TextStrokeTransparency = 1
+statusLabel.ZIndex = 2
+
+local shimmer = Instance.new("Frame")
+shimmer.Parent = button
+shimmer.Size = UDim2.new(0, 60, 1, 0)
+shimmer.Position = UDim2.new(-0.3, 0, 0, 0)
+shimmer.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+shimmer.BackgroundTransparency = 0.75
+shimmer.BorderSizePixel = 0
+shimmer.ZIndex = 4
+
+local shimmerGradient = Instance.new("UIGradient")
+shimmerGradient.Parent = shimmer
+shimmerGradient.Transparency = NumberSequence.new({
+	NumberSequenceKeypoint.new(0, 1),
+	NumberSequenceKeypoint.new(0.5, 0),
+	NumberSequenceKeypoint.new(1, 1),
+})
+shimmerGradient.Rotation = 90
+
+task.spawn(function()
+	while shimmer.Parent do
+		shimmer.Position = UDim2.new(-0.3, 0, 0, 0)
+		local tween = TweenService:Create(
+			shimmer,
+			TweenInfo.new(2, Enum.EasingStyle.Linear),
+			{ Position = UDim2.new(1, 0, 0, 0) }
+		)
+		tween:Play()
+		task.wait(3)
+	end
+end)
+
+local function updateButtonVisual()
+	if ESPEnabled then
+		button.BackgroundColor3 = CONFIG.BeeYellow
+		buttonGradient.Color = ColorSequence.new({
+			ColorSequenceKeypoint.new(0, T.ButtonGradientTop),
+			ColorSequenceKeypoint.new(1, T.ButtonGradientBottom),
+		})
+		buttonStroke.Color = CONFIG.BeeBlack
+		statusLabel.Text = "ESP: ON  ✅"
+		statusLabel.TextColor3 = T.TextColor
+	else
+		button.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+		buttonGradient.Color = ColorSequence.new({
+			ColorSequenceKeypoint.new(0, Color3.fromRGB(130, 130, 130)),
+			ColorSequenceKeypoint.new(1, Color3.fromRGB(50, 50, 50)),
+		})
+		buttonStroke.Color = Color3.fromRGB(30, 30, 30)
+		statusLabel.Text = "ESP: OFF  ❌"
+		statusLabel.TextColor3 = Color3.fromRGB(220, 220, 220)
+	end
+end
+
+updateButtonVisual()
+
+button.MouseButton1Click:Connect(function()
+	ESPEnabled = not ESPEnabled
+	updateButtonVisual()
+	refreshAll()
+	print("Bee ESP: " .. (ESPEnabled and "ON" or "OFF"))
+end)
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+	if gameProcessed then return end
+	if input.KeyCode == Enum.KeyCode.E then
+		ESPEnabled = not ESPEnabled
+		updateButtonVisual()
+		refreshAll()
+	end
+end)
+
+if ESPEnabled then
+	task.wait(1)
+	refreshAll()
+end
+
+print("🐝 Bee Hub ESP [" .. ThemePreset .. "] loaded!")
