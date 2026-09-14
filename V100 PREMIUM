@@ -276,7 +276,7 @@ local textLabel3 = Instance.new("TextLabel")
 textLabel3.Size = UDim2.new(1, -40, 1, 0)
 textLabel3.Position = UDim2.new(0, 10, 0, 0)
 textLabel3.BackgroundTransparency = 1
-textLabel3.Text = "BEE HUB 🐝🍯 | PREMIUM 🍯"
+textLabel3.Text = "BEE HUB 🐝🍯 | PREMIUM 👑 V100"
 textLabel3.TextColor3 = Color3.fromRGB(255, 220, 40) -- yellow
 textLabel3.TextSize = 11
 textLabel3.Font = Enum.Font.GothamBold
@@ -553,7 +553,7 @@ local function helper2(val8)
       textLabel5 = Instance.new("TextLabel")
       textLabel5.Size = UDim2.new(1, 0, 1, 0)
       textLabel5.BackgroundTransparency = 1
-      textLabel5.Text = "BEE HUB🐝🍯 | PREMIUM"
+      textLabel5.Text = "BEE HUB🐝🍯 | PREMIUM 👑"
       textLabel5.TextSize = 12
       textLabel5.Font = Enum.Font.GothamBold
       textLabel5.Parent = sourcesHubTag
