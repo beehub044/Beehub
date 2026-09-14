@@ -716,8 +716,8 @@ ownerTab:CreateButton("Promoter: Tawewie", function(p30)
   helper3("Tawewie", p30, "Promoter: Tawewie")
 end)
 
-ownerTab:CreateButton("Promoter - 4. Vhen", function(p31)
-  helper3("4. Vhen", p31, "Promoter - 4. Vhen")
+ownerTab:CreateButton("Promoter - None", function(p31)
+  helper3("None", p31, "Promoter - None")
 end)
 
 local configTab = reneBaterboniaWindow:CreateTab("Config")
