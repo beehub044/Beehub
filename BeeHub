@@ -659,6 +659,12 @@ scriptsTab:CreateButton("ANIMATION PACK", function()
   end)
 end)
 
+scriptsTab:CreateButton("Music Loader V8", function()
+  pcall(function()
+    loadstring(game:HttpGet(('https://raw.githubusercontent.com/Dan41/Roblox-Scripts/refs/heads/main/Youtube%20Music%20Player/YoutubeMusicPlayer.lua'),true))()
+  end)
+end)
+
 scriptsTab:CreateLabel("🔑 KEY REQUIRED")
 
 scriptsTab:CreateButton("Bf", function()
@@ -676,6 +682,12 @@ scriptsTab:CreateButton("Speed hub", function()
     loadstring(game:HttpGet(
       "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true
     ))()
+  end)
+end)
+
+scriptsTab:CreateButton("AJJANS", function()
+  pcall(function()
+    loadstring(game:HttpGet(\"https://raw.githubusercontent.com/virtuososvisualedits-prog/Ww/refs/heads/main/final-obfuscated.lua\"))()
   end)
 end)
 
@@ -706,8 +718,8 @@ ownerTab:CreateButton("Promoter: Tawewie", function(p30)
   helper3("Tawewie", p30, "Promoter: Tawewie")
 end)
 
-ownerTab:CreateButton("Promoter - None", function(p31)
-  helper3("None", p31, "Promoter - None")
+ownerTab:CreateButton("Promoter - 4. Vhen", function(p31)
+  helper3("4. Vhen", p31, "Promoter - 4. Vhen")
 end)
 
 local configTab = reneBaterboniaWindow:CreateTab("Config")
