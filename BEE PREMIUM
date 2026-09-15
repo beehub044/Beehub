@@ -677,6 +677,12 @@ scriptsTab:CreateButton("BEE HUB 🐝🍯 V200👑", function()
   end)
 end)
 
+scriptsTab:CreateButton("👑PERMANENT SERVER HOP👑", function()
+  pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/desyble/serverprivate/refs/heads/main/loader.luau",true))()
+  end)
+end)
+
 scriptsTab:CreateLabel("🔑 KEY REQUIRED")
 
 scriptsTab:CreateButton("Bf", function()
