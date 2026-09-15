@@ -728,6 +728,10 @@ ownerTab:CreateButton("Promoter - 4 OE VHEN", function(p31)
   helper3("4 OE VHEN", p31, "Promoter - 4 OE VHEN")
 end)
 
+ownerTab:CreateButton("Promoter - Aizennn", function(p32)
+  helper3("Aizennn", p32, "Promoter - Aizennn")
+end)
+
 local configTab = reneBaterboniaWindow:CreateTab("Config")
 configTab:CreateLabel("Configuration Manager")
 
