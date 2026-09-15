@@ -37,7 +37,7 @@ end
 
 task.spawn(function()
   local sound = Instance.new("Sound")
-  sound.SoundId = "rbxassetid://106806057419587"
+  sound.SoundId = "rbxassetid://80378206876530"
   sound.Volume = 0.5
   sound.Parent = soundService
   sound:Play()
