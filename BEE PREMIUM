@@ -671,6 +671,12 @@ scriptsTab:CreateButton("SHANKS HUB", function()
   end)
 end)
 
+scriptsTab:CreateButton("BEE HUB 🐝🍯 V200👑", function()
+  pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/beehub044/Beehub/refs/heads/main/V200"))()
+  end)
+end)
+
 scriptsTab:CreateLabel("🔑 KEY REQUIRED")
 
 scriptsTab:CreateButton("Bf", function()
