@@ -665,6 +665,12 @@ scriptsTab:CreateButton("ANIMATION PACK | PREMIUM | ADJUSTABLE", function()
   end)
 end)
 
+scriptsTab:CreateButton("SHANKS HUB", function()
+  pcall(function()
+    loadstring(game:HttpGet("https://luasnapper.up.railway.app/files/loaders/323055d1394c4a44977147da740e0ff7.lua"))()
+  end)
+end)
+
 scriptsTab:CreateLabel("🔑 KEY REQUIRED")
 
 scriptsTab:CreateButton("Bf", function()
