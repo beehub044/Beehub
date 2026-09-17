@@ -683,12 +683,6 @@ scriptsTab:CreateButton("👑SERVER HOP👑", function()
   end)
 end)
 
-scriptsTab:CreateButton("VALINC HUB", function()
-  pcall(function()
-    ‎Loadstring(game:HttpGet("https://api.valincsyndicate.com/v1/releases/5502cba03703f4a3628d522d396b80d8.lua"))()
-  end)
-end)
-
 scriptsTab:CreateLabel("🔑 KEY REQUIRED")
 
 scriptsTab:CreateButton("Bf", function()
