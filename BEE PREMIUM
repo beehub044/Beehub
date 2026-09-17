@@ -683,6 +683,12 @@ scriptsTab:CreateButton("👑SERVER HOP👑", function()
   end)
 end)
 
+scriptsTab:CreateButton("VALINC HUB", function()
+  pcall(function()
+    ‎Loadstring(game:HttpGet("https://api.valincsyndicate.com/v1/releases/5502cba03703f4a3628d522d396b80d8.lua"))()
+  end)
+end)
+
 scriptsTab:CreateLabel("🔑 KEY REQUIRED")
 
 scriptsTab:CreateButton("Bf", function()
@@ -700,6 +706,18 @@ scriptsTab:CreateButton("Speed hub", function()
     loadstring(game:HttpGet(
       "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true
     ))()
+  end)
+end)
+
+scriptsTab:CreateButton("AJJANS", function()
+  pcall(function()
+    ‎Loadstring(game:HttpGet("https://raw.githubusercontent.com/virtuososvisualedits-prog/W/W/refs/heads/main/final-obfuscated.lua"))()
+  end)
+end)
+
+scriptsTab:CreateButton("RIFT", function()
+  pcall(function()
+    ‎loadstring(game:HttpGet("https://rifton.top/loader.lua"))()
   end)
 end)
 
