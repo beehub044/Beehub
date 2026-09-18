@@ -584,7 +584,7 @@ end)
 
 scriptsTab:CreateButton("🔲 Lkz 🔲", function()
   pcall(function()
-    loadstring(game:HttpGet("https://api.luarmor.net/files/val3/loaders/65bf3459d87ba3ac46350e154b640929.lua"))()
+    loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/65bf3459d87ba3ac46350e154b640929.lua"))()
   end)
 end)
 
