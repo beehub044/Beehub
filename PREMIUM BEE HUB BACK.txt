@@ -584,7 +584,7 @@ end)
 
 scriptsTab:CreateButton("🔲 Lkz 🔲", function()
   pcall(function()
-    loadstring(game:HttpGet("https://api.luarmor.net/files/val3/loaders/65bf3459d87ba3ac46350e154b640929.lua"))()
+    loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/65bf3459d87ba3ac46350e154b640929.lua"))()
   end)
 end)
 
@@ -652,6 +652,18 @@ scriptsTab:CreateButton("🥶 JOSHBNS HUB 🥶", function()
     loadstring(game:HttpGet("https://flowauth.net/v1/loaders/e890aad1c32cda0a0e14d000aa06dd97.lua"))()
   end)
 end)
+
+scriptsTab:CreateButton("👑AVATAR CHANGER BEE👑", function()
+  pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/beehub044/Beehub/refs/heads/main/deepseek_lua_20260918_91d104%20(1).lua"))()
+  end)
+end)
+
+scriptsTab:CreateButton("🧏‍♂️ANIMATION ADJUSTABLE🧏‍♂️", function()
+  pcall(function()
+    loadstring(game:HttpGet("https://api.rubis.app/v2/scrap/PwFrcMysMOIJuWAQ/raw"))()
+  end)
+end
 
 scriptsTab:CreateLabel("🔑 KEY REQUIRED")
 
