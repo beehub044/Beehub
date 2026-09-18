@@ -191,7 +191,7 @@ function val3:CreateWindow(p13)
     val5:FindFirstChild("ServerHopUI")
   end
 
-  local name = element2.Name or "BEE HUB 🐝🍯"
+  local name = element2.Name or "BEE HUB 🐝🍯 | PREMIUM 👑"
   local subtitle = element2.Subtitle or "By Beehubs"
   local version = element2.Version or "v5"
   local default = val6.Default
@@ -386,7 +386,7 @@ end
 
 -- 🐝 BEE HUB 🐝🍯
 local reneBaterboniaWindow = val3:CreateWindow({
-  Name = "BEE HUB 🐝🍯", Subtitle = "By Beehubs", Version = "v5", })
+  Name = "BEE HUB 🐝🍯 | PREMIUM 👑", Subtitle = "By Beehubs | v25.2", Version = "v5", })
 
 local serverHopperTab = reneBaterboniaWindow:CreateTab("Server Hopper")
 
@@ -549,7 +549,7 @@ end)
 local scriptsTab = reneBaterboniaWindow:CreateTab("Scripts")
 scriptsTab:CreateLabel("🟢 NO KEY REQUIRED")
 
-scriptsTab:CreateButton("ON hub", function()
+scriptsTab:CreateButton("🔛ON hub🔛", function()
   pcall(function()
     loadstring(game:HttpGet(
       "https://raw.githubusercontent.com/davizin713/ONhub/refs/heads/main/script.lua", true
@@ -557,42 +557,42 @@ scriptsTab:CreateButton("ON hub", function()
   end)
 end)
 
-scriptsTab:CreateButton("Horizon", function()
+scriptsTab:CreateButton("🌀Horizon🌀", function()
   pcall(function()
     script_key = "Trial"
     loadstring(game:HttpGet("https://api.getpolsec.com/scripts/hosted/6582551b42d21c6b7eb55f1d76d8d50ce53cb35592093d6615b5e83437594dc0.lua"))()
   end)
 end)
 
-scriptsTab:CreateButton("Nasi hub", function()
+scriptsTab:CreateButton("🐟Nasi hub🐟", function()
   pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/JualNasiRendang/loader/refs/heads/main/main.lua"))()
   end)
 end)
 
-scriptsTab:CreateButton("Lennon", function()
+scriptsTab:CreateButton("🍋Lennon🍋", function()
   pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/lennonxscripts/lennonhubv2/refs/heads/main/stealaneggv2"))()
   end)
 end)
 
-scriptsTab:CreateButton("Miranda", function()
+scriptsTab:CreateButton("🔻Miranda🔻", function()
   pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/miirandahub/loader/refs/heads/main/stealaeggs"))()
   end)
 end)
 
-scriptsTab:CreateButton("Lkz", function()
+scriptsTab:CreateButton("🔲 Lkz 🔲", function()
   pcall(function()
     loadstring(game:HttpGet("https://api.luarmor.net/files/val3/loaders/65bf3459d87ba3ac46350e154b640929.lua"))()
   end)
 end)
 
-scriptsTab:CreateButton("Zeroin", function()
+scriptsTab:CreateButton("0️⃣ Zeroin 0️⃣", function()
   pcall(function() loadstring(game:HttpGet("https://zeroinhub.com/api/script"))() end)
 end)
 
-scriptsTab:CreateButton("Decode", function()
+scriptsTab:CreateButton("🆔 Decode 🆔", function()
   pcall(function()
     loadstring(game:HttpGet(
       "https://raw.githubusercontent.com/ItzYumi/Decode/refs/heads/main/DE%3ACODE.lua", true
@@ -600,54 +600,72 @@ scriptsTab:CreateButton("Decode", function()
   end)
 end)
 
-scriptsTab:CreateButton("Blxyo hub", function()
+scriptsTab:CreateButton("⬛ Blxyo hub ⬛", function()
   pcall(function()
     loadstring(game:HttpGet("https://flowauth.net/val/loaders/69d3463240384f3a73fbe32c178093a2.lua"))()
   end)
 end)
 
-scriptsTab:CreateButton("Hoshi hub", function()
+scriptsTab:CreateButton("🇯🇵 Hoshi hub 🇯🇵", function()
   pcall(function() loadstring(game:HttpGet("https://hoshihub.site/loader.lua"))() end)
 end)
 
-scriptsTab:CreateButton("Sena hub", function()
+scriptsTab:CreateButton("👾 Sena hub 👾", function()
   pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/senarblx/sena/refs/heads/main/loader"))()
   end)
 end)
 
-scriptsTab:CreateButton("Vincetore", function()
+scriptsTab:CreateButton("🎉 Vincetore 🎉", function()
   pcall(function()
     script_key = "KEYLESS"
     loadstring(game:HttpGet("https://raw.githubusercontent.com/tutorkah104-rgb/Sae/refs/heads/main/Sae.luau"))()
   end)
 end)
 
-scriptsTab:CreateButton("Void", function()
+scriptsTab:CreateButton("🕳️ Void 🕳️", function()
   pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/VoidShell-null/VoidShell-Hub/refs/heads/main/Scripts/StealAnEgg.luau"))()
   end)
 end)
 
-scriptsTab:CreateButton("Shader", function()
+scriptsTab:CreateButton("🌄 SHADER 🌄", function()
   pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/randomstring0/pshade-ultimate/refs/heads/main/src/cd.lua"))()
   end)
 end)
 
+scriptsTab:CreateButton("👑 ANIMATION PACK 👑", function()
+  pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/arjhaysaver-byte/BEE-SCRIPT-ANIMATION-PACK/refs/heads/main/bee_hub.lua"))()
+  end)
+end)
+
+scriptsTab:CreateButton("🌶️ CHILLI HUB 🌶️", function()
+  pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/tienkhanh1/spicy/main/Chilli.lua"))()
+  end)
+end)
+
+scriptsTab:CreateButton("🥶 JOSHBNS HUB 🥶", function()
+  pcall(function()
+    loadstring(game:HttpGet("https://flowauth.net/v1/loaders/e890aad1c32cda0a0e14d000aa06dd97.lua"))()
+  end)
+end)
+
 scriptsTab:CreateLabel("🔑 KEY REQUIRED")
 
-scriptsTab:CreateButton("Bf", function()
+scriptsTab:CreateButton("🟠 BIGFROOT 🟠", function()
   pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/hanniii1/Loader/refs/heads/main/BFLoader.lua"))()
   end)
 end)
 
-scriptsTab:CreateButton("Fyy", function()
+scriptsTab:CreateButton("🟣 FYY 🟣", function()
   pcall(function() loadstring(game:HttpGet("https://FyyCommunity.com"))() end)
 end)
 
-scriptsTab:CreateButton("Speed hub", function()
+scriptsTab:CreateButton("🔴 Speed hub 🔴", function()
   pcall(function()
     loadstring(game:HttpGet(
       "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true
@@ -670,7 +688,7 @@ local function helper3(val25, label2, text3)
   label2.Text = text3
 end
 
-ownerTab:CreateButton("Tiktok - renehubs.rblx", function(p28)
+ownerTab:CreateButton("Tiktok - PC DEV BEE 🐝", function(p28)
   helper3("renehubs.rblx", p28, "Tiktok - renehubs.rblx")
 end)
 
@@ -678,12 +696,16 @@ ownerTab:CreateButton("Discord", function(p29)
   helper3("https://discord.gg/cDB53Zm6g", p29, "Discord")
 end)
 
-ownerTab:CreateButton("Promoter: Kierb_08", function(p30)
-  helper3("Kierb_08", p30, "Promoter: Kierb_08")
+ownerTab:CreateButton("Promoter: Tawewie", function(p30)
+  helper3("Tawewie", p30, "Promoter: Tawewie")
 end)
 
-ownerTab:CreateButton("Promoter - syuta0666", function(p31)
-  helper3("syuta0666", p31, "Promoter - syuta0666")
+ownerTab:CreateButton("Promoter - Renzzz", function(p31)
+  helper3("Renzzz", p31, "Promoter - Renzzz")
+end)
+
+ownerTab:CreateButton("Promoter - Vhen", function(p32)
+  helper3("Vhen", p32, "Promoter - Vhen")
 end)
 
 local configTab = reneBaterboniaWindow:CreateTab("Config")
