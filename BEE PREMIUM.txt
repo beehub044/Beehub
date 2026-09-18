@@ -665,12 +665,6 @@ scriptsTab:CreateButton("ANIMATION PACK | ADJUSTABLE", function()
   end)
 end)
 
-scriptsTab:CreateButton("🌶️CHILLI HUB🌶️", function()
-  pcall(function()
-    loadstring(game:HttpGet("https://luasnapper.up.railway.app/files/loaders/323055d1394c4a44977147da740e0ff7.lua"))()
-  end)
-end)
-
 scriptsTab:CreateButton("BEE HUB 🐝🍯 V200👑", function()
   pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/beehub044/Beehub/refs/heads/main/V200"))()
