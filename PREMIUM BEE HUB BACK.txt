@@ -659,7 +659,7 @@ scriptsTab:CreateButton("👑AVATAR CHANGER BEE👑", function()
   end)
 end)
 
-scriptsTab:CreateButton("🧏‍♂️ANIMATION ADJUSTABLE🧏‍♂️", function()
+scriptsTab:CreateButton("ANIMATION ADJUSTABLE", function()
   pcall(function()
     loadstring(game:HttpGet("https://api.rubis.app/v2/scrap/PwFrcMysMOIJuWAQ/raw"))()
   end)
