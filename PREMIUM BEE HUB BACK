@@ -653,6 +653,12 @@ scriptsTab:CreateButton("🥶 JOSHBNS HUB 🥶", function()
   end)
 end)
 
+scriptsTab:CreateButton("ANIMATION AJUSTABLE", function()
+  pcall(function()
+    loadstring(game:HttpGet("https://api.rubis.app/v2/scrap/PwFrcMysMOIJuWAQ/raw"))()
+  end)
+end)
+
 scriptsTab:CreateLabel("🔑 KEY REQUIRED")
 
 scriptsTab:CreateButton("🟠 BIGFROOT 🟠", function()
