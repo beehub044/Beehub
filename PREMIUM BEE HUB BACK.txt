@@ -671,6 +671,12 @@ scriptsTab:CreateButton("AVATAR CHANGER", function()
   end)
 end)
 
+scriptsTab:CreateButton("!SERVER HOP!", function()
+  pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/desyble/serverprivate/refs/heads/main/loader.luau",true))()
+  end)
+end)
+
 scriptsTab:CreateLabel("🔑 KEY REQUIRED")
 
 scriptsTab:CreateButton("🟠 BIGFROOT 🟠", function()
