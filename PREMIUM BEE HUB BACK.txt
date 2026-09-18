@@ -669,7 +669,7 @@ scriptsTab:CreateButton("AVATAR CHANGER", function()
   pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/beehub044/Beehub/refs/heads/main/deepseek_lua_20260918_91d104%20(1).lua"))()
   end)
-end
+end)
 
 scriptsTab:CreateLabel("🔑 KEY REQUIRED")
 
