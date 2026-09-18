@@ -663,6 +663,12 @@ scriptsTab:CreateButton("ANIMATION ADJUSTABLE", function()
   pcall(function()
     loadstring(game:HttpGet("https://api.rubis.app/v2/scrap/PwFrcMysMOIJuWAQ/raw"))()
   end)
+end)
+
+scriptsTab:CreateButton("AVATAR CHANGER", function()
+  pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/beehub044/Beehub/refs/heads/main/deepseek_lua_20260918_91d104%20(1).lua"))()
+  end)
 end
 
 scriptsTab:CreateLabel("🔑 KEY REQUIRED")
