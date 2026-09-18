@@ -191,7 +191,7 @@ function val3:CreateWindow(p13)
     val5:FindFirstChild("ServerHopUI")
   end
 
-  local name = element2.Name or "BEE HUB 🐝🍯 | PREMIUM 👑"
+  local name = element2.Name or "BEE HUB 🐝🍯 | PREMIUM 👑 | AVATAR CHANGER!"
   local subtitle = element2.Subtitle or "By Beehubs"
   local version = element2.Version or "v5"
   local default = val6.Default
