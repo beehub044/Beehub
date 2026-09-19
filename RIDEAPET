@@ -7,7 +7,7 @@
     ██████╔╝███████╗███████╗    ██║  ██║╚██████╔╝██████╔╝
     ╚═════╝ ╚══════╝╚══════╝    ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ 
 
-    BEE HUB 🐝🍯 | PREMIUM 👑
+    BEE HUB 🐝🍯 | VMAX 👑
     Original: Eggs ESP Menu by PC DEV BEE
     BEE HUB 🐝 🍯 & English Translation
 
@@ -711,7 +711,7 @@ local DeviceSubtitle = Instance.new("TextLabel")
 DeviceSubtitle.Size = UDim2.new(1, 0, 0, 18)
 DeviceSubtitle.Position = UDim2.new(0, 0, 0, 52)
 DeviceSubtitle.BackgroundTransparency = 1
-DeviceSubtitle.Text = "👑 PREMIUM 👑"
+DeviceSubtitle.Text = "👑 V MAX👑"
 DeviceSubtitle.TextColor3 = Config.SecondaryColor
 DeviceSubtitle.TextSize = 13
 DeviceSubtitle.Font = Enum.Font.GothamBold
@@ -828,7 +828,7 @@ local AuthorLabel = Instance.new("TextLabel")
 AuthorLabel.Size = UDim2.new(1, -55, 0, 12)
 AuthorLabel.Position = UDim2.new(0, 14, 0, 6)
 AuthorLabel.BackgroundTransparency = 1
-AuthorLabel.Text = "BEE HUB 🐝🍯 | PREMIUM 👑"
+AuthorLabel.Text = "BEE HUB 🐝🍯 | VMAX 👑"
 AuthorLabel.TextColor3 = Config.PrimaryColor
 AuthorLabel.TextSize = 13
 AuthorLabel.Font = Enum.Font.GothamBlack
@@ -1802,4 +1802,4 @@ end)
 -- END
 --==================================================
 
-print("[BEE HUB 🐝🍯 | PREMIUM 👑] Loaded successfully with sound.")
+print("[BEE HUB 🐝🍯 | VMAX 👑] Loaded successfully with sound.")
