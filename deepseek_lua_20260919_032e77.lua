@@ -1,0 +1,290 @@
+-- ==========================================
+-- BEE HUB INTRO SCRIPT
+-- Asset ID: rbxassetid://126492054871369
+-- Theme: Fullscreen Honey Yellow
+-- ==========================================
+
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+local LocalPlayer = Players.LocalPlayer
+
+-- 1. Create the ScreenGui
+local introGui = Instance.new("ScreenGui")
+introGui.Name = "BeeHubIntro"
+introGui.IgnoreGuiInset = true
+introGui.ResetOnSpawn = false
+introGui.DisplayOrder = 999 
+introGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+-- 2. Create the Black Background
+local bgFrame = Instance.new("Frame")
+bgFrame.Size = UDim2.new(1, 0, 1, 0)
+bgFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+bgFrame.BackgroundTransparency = 1 
+bgFrame.BorderSizePixel = 0
+bgFrame.Parent = introGui
+
+-- 3. Create the Logo Image
+local logoImage = Instance.new("ImageLabel")
+logoImage.Size = UDim2.new(1, 0, 1, 0) 
+logoImage.Position = UDim2.new(0.5, 0, 0.5, 0) 
+logoImage.AnchorPoint = Vector2.new(0.5, 0.5)
+logoImage.BackgroundTransparency = 1
+logoImage.Image = "rbxassetid://126492054871369"
+logoImage.ImageTransparency = 1 
+logoImage.ScaleType = Enum.ScaleType.Fit 
+logoImage.Parent = bgFrame
+
+-- 4. Create the Main Title Text
+local titleText = Instance.new("TextLabel")
+titleText.Size = UDim2.new(0, 600, 0, 70) 
+titleText.Position = UDim2.new(0.5, 0, 0.65, 0) 
+titleText.AnchorPoint = Vector2.new(0.5, 0.5)
+titleText.BackgroundTransparency = 1
+titleText.Text = "BEE HUB 🐝🍯| VMAX" 
+titleText.TextColor3 = Color3.fromRGB(255, 204, 0) 
+titleText.Font = Enum.Font.GothamBold
+titleText.TextScaled = true
+titleText.TextTransparency = 1 
+titleText.Parent = bgFrame
+
+-- 5. Create the Subtitle Text
+local subText = Instance.new("TextLabel")
+subText.Size = UDim2.new(0, 350, 0, 35)
+subText.Position = UDim2.new(0.5, 0, 0.71, 0) 
+subText.AnchorPoint = Vector2.new(0.5, 0.5)
+subText.BackgroundTransparency = 1
+subText.Text = "[ BEE HUB ]"
+subText.TextColor3 = Color3.fromRGB(255, 255, 255) 
+subText.Font = Enum.Font.GothamBold
+subText.TextScaled = true
+subText.TextTransparency = 1 
+subText.Parent = bgFrame
+
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(255, 204, 0) 
+stroke.Thickness = 1.5
+stroke.Transparency = 0.5
+stroke.Parent = subText
+
+-- ==========================================
+-- INTRO ANIMATION SEQUENCE
+-- ==========================================
+
+local function createTween(obj, time, props)
+    local tweenInfo = TweenInfo.new(time, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local tween = TweenService:Create(obj, tweenInfo, props)
+    tween:Play()
+    return tween
+end
+
+createTween(bgFrame, 0.5, {BackgroundTransparency = 0})
+task.wait(0.5)
+createTween(logoImage, 1.5, {ImageTransparency = 0})
+createTween(titleText, 1.5, {TextTransparency = 0})
+createTween(subText, 1.5, {TextTransparency = 0})
+task.wait(3.5) 
+createTween(bgFrame, 1, {BackgroundTransparency = 1})
+createTween(logoImage, 1, {ImageTransparency = 1})
+createTween(titleText, 1, {TextTransparency = 1})
+createTween(subText, 1, {TextTransparency = 1})
+task.wait(1)
+introGui:Destroy()
+
+-- ==========================================
+-- NOTIFICATION SYSTEM (Runs after intro)
+-- ==========================================
+
+local function showNotification(text, isTop)
+    -- Create the ScreenGui for notifications
+    local notifGui = Instance.new("ScreenGui")
+    notifGui.Name = "BeeHubNotifs"
+    notifGui.IgnoreGuiInset = true
+    notifGui.ResetOnSpawn = false
+    notifGui.DisplayOrder = 1000 -- Higher than everything else
+    notifGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+    -- Create the Notification Frame
+    local notifFrame = Instance.new("Frame")
+    notifFrame.Size = UDim2.new(0, 350, 0, 50)
+    -- Start off-screen to the right, then tween in
+    notifFrame.Position = UDim2.new(1, 400, 0, isTop and 0.35 or 0.45) 
+    notifFrame.AnchorPoint = Vector2.new(1, 0)
+    notifFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20) -- Dark grey background
+    notifFrame.BorderSizePixel = 0
+    notifFrame.Parent = notifGui
+
+    -- Add a honey-yellow UIStroke for the border
+    local notifStroke = Instance.new("UIStroke")
+    notifStroke.Color = Color3.fromRGB(255, 204, 0)
+    notifStroke.Thickness = 2
+    notifStroke.Parent = notifFrame
+
+    -- Add rounded corners
+    local notifCorner = Instance.new("UICorner")
+    notifCorner.CornerRadius = UDim.new(0, 8)
+    notifCorner.Parent = notifFrame
+
+    -- Create the Text Label
+    local notifText = Instance.new("TextLabel")
+    notifText.Size = UDim2.new(1, -20, 1, 0)
+    notifText.Position = UDim2.new(0.5, 0, 0.5, 0)
+    notifText.AnchorPoint = Vector2.new(0.5, 0.5)
+    notifText.BackgroundTransparency = 1
+    notifText.Text = text
+    notifText.TextColor3 = Color3.fromRGB(255, 204, 0) -- Honey Yellow text
+    notifText.Font = Enum.Font.GothamBold
+    notifText.TextScaled = true
+    notifText.TextWrapped = true
+    notifText.Parent = notifFrame
+
+    -- Tween the notification into view
+    local slideIn = TweenService:Create(notifFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+        Position = UDim2.new(1, -20, 0, isTop and 0.35 or 0.45)
+    })
+    slideIn:Play()
+
+    -- Wait, then fade out and destroy
+    task.wait(3.5)
+    
+    local fadeOut = TweenService:Create(notifFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+        BackgroundTransparency = 1,
+        Position = UDim2.new(1, 400, 0, isTop and 0.35 or 0.45)
+    })
+    
+    -- Fade out the text and stroke too
+    TweenService:Create(notifText, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
+    TweenService:Create(notifStroke, TweenInfo.new(0.5), {Transparency = 1}):Play()
+    
+    fadeOut:Play()
+    fadeOut.Completed:Connect(function()
+        notifGui:Destroy()
+    end)
+end
+
+-- Fire the notifications one after the other
+task.spawn(function()
+    showNotification("🐝 INSTANT STEAL EXECUTED 🐝", true)
+    task.wait(1) -- Wait 1 second before showing the second one
+    showNotification("🍯 INSTANT GRAB EXECUTED 🍯", false)
+end)
+
+-- ==========================================
+-- LOAD MAIN HUB: ANTI-CHASE TELEPORT LOGIC
+-- ==========================================
+
+-- ⚠️ IMPORTANT: Replace this placeholder function with your actual UI toggle logic!
+local function getAntiChaseState()
+    -- return AntiChaseEnabled -- Example
+    return true -- Defaulting to true for testing purposes
+end
+
+local updateInstancePropertiesData = {
+    Vector3.new(500.62, 70.28, -366.71),
+    Vector3.new(508.3, 70.28, -366.02),
+    Vector3.new(519.43, 70.28, -366.47),
+    Vector3.new(529.22, 70.28, -366.71),
+    Vector3.new(546.8, 70.28, -364.4),
+}
+
+local flag = false
+
+local function updateInstanceProperties(character)
+    if not getAntiChaseState() then return end
+    if not character or not character.Parent then return end
+
+    for index, item in ipairs(updateInstancePropertiesData) do
+        if not getAntiChaseState() then
+            return
+        end
+
+        character:PivotTo(CFrame.new(item))
+
+        if index < #updateInstancePropertiesData then
+            RunService.Heartbeat:Wait()
+        end
+    end
+end
+
+ProximityPromptService.PromptTriggered:Connect(function(prompt, player)
+    if player ~= LocalPlayer then return end
+    if not getAntiChaseState() or flag then return end
+
+    local character = LocalPlayer.Character
+    if not character then return end
+
+    flag = true
+    updateInstanceProperties(character)
+    flag = false
+end)
+
+-- ==========================================
+-- FLOOR STEAL / INSTANT PROMPT LOGIC (Runs after Intro)
+-- ==========================================
+
+task.spawn(function()
+    local function firePrompt(prompt)
+        if not prompt or not prompt.Parent then return end
+        if fireproximityprompt then
+            pcall(function() fireproximityprompt(prompt, 0) end)
+        else
+            pcall(function()
+                prompt:InputHoldBegin()
+                task.wait(0.01)
+                prompt:InputHoldEnd()
+            end)
+        end
+    end
+
+    local function optimizePrompt(prompt)
+        if prompt:IsA("ProximityPrompt") then
+            -- Instant click / touch pickup, no hold required + works through floors
+            prompt.HoldDuration = 0
+            prompt.RequiresLineOfSight = false
+        end
+    end
+
+    -- Optimize existing prompts in the workspace
+    for _, desc in ipairs(Workspace:GetDescendants()) do
+        optimizePrompt(desc)
+    end
+
+    -- Optimize new prompts that spawn later
+    Workspace.DescendantAdded:Connect(optimizePrompt)
+
+    -- When player actively presses the pickup button -> fire instantly
+    ProximityPromptService.PromptButtonHoldBegan:Connect(function(prompt)
+        firePrompt(prompt)
+    end)
+
+    -- Keybind [B]: Manually activate Floor Steal to suck nearby eggs
+    UserInputService.InputBegan:Connect(function(input, gpe)
+        if gpe then return end
+        if input.KeyCode == Enum.KeyCode.B then
+            pcall(function()
+                local char = LocalPlayer.Character
+                local hrp = char and char:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    for _, desc in ipairs(Workspace:GetDescendants()) do
+                        if desc:IsA("ProximityPrompt") and desc.Enabled then
+                            local part = desc:FindFirstAncestorOfClass("BasePart") or desc.Parent
+                            if part and part:IsA("BasePart") then
+                                if (hrp.Position - part.Position).Magnitude <= 35 then
+                                    firePrompt(desc)
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end)
+
+    print("BEE HUB: Floor Steal & Instant Prompt logic loaded.")
+end)
+
+print("Intro finished. BEE HUB Main Hub loaded successfully.")
