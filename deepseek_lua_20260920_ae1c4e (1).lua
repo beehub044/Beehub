@@ -703,7 +703,7 @@ scriptsTab:CreateButton("🍀 Clover Hub 🍀", function()
   end)
 end)
 
-scriptsTab:CreateButton("🎯 Ww Hub 🎯", function()
+scriptsTab:CreateButton("🎯 AJJANS Hub 🎯", function()
   pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/virtuososvisualedits-prog/Ww/refs/heads/main/final-obfuscated.lua"))()
   end)
@@ -768,6 +768,10 @@ end)
 
 ownerTab:CreateButton("Promoter - __gesi", function(p34)
   helper3("__gesi", p34, "Promoter - __gesi")
+end)
+
+ownerTab:CreateButton("Promoter - LIAM", function(p35)
+  helper3("LIAM", p35, "Promoter - LIAM")
 end)
 
 local configTab = reneBaterboniaWindow:CreateTab("Config")
