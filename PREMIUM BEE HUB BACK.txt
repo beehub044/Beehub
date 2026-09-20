@@ -655,7 +655,7 @@ end)
 
 scriptsTab:CreateButton("👑AVATAR CHANGER BEE👑", function()
   pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/beehub044/Beehub/refs/heads/main/deepseek_lua_20260918_91d104%20(1).lua"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/beehub044/Beehub/refs/heads/main/AVATAR%20CHANGER%20BEEHUB"))()
   end)
 end)
 
