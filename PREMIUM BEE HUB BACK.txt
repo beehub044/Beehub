@@ -572,7 +572,7 @@ end)
 
 scriptsTab:CreateButton("🍋Lennon🍋", function()
   pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/lennonxscripts/lennonhubv2/refs/heads/main/stealaneggv2"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/lennonxscripts/lennonhubv3/refs/heads/main/stealanegg.lua"))()
   end)
 end)
 
