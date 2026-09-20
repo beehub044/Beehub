@@ -717,7 +717,7 @@ ownerTab:CreateButton("Tiktok - PC DEV BEE 🐝", function(p28)
 end)
 
 ownerTab:CreateButton("Discord", function(p29)
-  helper3("https://discord.gg/XA74SmVHn", p29, "Discord")
+  helper3("https://discord.gg/beehub", p29, "Discord")
 end)
 
 ownerTab:CreateButton("Promoter: Tawewie", function(p30)
